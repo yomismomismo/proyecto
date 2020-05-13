@@ -15,7 +15,7 @@ class UsuarioType extends AbstractType
             ->add('nombre')
             ->add('apellido')
             ->add('email')
-            ->add('fecha_Registro', HiddenType::class)
+            // ->add('fecha_Registro', HiddenType::class)
             ->add('telefono')
             ->add('provincia',ChoiceType::class, [
                 'choices' => [

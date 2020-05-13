@@ -249,9 +249,9 @@ if ($user1) {
           $formcantidad->handleRequest($request);
             
       if ($pedidos  && $estado) {
-            echo("hola");
+
         if ($idusario->getId() == $pedidos->getIdCliente()->getId() && $estado){
-                echo("Hola2");
+
             if($formpedido->isSubmitted() && $formpedido->isValid()){
                 echo("Pedido ya existe por lo que hemos creado solo el producto");
                   $entityManager1=$this->getDoctrine()->getManager();
@@ -307,7 +307,6 @@ if ($user1) {
         //Creamos el pedido incompleto al pulsar el botón de añadir producto
 
                   else{
-                    echo("El producto no existe así que lo creamos todo");
                     $contactoTopedidos=new Pedidos();
                     $formpedidos=$this->CreateForm(PedidosType::Class, $contactoTopedidos);
                     $formpedidos->handleRequest($request);
@@ -340,7 +339,6 @@ if ($user1) {
             // echo($cantidadActualizada);
       
                 if ($PedidoCreadoAhora) {
-                 echo("Tdod");
                 $estado=$this->getDoctrine()
                   ->getRepository(Pedidos::class)
                   ->findOneBy(['estado' => "incompleto", 'id_cliente' => $idusario->getId()]);
