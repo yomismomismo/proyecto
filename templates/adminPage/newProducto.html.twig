@@ -42,23 +42,65 @@
                                     </div>
                                     <hr class="mb-0"> 
                                     <div class="card-body"> 
-                                        <div id="uploads"></div>
-                                            <div class="dropzone" id="dropzone">Drop files here to upload</div>
-                                        {# <small class="text-muted d-block">Imagen</small>
-                                        <h6>{{productos.imagen}}</h6> 
-                                        <small class="text-muted d-block pt-10">Nombre</small>
-                                        <h6>{{productos.nombre}}</h6> 
-                                        <small class="text-muted d-block pt-10">Descripción</small>
-                                        <h6>{{productos.descripcion}}</h6>
-                                        <small class="text-muted d-block pt-10">Precio</small>
-                                        <h6>{{productos.precio}}€</h6>
-                                         <small class="text-muted d-block pt-10">Unidades en stock</small>
-                                        <h6>{{productos.unidadesStock}}</h6>
-                                         <small class="text-muted d-block pt-10">Categoría</small>
-                                        <h6>{{productos.categoria}}</h6>
-                                        <small class="text-muted d-block pt-10">Unidades vendidas</small>
-                                        <h6>{{productos.unidadesVendidas}}</h6> #}
-                                        <script src="/js/js-admin/upload.js"></script>
+                                         <div id="uploads"></div>
+    <div class="dropzone" id="dropzone">Drop files here to upload</div>
+
+    <script>
+        (function() {
+            var dropzone = document.getElementById('dropzone');
+
+            var displayUploads = function(data){
+                var uploads = document.getElementById('uploads'),
+                    anchor,
+                    x;
+
+                for(x = 0; x < data.length; x = x + 1){
+                    anchor = document.createElement('a');
+                    anchor.href = data[x].file;
+                    anchor.innerText = data[x].name;
+
+                    uploads.appendChild(anchor);
+                }
+            }
+
+            var upload = function(files){
+                var formData = new FormData(),
+                    xhr = new XMLHttpRequest(),
+                    x;
+
+                for(x = 0; x < files.length; x = x + 1) {
+                    formData.append('file[]', files[x]);
+                }
+                xhr.onload = function(){
+                    var data = JSON.parse(this.responseText);
+
+                    displayUploads(data);
+                    
+                    
+                }
+
+                xhr.open('post', '{{ asset("upload.php", "script") }}');
+                xhr.send(formData);
+                
+            };
+            dropzone.ondrop = function(e){
+                e.preventDefault();
+                this.className = 'dropzone';
+                upload(e.dataTransfer.files);
+            };
+
+            dropzone.ondragover = function() {
+                this.className = 'dropzone dragover';
+                return false;
+            };
+
+            dropzone.ondragleave = function(){
+                this.className = 'dropzone';
+                return false;
+            };
+            
+        }());
+    </script>
                                     </div>
                                 </div>
                             </div>

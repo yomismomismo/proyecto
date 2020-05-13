@@ -26,3 +26,5 @@ framework:
                 base_path: '/js/js-admin'
             imagen:
                 base_path: '/img'
+            upload:
+                base_path: '/templates/adminPage'
