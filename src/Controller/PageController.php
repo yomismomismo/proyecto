@@ -249,11 +249,11 @@ if ($user1) {
           $formcantidad->handleRequest($request);
             
       if ($pedidos  && $estado) {
-            
-        if ($idusario->getId() == $pedidos->getIdCliente()->getId() && $estado){
-                
-            if($formpedido->isSubmitted() && $formpedido->isValid()){
 
+        if ($idusario->getId() == $pedidos->getIdCliente()->getId() && $estado){
+
+            if($formpedido->isSubmitted() && $formpedido->isValid()){
+                echo("Pedido ya existe por lo que hemos creado solo el producto");
                   $entityManager1=$this->getDoctrine()->getManager();
                     
                   foreach ($filtroProducto as $productoid) {
@@ -307,7 +307,6 @@ if ($user1) {
         //Creamos el pedido incompleto al pulsar el botón de añadir producto
 
                   else{
-
                     $contactoTopedidos=new Pedidos();
                     $formpedidos=$this->CreateForm(PedidosType::Class, $contactoTopedidos);
                     $formpedidos->handleRequest($request);
@@ -323,11 +322,11 @@ if ($user1) {
                     $pedidos=$this->getDoctrine()
                     ->getRepository(Pedidos::class)
                     ->findOneBy(['id_cliente' => $iduser->getId()]);
-                    $PedidoCreadoAhora="True";
+                    $PedidoCreadoAhora="true";
                     $entityManager1->persist($contactoTopedidos);
                     $entityManager1->flush();
-                    return $this->redirectToRoute('detalleprod', [
-                      "id" => $id]);
+                    // return $this->redirectToRoute('detalleprod', [
+                    //   "id" => $id]);
                   }
 
         //Finaliza el crear el pedido
@@ -340,7 +339,6 @@ if ($user1) {
             // echo($cantidadActualizada);
       
                 if ($PedidoCreadoAhora) {
-                 
                 $estado=$this->getDoctrine()
                   ->getRepository(Pedidos::class)
                   ->findOneBy(['estado' => "incompleto", 'id_cliente' => $idusario->getId()]);

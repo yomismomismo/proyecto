@@ -2,6 +2,7 @@
 {% block head %}
         
         {# <script>window.jQuery || document.write('<script src="../src/js/vendor/jquery-3.3.1.min.js"><\/script>')</script> #}
+        		<link rel="stylesheet" href="{{ asset("estilosproDetalle.css", "estilos") }}">
         <link rel="stylesheet" href="/plugins/chartist/dist/chartist.min.css">
         <link rel="stylesheet" href="/plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -55,136 +56,183 @@
                                 <div class="card">
                                     <ul class="nav nav-pills custom-pills" id="pills-tab" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" id="pills-timeline-tab" data-toggle="pill" href="#current-month" role="tab" aria-controls="pills-timeline" aria-selected="true">Timeline</a>
+                                            <a class="nav-link active" id="pills-timeline-tab" data-toggle="pill" href="#current-month" role="tab" aria-controls="pills-timeline" aria-selected="true">Comentarios</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="pills-products-tab" data-toggle="pill" href="#next-month" role="tab" aria-controls="pills-products" aria-selected="true">Pedidos</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" id="pills-setting-tab" data-toggle="pill" href="#previous-month" role="tab" aria-controls="pills-setting" aria-selected="false">Setting</a>
                                         </li>
                                     </ul>
+
+    {# ----------------------------------------------------------------------Comentarios---------------------------------------------------------------- #}
                                     <div class="tab-content" id="pills-tabContent">
                                         <div class="tab-pane fade show active" id="current-month" role="tabpanel" aria-labelledby="pills-timeline-tab">
                                             <div class="card-body">
                                                 <div class="profiletimeline mt-0">
+                                                		{% set contador = 0 %}
+                                                    {% set itemsPerpage = 4 %}
+			                                        {% set lowerLimit = (currentPage - 1) * itemsPerpage %}
+			                                        {% set upperLimit = currentPage * itemsPerpage %}
+                                                {% for comentario in comentarioUsuario %}
+                                                    {% if loop.index0 >= lowerLimit and loop.index0 < upperLimit %}
                                                     <div class="sl-item">
-                                                        <div class="sl-left"> <img src="../img/users/1.jpg" alt="user" class="rounded-circle" /> </div>
+                                                        <div class="sl-left">  </div>
+                                                        {# <img src="../img/users/1.jpg" alt="user" class="rounded-circle" /> #}
                                                         <div class="sl-right">
-                                                            <div><a href="javascript:void(0)" class="link">John Doe</a> <span class="sl-date">5 minutes ago</span>
-                                                                <p>assign a new task <a href="javascript:void(0)"> Design weblayout</a></p>
-                                                                <div class="row">
-                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
-                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
-                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
-                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
-                                                                </div>
-                                                                <div class="like-comm"> 
-                                                                    <a href="javascript:void(0)" class="link mr-10">2 comment</a> 
-                                                                    <a href="javascript:void(0)" class="link mr-10"><i class="fa fa-heart text-danger"></i> 5 Love</a> 
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <hr>
-                                                    <div class="sl-item">
-                                                        <div class="sl-left"> <img src="../img/users/1.jpg" alt="user" class="rounded-circle" /> </div>
-                                                        <div class="sl-right">
-                                                            <div><a href="javascript:void(0)" class="link">John Doe</a> <span class="sl-date">5 minutes ago</span>
-                                                                <p>assign a new task <a href="javascript:void(0)"> Design weblayout</a></p>
-                                                                <div class="row">
-                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
-                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
-                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
-                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg"class="img-fluid rounded" /></div>
-                                                                </div>
-                                                                <div class="like-comm"> 
-                                                                    <a href="javascript:void(0)" class="link mr-10">2 comment</a> 
-                                                                    <a href="javascript:void(0)" class="link mr-10"><i class="fa fa-heart text-danger"></i> 5 Love</a> 
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <hr>
-                                                    <div class="sl-item">
-                                                        <div class="sl-left"> <img src="../img/users/1.jpg" alt="user" class="rounded-circle" /> </div>
-                                                        <div class="sl-right">
-                                                            <div><a href="javascript:void(0)" class="link">John Doe</a> <span class="sl-date">5 minutes ago</span>
-                                                                <p>assign a new task <a href="javascript:void(0)"> Design weblayout</a></p>
-                                                                <div class="row">
-                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
-                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
-                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
-                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
-                                                                </div>
-                                                                <div class="like-comm"> 
-                                                                    <a href="javascript:void(0)" class="link mr-10">2 comment</a> 
-                                                                    <a href="javascript:void(0)" class="link mr-10"><i class="fa fa-heart text-danger"></i> 5 Love</a> 
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <hr>
-                                                    <div class="sl-item">
-                                                        <div class="sl-left"> <img src="../img/users/1.jpg" alt="user" class="rounded-circle" /> </div>
-                                                        <div class="sl-right">
-                                                            <div><a href="javascript:void(0)" class="link">John Doe</a> <span class="sl-date">5 minutes ago</span>
-                                                                <p>assign a new task <a href="javascript:void(0)"> Design weblayout</a></p>
-                                                                <div class="row">
-                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
-                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
-                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                            <div><a href="javascript:void(0)" class="link">{{comentario.getIdUsuario().getNombre()}} {{comentario.getIdUsuario().getApellido()}}</a> <span class="sl-date">{{comentario.getFecha()|date("d-m-Y H:i")}}</span>
+                                                            <br>
+                                                            <br>
+                                                                <p>{{comentario.getComentario()}}</a></p>
 
-                                                                    <div class="col-lg-3 col-md-6 mb-20"><p>Ver más</p></div>                                                                    
-                                                                </div>
                                                                 <div class="like-comm"> 
-                                                                    <a href="javascript:void(0)" class="link mr-10">2 comment</a> 
-                                                                    <a href="javascript:void(0)" class="link mr-10"><i class="fa fa-heart text-danger"></i> 5 Love</a> 
+								<div class="rate" style="position:relative;">
+								    <input type="radio" id="star5{{contador}}" name="rate{{contador}}" value="5" disabled {% if comentario.getPuntuacion() == "5" %} checked {% endif %}/>
+								    <label for="star5{{contador}}" id="hoverlabeldisabled" title="text">5 stars</label>
+								    <input type="radio" id="star4{{contador}}"  name="rate{{contador}}" value="4" disabled {% if comentario.getPuntuacion() == "4" %} checked {% endif %}/>
+								    <label for="star4{{contador}}" title="text" id="hoverlabeldisabled">4 stars</label>
+								    <input type="radio" id= "star3{{contador}}" name="rate{{contador}}" value="3" disabled {% if comentario.getPuntuacion() == "3" %} checked {% endif %}/>
+								    <label for="star3{{contador}}" title="text" id="hoverlabeldisabled">3 stars</label>
+								    <input type="radio" id="star2{{contador}}" name="rate{{contador}}" value="2" disabled {% if comentario.getPuntuacion() == "2" %} checked {% endif %}/>
+								    <label for="star2{{contador}}" title="text" id="hoverlabeldisabled">2 stars</label>
+								    <input type="radio" id="star1{{contador}}" name="rate{{contador}}" value="1" disabled {% if comentario.getPuntuacion() == "1" %} checked {% endif %}/>
+								    <label for="star1{{contador}}" title="text" id="hoverlabeldisabled">1 star</label>
+									
+									{# {{comentarios.fecha|date("m/d/Y")}} #}
+								</div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div><br>
+                                                    <hr>
+                                                    <div style="text-align:center">
+                                                    {% set contador =  contador + 1 %}
+                                                {% endif %}
+                                            {% endfor %}
+
+                                              {% set totalItems = data|length %}
+			                                    {% set lastPage = (totalItems / itemsPerpage)|round(0,'ceil') %}
+			                                    {% set lastPageItems = (itemsPerpage * lastPage) - totalItems %}
+                                                {% if currentPage > 1 %}
+				<a href="{{ path('detalleUsuarios',{'id':id, 'currentPage':currentPage - 1}) }}" class="tm-btn tm-btn-default tm-right">Previous</a>
+				&nbsp;&nbsp;
+			{% else %}
+				<span class="tm-btn tm-btn-default tm-right">Previous</span>
+				&nbsp;&nbsp;
+			{% endif %}
+			{% for i in 1..lastPage %}
+				{% if currentPage == i %}
+					<span class="tm-btn tm-btn-default tm-right" style="color:green">{{ i }}</span>
+
+				{% else %}
+					<a href="{{ path('detalleUsuarios',{'id':id, 'currentPage':i}) }}" class="tm-btn tm-btn-default tm-right">{{ i }}</a>
+				{% endif %}
+				{% if not loop.last %}&nbsp;&nbsp;
+				{% endif %}
+			{% endfor %}
+
+			{% if currentPage != lastPage %}
+				&nbsp;&nbsp;
+				<a href="{{ path('detalleUsuarios',{'id':id, 'currentPage':currentPage + 1}) }}" class="tm-btn tm-btn-default tm-right">Next</a>
+			{% else %}
+				&nbsp;&nbsp;
+				<span class="tm-btn tm-btn-default tm-right">Next</span>
+			{% endif %}
+            </div>
                                                 </div>
                                             </div>
                                         </div>
+    {# ------------------------------------------------------------------------------------------------------------------------------------------------ #}
+
+    {# ------------------------------------------------------Pedidos----------------------------------------------------------------------------------- #}
+                                
+                                        <div class="tab-pane fade " id="next-month" role="tabpanel" aria-labelledby="pills-products-tab">
+                                            <div class="card-body">
+                                                <div class="profiletimeline mt-0">
+
+                                                {% for pedido in pedidoUsuario %}
+                                                    
+                                                    <div class="sl-item">
+                                                        <div class="sl-left"> <img src="../img/users/1.jpg" alt="user" class="rounded-circle" /> </div>
+                                                        <div class="sl-right">
+                                                            <div>{{pedido.getIdCliente().getNombre()}} {{pedido.getIdcliente().getApellido()}} <span class="sl-date">{{pedido.getFechaPedido()|date("d-m-Y H:i")}}</span>
+                                                                <p>assign a new task <a href="javascript:void(0)"> Design weblayout</a></p>
+                                                                <div class="row">
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    
+                                                {% endfor %}
+                                              
+                                                </div>
+                                            </div>
+                                        </div>
+    {# ------------------------------------------------------------------------------------------------------------------------------------------------ #}
+
+    {# ------------------------------------------------------Ajustes de usuario------------------------------------------------------------------------ #}
                                         <div class="tab-pane fade" id="previous-month" role="tabpanel" aria-labelledby="pills-setting-tab">
                                             <div class="card-body">
-                                                <form class="form-horizontal">
+                                                {# <form class="form-horizontal"> #}
+                                            {{form_start(form, {'attr':{'class':"form-horizontal", 'action':'', "id":"submissionForm", "autocomplete":"on"}})}}
                                                     <div class="form-group">
                                                         <label for="example-name">Nombre</label>
-                                                        <input type="text" placeholder="{{usuarios.nombre}}" class="form-control" name="example-name" id="example-name">
+                                                        {# <input type="text" placeholder="{{usuarios.nombre}}" class="form-control" name="example-name" id="example-name"> #}
+                                            {{form_widget(form.nombre, {'attr':{'class':'form-control', "id":"firstName", "name":"given-name", "autocomplete":"given-name", 'required':'', "aria-required":"true", "autofocus":""}})}}
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="example-name">Apellidos</label>
-                                                        <input type="text" placeholder="{{usuarios.apellido}}" class="form-control" name="example-name" id="example-name">
+                                                        {# <input type="text" placeholder="{{usuarios.apellido}}" class="form-control" name="example-name" id="example-name"> #}
+                                            {{form_widget(form.apellido, {'attr':{'class':'form-control', "id":"lastName", "name":"given-apellido", "autocomplete":"given-apellido", 'required':'', "aria-required":"true", "autofocus":""}})}}
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="example-email">Email</label>
-                                                        <input type="email" placeholder="{{usuarios.email}}" class="form-control" name="example-email" id="example-email">
+                                                        {# <input type="email" placeholder="{{usuarios.email}}" class="form-control" name="example-email" id="example-email"> #}
+                                            {{form_widget(form.email, {'attr':{'class':'form-control', "id":"email", "name":"given-email", "autocomplete":"given-email", 'required':'', "aria-required":"true", "autofocus":""}})}}
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="example-phone">Phone No</label>
-                                                        <input type="text" placeholder="{{usuarios.telefono}}" id="example-phone" name="example-phone" class="form-control">
+                                                        <label for="example-phone">Teléfono</label>
+                                            {{form_widget(form.direccion, {'attr':{'class':'form-control', "id":"direccion", "name":"given-direccion", "autocomplete":"given-direccion", 'required':'', "aria-required":"true", "autofocus":""}})}}
+                                            {{form_widget(form.contrasenya, {'type':'hidden', 'attr':{'class':'form-control', "id":"direccion", "name":"given-direccion", "autocomplete":"given-direccion", 'required':'', "aria-required":"true", "autofocus":""}})}}
+                                                    </div>
+                                                   <div class="form-group">
+                                                    <label for="example-phone">Dirección</label>
+                                                        {# <input type="text" placeholder="{{usuarios.telefono}}" id="example-phone" name="example-phone" class="form-control"> #}
+                                            {{form_widget(form.telefono, {'attr':{'class':'form-control', "id":"telefono", "name":"given-telefono", "autocomplete":"given-telefono", 'required':'', "aria-required":"true", "autofocus":""}})}}
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="example-phone">Código Postal</label>
-                                                        <input type="text" placeholder="{{usuarios.codpostal}}" id="example-phone" name="example-phone" class="form-control">
+                                                        {# <input type="text" placeholder="{{usuarios.codpostal}}" id="example-phone" name="example-phone" class="form-control"> #}
+                                                        {{form_widget(form.cod_postal, {'attr':{'class':'form-control', "id":"cod_postal", "name":"given-cod_postal", "autocomplete":"given-cod_postal", 'required':'', "aria-required":"true", "autofocus":""}})}}
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="example-country">Select Country</label>
-                                                        <select name="example-message" id="example-message" class="form-control">
+                                                        {{form_widget(form.provincia, {'attr':{'class':'form-control', "id":"provincia", "name":"given-provincia", "autocomplete":"given-provincia", 'required':'', "aria-required":"true", "autofocus":""}})}}
+                                                        {# <select name="example-message" id="example-message" class="form-control">
                                                             <option selected>{{usuarios.provincia}}</option>
                                                             <option>India</option>
                                                             <option>Usa</option>
                                                             <option>Canada</option>
                                                             <option>Thailand</option>
-                                                        </select>
+                                                        </select> #}
                                                     </div>
-                                                    <div class="form-group">
+                                                    {# <div class="form-group">
                                                         <label for="example-password">Password</label>
                                                         <input type="password" value="password" class="form-control" name="example-password" id="example-password">
-                                                    </div>
-                                                    <button class="btn btn-success" type="submit">Update Profile</button>
-                                                </form>
+                                                    </div> #}
+                                                    {# <button class="btn btn-success" type="submit">Update Profile</button> #}
+                                                {{form_widget(form.send, {'type':'submit', 'attr':{'class':'btn btn-success', 'placeholder':'Enviar',  }})}}
+                                                {# </form> #}
+                                                         {{form_end(form)}}   
                                             </div>
                                         </div>
+    {# ------------------------------------------------------------------------------------------------------------------------------------------------ #}
                                     </div>
 {% endfor %}
 
