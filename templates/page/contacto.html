@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/estilos.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="js/jquery-3.4.1.slim.min.js">
+	<link rel="stylesheet" href="js/bootstrap.min.js"> <!-- Gem style -->
+    <script src="js/modernizr.js"></script> <!-- Modernizr -->
+    <link rel="stylesheet" href="css/formstyle.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="js/validate-jquery-form.js"></script>
+    <script src="js/additional-validate-form.js"></script>
+    <script src="js/formscript.js"></script>
+    <link rel="stylesheet" href="css/socialNstyle.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora.css">
+    <link rel="stylesheet" href="css/mapastyle.css">
+
+	<title>Side Cart</title>
+</head>
+<body class="foo">
+
+	<header>
+		<div id="logo"><img src="img/Logo.png"  style="width: 240px; margin-top: -25px;" alt="Homepage"></div>
+
+		<div id="cd-hamburger-menu"><a class="cd-img-replace" href="#0">Menu</a></div>
+		<div id="cd-cart-trigger"><a class="cd-img-replace" href="#0">Cart</a></div>
+
+	<nav id="main-nav">
+		<ul>
+			<li><a class="current" href="#0">Inicio</a></li>
+			<li><a href="#0">Productos</a></li>
+			<li><a href="#0">Servicios</a></li>
+			<li><a href="#0">Contacto</a></li>
+			<li><a href="#0" id="user" ><i class="far fa-user"></i></a></li>
+			<script src="https://kit.fontawesome.com/7bd9185960.js" crossorigin="anonymous"></script>
+			<li><a href="#0">Idioma</a></li>
+		</ul>
+	</nav>
+	
+</header>
+<section>
+	<div class="container-fluid" style="padding-right: 0px; padding-left: 0px;">
+		<div class="jumbotron jumbotron-fluid"
+			style=" background-size: cover; background-repeat: no-repeat;height: 40em;margin-top: 0px">
+		</div>
+	</div>
+</section>
+<!-- Thank you section -->
+<section id="thankYou" class="container" style="display:none;">
+  <h1>Hey, thanks!</h1>
+  <p>
+    Thanks for submitting your super personal information. Again, we probably won't sell it for that sweet bank — relax. Want to submit again? Maybe a friend's info? Click below!
+  </p>
+  <a href="#" id="restartForm">Restart form</a>
+</section>
+
+<!-- Contact form section -->
+<section id="contactForm" class="container" itemscope itemtype="http://schema.org/ContactPage">
+  <h1 itemprop="mainContentOfPage">Become a member</h1>
+  <p itemprop="description">
+    You want to become a member, right? Of course you do – everyone does. Just fill out the simple little form below and submit your very personal information to us. We promise we won't sell it or anything... probably.
+  </p>
+  
+  <!--  START FORM  -->
+  <form id="submissionForm" class="form" action="/" method="post" autocomplete="on">
+    <legend for="submissionForm">Contáctanos</legend>
+
+    <!--   FORM => First/last name   -->
+    <div id="formNames" class="form-group width-1-1 child-width-1-2">
+      <div>
+        <label class="form-label" for="firstName">
+          Nombre<abbr title="required">*</abbr>
+        </label>
+        <input id="firstName" class="form-element" name="given-name" type="text" autocomplete="given-name" placeholder="John? Jacob?" tabindex="1" required aria-required="true" autofocus />
+      </div>
+      <div>
+        <label class="form-label" for="lastName">
+          Apellidos<abbr title="required">*</abbr>
+        </label>
+        <input id="lastName" class="form-element" name="family-name" type="text" autocomplete="family-name" placeholder="Jingleheimer Schmidt?" tabindex="2" required aria-required="true" />
+      </div>
+    </div>
+
+    <!--   FORM => Email, phone   -->
+    <div id="formEmailPhone" class="form-group width-1-1 child-width-3-4">
+      <div>
+        <label class="form-label" for="emailAddress">
+          Email<abbr title="required">*</abbr>
+        </label>
+        <input id="emailAddress" class="form-element" name="emailAddress" type="email" autocomplete="on" placeholder="yourname@gmail(probably).com" tabindex="3" required aria-required="true" />
+      </div>
+      <div>
+        <label class="form-label" for="phoneNumber">
+          Número de télefono<abbr title="required">*</abbr>
+        </label>
+        <input id="phoneNumber" class="form-element" name="phoneNumber" type="tel" autocomplete="on" placeholder="000-00-00-00" tabindex="4" required aria-required="true" />
+      </div>
+    </div>
+
+      <!-- FORM => Address line 1 & 2   -->
+        <!-- <label class="form-label" for="mensaje">Mensaje<abbr title="required">*</abbr></label>
+        <div id="divTextarea">
+        <textarea id="mensaje" class="form-element" name="" id="" cols="40" rows="10" required placeholder="Apartment number, suite, PO Box, etc." tabindex="9" aria-required="false" style="width: 100%;"></textarea>
+      </div> -->
+
+      <!-- FORM => City, state, and ZIP   -->
+    <div id="formCityStateZip" class="form-group width-1-1 child-width-1-3">
+      <div>
+        <label class="form-label" for="addressCity">
+          Direccion<abbr title="required">*</abbr>
+        </label>
+        <input id="addressCity" class="form-element" name="address-level2" type="text" autocomplete="shipping address-level2" placeholder="Calle, puerta, patio... " minlength="2" tabindex="7" required aria-required="true" />
+      </div>
+      <div class="form-select-wrapper">
+        <label class="form-label" for="addressState">
+          State<abbr title="required">*</abbr>
+        </label>
+        <select id="addressState" class="form-element" name="address-level1" type="text" autocomplete="shipping address-level1" placeholder="Please select" tabindex="8" required aria-required="true">
+          <option value="" disabled default selected>Please select</option>
+              <option value="">- selecciona -</option>
+              <option value="15">A coru&#241;a</option>
+              <option value="1">&#193;lava</option>
+              <option value="2">Albacete</option>
+              <option value="3">Alicante</option>
+              <option value="4">Almer&#237;a</option>
+              <option value="33">Asturias</option>
+              <option value="5">&#193;vila</option>
+              <option value="6">Badajoz</option>
+              <option value="7">Baleares</option>
+              <option value="8">Barcelona</option>
+              <option value="9">Burgos</option>
+              <option value="10">C&#225;ceres</option>
+              <option value="11">C&#225;diz</option>
+              <option value="39">Cantabria</option>
+              <option value="12">Castell&#243;n</option>
+              <option value="51">Ceuta</option>
+              <option value="13">Ciudad Real</option>
+              <option value="14">C&#243;rdoba</option>
+              <option value="16">Cuenca</option>
+              <option value="99">Extranjero</option>
+              <option value="17">Girona</option>
+              <option value="18">Granada</option>
+              <option value="19">Guadalajara</option>
+              <option value="20">Guip&#250;zcoa</option>
+              <option value="21">Huelva</option>
+              <option value="22">Huesca</option>
+              <option value="23">Ja&#233;n</option>
+              <option value="26">La rioja</option>
+              <option value="35">Las palmas</option>
+              <option value="24">Le&#243;n</option>
+              <option value="25">Lleida</option>
+              <option value="27">Lugo</option>
+              <option value="28">Madrid</option>
+              <option value="29">M&#225;laga</option>
+              <option value="52">Melilla</option>
+              <option value="30">Murcia</option>
+              <option value="31">Navarra</option>
+              <option value="32">Ourense</option>
+              <option value="34">Palencia</option>
+              <option value="36">Pontevedra</option>
+              <option value="37">Salamanca</option>
+              <option value="38">Santa cruz de tenerife</option>
+              <option value="40">Segovia</option>
+              <option value="41">Sevilla</option>
+              <option value="42">Soria</option>
+              <option value="43">Tarragona</option>
+              <option value="44">Teruel</option>
+              <option value="45">Toledo</option>
+              <option value="46">Valencia</option>
+              <option value="47">Valladolid</option>
+              <option value="48">Vizcaya</option>
+              <option value="49">Zamora</option>
+              <option value="50">Zaragoza</option>
+        </select>
+        <div class="arrow"></div>
+      </div>
+      <div>
+        <label class="form-label" for="addressZIP">
+          ZIP<abbr title="required">*</abbr>
+        </label>
+      <input id="addressZIP" class="form-element" name="postal-code" type="tel" autocomplete="shipping postal-code" placeholder="12345" tabindex="9" minlength="1" maxlength="12" required aria-required="true" />
+      </div>
+    </div>
+<!-- Contraseña-->
+      <!-- FORM => City, state, and ZIP   -->
+      <div id="Password" class="form-group width-1-1 child-width-1-3">
+        <div>
+          <label class="form-label" for="Password">
+            Contraseña<abbr title="required">*</abbr>
+          </label>
+          <input id="Password" class="form-element" name="Password" type="password" autocomplete="new-password" placeholder="Contraseña " minlength="5" tabindex="7" required aria-required="true" />
+        </div>
+</div>
+    <!--   FORM => Honeypot   -->
+    <div id="formHoney" class="form-group width-1-1">
+      <!-- forked from https://stackoverflow.com/a/36227377 -->
+      <input type="checkbox" name="contact_me_by_fax_only" style="display:none !important" tabindex="-1" autocomplete="off">
+    </div>
+
+    <!--   FORM => Action buttons (submit/reset)   -->
+    <div id="formButtons" class="form-group form-buttons">
+      <div>
+        <button type="submit" name="Submit" value="Submit form" tabindex="14" itemprop="significantLink">Enviar</button>
+      </div>
+      <div>
+        <button type="reset" name="Reset" value="Clear form" tabindex="15">Borrar</button>
+      </div>
+    </div>
+    
+    <!--   FORM => Additional information   -->
+    <div id="formInfo" class="form-group width-1-1">
+      <p class="info"><abbr title="required">*</abbr>El asterisco rojo significa que es un campo <span> obligatorio</span>.</p>
+    </div>
+    
+  </form>
+
+  <p id="guion" class="linea"><span>O contacta con nosotros mediante</span></p>
+
+
+<ul class="social-networks bounce">
+<li><a href="https://twitter.com/" class="icon-twitter">Twitter</a></li>
+<li><a href="https://www.facebook.com/" class="icon-facebook">Facebook</a></li>
+<li><a href="https://pinterest.com" class="icon-pinterest">Pinterest</a></li>
+<li><a href="https://instagram.com" class="icon-instagram">Instagram</a></li>
+</ul>
+
+  <legend for="submissionForm">Ubicación</legend>
+  <div class="container-fluid">
+    <div class="map-responsive">
+   <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc&q=Eiffel+Tower+Paris+France" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+</div>
+</div>
+</section>
+
+
+  <div id="cd-shadow-layer"></div>
+
+	<div id="cd-cart">
+		<h2>Cart</h2>
+		<ul class="cd-cart-items">
+      <li>
+        <div class="product">
+        <span class="cd-qty">2x</span> Product Name
+        <div class="product-price">12.99</div>
+	<div class="product-removal">
+	  <button class="remove-product">
+			<a href="#0" class="cd-item-remove cd-img-replace">Remove</a>
+    </button>
+    </div>
+    <div class="product-line-price">12.99</div>
+    </div>
+			</li>
+
+			<li>
+        <div class="product">
+        <span class="cd-qty">2x</span> Product Name
+        <div class="product-price">12.99</div>
+	<div class="product-removal">
+	  <button class="remove-product">
+			<a href="#0" class="cd-item-remove cd-img-replace">Remove</a>
+    </button>
+    </div>
+    <div class="product-line-price">12.99</div>
+    </div>
+			</li>
+
+      <li>
+        <div class="product">
+        <span class="cd-qty">2x</span> Product Name
+        <div class="product-price">12.99</div>
+	<div class="product-removal">
+	  <button class="remove-product">
+			<a href="#0" class="cd-item-remove cd-img-replace">Remove</a>
+    </button>
+    </div>
+    <div class="product-line-price">12.99</div>
+    </div>
+			</li>
+		</ul> <!-- cd-cart-items -->
+
+    <div class="cd-cart-total">
+          </div> <!-- cd-cart-total -->
+    <dl class="total">
+      <dt>Total</dt>
+      <dd class="totals-value" id="cart-total">90.57</dd>
+    </dl>
+		<a href="#0" class="checkout-btn">Checkout</a>
+		
+		<p class="cd-go-to-cart"><a href="#0">Go to cart page</a></p>
+	</div> <!-- cd-cart -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/cart-drop.js"></script> <!-- Gem jQuery -->
+<script src="js/newjs.js"></script>
+<footer>
+	<div class="container">
+		<br>
+<div class="row" id="rowFooter" style=" margin-top: 40px;">
+	<div class="col-5 col-sm-2 col-md-2 col-lg-2 col-xl-2 form-group" style="text-align: center; margin-left: 0px;"><p>Inicio</p></div>
+	<div class="col-5 col-sm-2 col-md-2 col-lg-2 col-xl-2 form-group" style="text-align: center;"><p>Productos</p></div>
+	<div class="col-5 col-sm-2 col-md-2 col-lg-2 col-xl-2 form-group" style="text-align: center;"><p>Servicio</p></div>
+	<div class="col-5 col-sm-2 col-md-2 col-lg-2 col-xl-2 form-group" style="text-align: center;"><p>Contacto</p></div>
+</div>
+<div style="border-bottom: solid 1px white; margin: auto; width: 284px;;"></div> <!-- Separador-->
+</div>
+<div style="text-align: center;"><p id="DirecFooter">1717 Harrison St, San Francisco, CA94103, USA</p>
+<p id="DirecFooter">© Yomo S.A</p></div>
+</footer>
+</body>
+</html>

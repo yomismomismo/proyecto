@@ -1,0 +1,191 @@
+{% extends "adminPage/layout.html.twig" %}
+{% block head %}
+        
+        {# <script>window.jQuery || document.write('<script src="../src/js/vendor/jquery-3.3.1.min.js"><\/script>')</script> #}
+        <link rel="stylesheet" href="/plugins/chartist/dist/chartist.min.css">
+        <link rel="stylesheet" href="/plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="/plugins/flot-charts/jquery.flot.js"></script>
+        <script src="/plugins/flot-charts/curvedLines.js"></script>
+        <script src="/plugins/chartist/dist/chartist.min.js"></script>
+        <script src="/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
+        <script src="/plugins/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="/js/js-admin/tables.js"></script>
+        <script src="/js/js-admin/datatables.js"></script>
+        <script src="/js/js-admin/widget-data.js"></script>
+        <script src="/js/js-admin/widget-statistic.js"></script>
+{% endblock %}
+{% block contenido %}         
+                    <div class="container-fluid">
+
+                        <div class="row">
+                            <div class="col-lg-4 col-md-5">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="text-center"> 
+                                            <img src="/img/user.png" class="rounded-circle" width="150" />
+                                            {% for usuarios in usuario %}
+                                            <h4 class="card-title mt-10">{{usuarios.nombre}}</h4>
+                                            <p class="card-subtitle">Front End Developer</p>
+                                            <div class="row text-center justify-content-md-center">
+                                                <div class="col-4"><a href="javascript:void(0)" class="link"><i class="ik ik-user"></i> <font class="font-medium">254</font></a></div>
+                                                <div class="col-4"><a href="javascript:void(0)" class="link"><i class="ik ik-image"></i> <font class="font-medium">54</font></a></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="mb-0"> 
+                                    <div class="card-body"> 
+                                        <small class="text-muted d-block">Email address </small>
+                                        <h6>{{usuarios.email}}</h6> 
+                                        <small class="text-muted d-block pt-10">Phone</small>
+                                        <h6>{{usuarios.telefono}}</h6> 
+                                        <small class="text-muted d-block pt-10">Dirección</small>
+                                        <h6>{{usuarios.direccion}}</h6>
+                                        <h6>{{usuarios.provincia}}</h6>
+                                        <h6>{{usuarios.codpostal}}</h6>
+                                        <small class="text-muted d-block pt-30">Social Profile</small>
+                                        <br/>
+                                        <button class="btn btn-icon btn-facebook"><i class="fab fa-facebook-f"></i></button>
+                                        <button class="btn btn-icon btn-twitter"><i class="fab fa-twitter"></i></button>
+                                        <button class="btn btn-icon btn-instagram"><i class="fab fa-instagram"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8 col-md-7">
+                                <div class="card">
+                                    <ul class="nav nav-pills custom-pills" id="pills-tab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="pills-timeline-tab" data-toggle="pill" href="#current-month" role="tab" aria-controls="pills-timeline" aria-selected="true">Timeline</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="pills-setting-tab" data-toggle="pill" href="#previous-month" role="tab" aria-controls="pills-setting" aria-selected="false">Setting</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" id="pills-tabContent">
+                                        <div class="tab-pane fade show active" id="current-month" role="tabpanel" aria-labelledby="pills-timeline-tab">
+                                            <div class="card-body">
+                                                <div class="profiletimeline mt-0">
+                                                    <div class="sl-item">
+                                                        <div class="sl-left"> <img src="../img/users/1.jpg" alt="user" class="rounded-circle" /> </div>
+                                                        <div class="sl-right">
+                                                            <div><a href="javascript:void(0)" class="link">John Doe</a> <span class="sl-date">5 minutes ago</span>
+                                                                <p>assign a new task <a href="javascript:void(0)"> Design weblayout</a></p>
+                                                                <div class="row">
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                                </div>
+                                                                <div class="like-comm"> 
+                                                                    <a href="javascript:void(0)" class="link mr-10">2 comment</a> 
+                                                                    <a href="javascript:void(0)" class="link mr-10"><i class="fa fa-heart text-danger"></i> 5 Love</a> 
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="sl-item">
+                                                        <div class="sl-left"> <img src="../img/users/1.jpg" alt="user" class="rounded-circle" /> </div>
+                                                        <div class="sl-right">
+                                                            <div><a href="javascript:void(0)" class="link">John Doe</a> <span class="sl-date">5 minutes ago</span>
+                                                                <p>assign a new task <a href="javascript:void(0)"> Design weblayout</a></p>
+                                                                <div class="row">
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg"class="img-fluid rounded" /></div>
+                                                                </div>
+                                                                <div class="like-comm"> 
+                                                                    <a href="javascript:void(0)" class="link mr-10">2 comment</a> 
+                                                                    <a href="javascript:void(0)" class="link mr-10"><i class="fa fa-heart text-danger"></i> 5 Love</a> 
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="sl-item">
+                                                        <div class="sl-left"> <img src="../img/users/1.jpg" alt="user" class="rounded-circle" /> </div>
+                                                        <div class="sl-right">
+                                                            <div><a href="javascript:void(0)" class="link">John Doe</a> <span class="sl-date">5 minutes ago</span>
+                                                                <p>assign a new task <a href="javascript:void(0)"> Design weblayout</a></p>
+                                                                <div class="row">
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                                </div>
+                                                                <div class="like-comm"> 
+                                                                    <a href="javascript:void(0)" class="link mr-10">2 comment</a> 
+                                                                    <a href="javascript:void(0)" class="link mr-10"><i class="fa fa-heart text-danger"></i> 5 Love</a> 
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="sl-item">
+                                                        <div class="sl-left"> <img src="../img/users/1.jpg" alt="user" class="rounded-circle" /> </div>
+                                                        <div class="sl-right">
+                                                            <div><a href="javascript:void(0)" class="link">John Doe</a> <span class="sl-date">5 minutes ago</span>
+                                                                <p>assign a new task <a href="javascript:void(0)"> Design weblayout</a></p>
+                                                                <div class="row">
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><p>Ver más</p></div>                                                                    
+                                                                </div>
+                                                                <div class="like-comm"> 
+                                                                    <a href="javascript:void(0)" class="link mr-10">2 comment</a> 
+                                                                    <a href="javascript:void(0)" class="link mr-10"><i class="fa fa-heart text-danger"></i> 5 Love</a> 
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="previous-month" role="tabpanel" aria-labelledby="pills-setting-tab">
+                                            <div class="card-body">
+                                                <form class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label for="example-name">Nombre</label>
+                                                        <input type="text" placeholder="{{usuarios.nombre}}" class="form-control" name="example-name" id="example-name">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="example-name">Apellidos</label>
+                                                        <input type="text" placeholder="{{usuarios.apellido}}" class="form-control" name="example-name" id="example-name">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="example-email">Email</label>
+                                                        <input type="email" placeholder="{{usuarios.email}}" class="form-control" name="example-email" id="example-email">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="example-phone">Phone No</label>
+                                                        <input type="text" placeholder="{{usuarios.telefono}}" id="example-phone" name="example-phone" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="example-phone">Código Postal</label>
+                                                        <input type="text" placeholder="{{usuarios.codpostal}}" id="example-phone" name="example-phone" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="example-country">Select Country</label>
+                                                        <select name="example-message" id="example-message" class="form-control">
+                                                            <option selected>{{usuarios.provincia}}</option>
+                                                            <option>India</option>
+                                                            <option>Usa</option>
+                                                            <option>Canada</option>
+                                                            <option>Thailand</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="example-password">Password</label>
+                                                        <input type="password" value="password" class="form-control" name="example-password" id="example-password">
+                                                    </div>
+                                                    <button class="btn btn-success" type="submit">Update Profile</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+{% endfor %}
+
+                                        {% endblock %} 

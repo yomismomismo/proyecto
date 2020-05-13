@@ -1,0 +1,6 @@
+<form style="width: 31px; display: inline;" method="post" action="{{ path('comentario_delete', {'id': comentario.id}) }}"  onclick="return confirm('Are you sure you want to delete this item?');" id="form1">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comentario.id) }}">
+    {# <button class="ik ik-trash-2 f-16 text-red" style="border:none; background:none"></button> #}
+ <a href="javascript:;" onclick="document.getElementById('form1').submit();"><i class="ik ik-trash-2 f-16 text-red"></i></a>
+</form>

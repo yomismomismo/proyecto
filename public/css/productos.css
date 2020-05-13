@@ -1,0 +1,6 @@
+#products{background-color: rgb(232, 233, 245);
+    border-radius: 0px 0px 7px 7px;
+    text-align: center;
+    font-size: 18px;
+}
+#products:hover{background-color: rgb(175, 175, 175);}

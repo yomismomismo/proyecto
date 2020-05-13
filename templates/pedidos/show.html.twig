@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<title>Pedidos</title>
+
+{% block body %}
+    <h1>Pedidos</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ pedido.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre_cliente</th>
+                <td>{{ pedido.nombreCliente }}</td>
+            </tr>
+            <tr>
+                <th>Telefono</th>
+                <td>{{ pedido.telefono }}</td>
+            </tr>
+            <tr>
+                <th>Direccion</th>
+                <td>{{ pedido.direccion }}</td>
+            </tr>
+            <tr>
+                <th>Provincia</th>
+                <td>{{ pedido.provincia }}</td>
+            </tr>
+            <tr>
+                <th>Fecha_pedido</th>
+                <td>{{ pedido.fechaPedido ? pedido.fechaPedido|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('pedidos_index') }}">back to list</a>
+
+    <a href="{{ path('pedidos_edit', {'id': pedido.id}) }}">edit</a>
+
+    {{ include('pedidos/_delete_form.html.twig') }}
+{% endblock %}

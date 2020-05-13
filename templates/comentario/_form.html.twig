@@ -1,0 +1,10 @@
+{# {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }} #}
+
+{# {% extends "page/layout.html.twig" %}
+{{ form_start(form) }}
+{{form_widget(form.fecha|date('Y-m-d'), {'attr':{'id':'titulo', 'class':'form-control', 'placeholder':'Título cabecera', 'type':'text', 'required':''}})}}
+
+{{ form_end(form) }} #}

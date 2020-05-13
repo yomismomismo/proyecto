@@ -1,0 +1,203 @@
+{% extends "adminPage/layout.html.twig" %}
+{% block head %}
+        
+        {# <script>window.jQuery || document.write('<script src="../src/js/vendor/jquery-3.3.1.min.js"><\/script>')</script> #}
+        <link rel="stylesheet" href="/plugins/chartist/dist/chartist.min.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="/plugins/flot-charts/jquery.flot.js"></script>
+        <script src="/plugins/flot-charts/curvedLines.js"></script>
+        <script src="/plugins/chartist/dist/chartist.min.js"></script>
+        <script src="/plugins/amcharts/amcharts.js"></script>
+        <script src="/plugins/amcharts/gauge.js"></script>
+        <script src="/plugins/amcharts/serial.js"></script>
+        <script src="/plugins/amcharts/themes/light.js"></script>
+        <script src="/plugins/amcharts/animate.min.js"></script>
+        <script src="/plugins/amcharts/pie.js"></script>
+        <script src="/plugins/ammap3/ammap/ammap.js"></script>
+        <script src="/plugins/ammap3/ammap/maps/js/usaLow.js"></script>
+        <script src="/js/js-admin/chart-amcharts.js"></script>
+        <script src="/js/js-admin/widget-data.js"></script>
+        <script src="/js/js-admin/widget-statistic.js"></script>
+{% endblock %}
+{% block contenido %}
+                        <div class="row">
+                            <!-- page statustic chart start -->
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card card-red text-white">
+                                    <div class="card-block">
+                                        <div class="row align-items-center">
+                                            <div class="col-8">
+                                                <h4 class="mb-0">2,563</h4>
+                                                <p class="mb-0">Usuarios</p>
+                                            </div>
+                                            <div class="col-4 text-right">
+                                                <i class="ik ik-user f-30"></i>
+                                            </div>
+                                        </div>
+                                        <div id="Widget-line-chart1" class="chart-line chart-shadow" style="width:100%;height:75px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card card-blue text-white">
+                                    <div class="card-block">
+                                        <div class="row align-items-center">
+                                            <div class="col-8">
+                                                <h4 class="mb-0">3,612</h4>
+                                                <p class="mb-0">Pedidos</p>
+                                            </div>
+                                            <div class="col-4 text-right">
+                                                <i class="ik ik-shopping-cart f-30"></i>
+                                            </div>
+                                        </div>
+                                        <div id="Widget-line-chart2" class="chart-line chart-shadow" style="width:100%;height:75px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card card-yellow text-white">
+                                    <div class="card-block">
+                                        <div class="row align-items-center">
+                                            <div class="col-8">
+                                                <h4 class="mb-0">3,550</h4>
+                                                <p class="mb-0">Comentarios</p>
+                                            </div>
+                                            <div class="col-4 text-right">
+                                                <i class="ik ik-volume-2 f-30"></i>
+                                            </div>
+                                        </div>
+                                        <div id="Widget-line-chart4" class="chart-line chart-shadow" style="width:100%;height:75px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- page statustic chart end -->
+
+                            <!-- Project statustic start -->
+                             <div class="col-xl-3 col-md-6">
+                                <div class="card prod-p-card card-red">
+                                    <div class="card-body" style="height: 165px;">
+                                        <div class="row align-items-center mb-30">
+                                            <div class="col">
+                                                <h6 class="mb-5 text-white">Beneficio total</h6>
+                                                <h3 class="mb-0 fw-700 text-white">$1,783</h3>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fa fa-money-bill-alt text-red f-18"></i>
+                                            </div>
+                                        </div>
+                                        {# <p class="mb-0 text-white"><span class="label label-danger mr-10">+11%</span>From Previous Month</p> #}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3>Line Chart</h3>
+                                    </div>
+                                    <div class="card-block text-center">
+                                        <div id="line_chart" class="chart-shadow" style="height:400px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                    <div class="row">
+                            <!-- Application Sales start -->
+                            <div class="col-md-12 col-xl-12">
+                                <div class="card table-card">
+                                    <div class="card-header">
+                                        <h3>Productos más vendidos</h3>
+                                        <div class="card-header-right">
+                                            <ul class="list-unstyled card-option">
+                                                <li><i class="ik ik-chevron-left action-toggle"></i></li>
+                                                <li><i class="ik ik-minus minimize-card"></i></li>
+                                                <li><i class="ik ik-x close-card"></i></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="card-block p-b-0">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-borderless mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Productos</th>
+                                                        <th>Ventas</th>
+                                                        <th>Stock</th>
+                                                        <th>Precio</th>
+                                                        <th>Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-inline-block align-middle">
+                                                                <h6>Able Pro</h6>
+                                                                <p class="text-muted mb-0">Powerful Admin Theme</p>
+                                                            </div>
+                                                        </td>
+                                                        <td>16,300</td>
+                                                        <td>
+                                                            <div ><label class="badge badge-danger">out Stock</label></div>
+                                                        </td>
+                                                        <td>$53</td>
+                                                        <td class="text-blue">$15,652</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-inline-block align-middle">
+                                                                <h6>Photoshop</h6>
+                                                                <p class="text-muted mb-0">Design Software</p>
+                                                            </div>
+                                                        </td>
+                                                        <td>26,421</td>
+                                                        <td>
+                                                            <div ><label class="badge badge-danger">out Stock</label></div>
+                                                        </td>
+                                                        <td>$35</td>
+                                                        <td class="text-blue">$18,785</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-inline-block align-middle">
+                                                                <h6>Guruable</h6>
+                                                                <p class="text-muted mb-0">Best Admin Template</p>
+                                                            </div>
+                                                        </td>
+                                                        <td>8,265</td>
+                                                        <td>
+                                                            <div ><label class="badge badge-success">In Stock</label></div>
+                                                        </td>
+                                                        <td>$98</td>
+                                                        <td class="text-blue">$9,652</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-inline-block align-middle">
+                                                                <h6>Flatable</h6>
+                                                                <p class="text-muted mb-0">Admin App</p>
+                                                            </div>
+                                                        </td>
+                                                        <td>10,652</td>
+                                                        <td>
+                                                            <div ><label class="badge badge-success">In Stock</label></div>
+                                                        </td>
+                                                        <td>$20</td>
+                                                        <td class="text-blue">$7,856</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="text-right">
+                                            <a href="#!" class=" b-b-primary text-primary">View all Projects</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Application Sales end -->
+                    </div>
+{% block script %}{% endblock %}
+{% endblock %}

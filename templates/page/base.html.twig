@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    	<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
+    <script src="https://kit.fontawesome.com/ad58fc7f24.js" crossorigin="anonymous"></script>
+    	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+		<link rel="stylesheet" href="{{ asset("bootstrap.min.css", "estilos") }}">
+
+    <link rel="stylesheet" href="{{ asset("style.css", "estilos") }}">
+    <link rel="stylesheet" href="{{ asset("estilos.css", "estilos") }}">
+        <link rel="stylesheet" href="/css/css-admin/theme.min.css">
+        <script src="/js/js-admin/modernizr-2.8.3.min.js"></script>
+        <link rel="stylesheet" href="/css/login.css">
+            <script src="{{ asset("popper.min.js", "script") }}" ></script>
+
+    <link rel="icon" type="image/jpg" href="{{ asset("favicon.jpg", "imagen") }}">
+        <script src="{{ asset("jquery-3.4.1.slim.min.js", "script") }}"></script>
+    <script src="{{ asset("jquery-3-4-1.min.js", "script") }}"></script>
+    <script src="{{ asset("modernizr.js", "script") }}"></script>
+        <script src="{{ asset("bootstrap.js", "script") }}"></script>
+        <script src="{{ asset("bootstrap.bundle.js", "script") }}"></script>
+
+    <script src="{{ asset("bootstrap.min.js", "script") }}"></script>
+		<script src="{{ asset("jquery.fancybox.min.js", "script") }}"></script>
+    
+		{% block head %}{% endblock %}
+
+
+		<title>{% block titulo %}{% endblock %}</title>
+
+	</head>
+
+	<body>
+        
+		{% block body %}{% endblock %}
+
+
+	</body>
+            
+</html>
+
+

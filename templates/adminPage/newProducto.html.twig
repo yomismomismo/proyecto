@@ -1,0 +1,122 @@
+{% extends "adminPage/layout.html.twig" %}
+{% block head %}
+        
+        {# <script>window.jQuery || document.write('<script src="../src/js/vendor/jquery-3.3.1.min.js"><\/script>')</script> #}
+        <link rel="stylesheet" href="/plugins/chartist/dist/chartist.min.css">
+        <link rel="stylesheet" href="/plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+        <link rel="stylesheet" href="/css/css-admin/upload.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="/plugins/flot-charts/jquery.flot.js"></script>
+        <script src="/plugins/flot-charts/curvedLines.js"></script>
+        <script src="/plugins/chartist/dist/chartist.min.js"></script>
+        <script src="/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
+        <script src="/plugins/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="/js/js-admin/tables.js"></script>
+        <script src="/js/js-admin/datatables.js"></script>
+        <script src="/js/js-admin/widget-data.js"></script>
+        <script src="/js/js-admin/widget-statistic.js"></script>
+{% endblock %}
+{% block contenido %}         
+                    <div class="container-fluid">
+
+                        <div class="row">
+                            <div class="col-lg-4 col-md-5">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="text-center"> 
+                                            {# {% for productos in producto %}
+
+                                            <!-- La variable imagen separa los datos que recibe de la base de datos en un array -->
+					                            {% set imagen = productos.imagen|split('|') %}
+		                                    <!-- For rutaImg saca el primer dato del array que debe ser siempre la ruta de la imagen -->
+					                            {% set ruta = "" %}
+					                            {% for rutaImg in imagen|slice(0, 1) %}
+						                            {% set ruta = rutaImg %}
+					                            {% endfor %}
+
+                                                   {% for imagen in imagen|slice(1) %}
+						  	                            <img src="{{ruta}}{{imagen}}" width="200"/>
+    					                            {% endfor %}
+                                            <h4 class="card-title mt-10">{{productos.nombre}}</h4> #}
+                                        </div>
+                                    </div>
+                                    <hr class="mb-0"> 
+                                    <div class="card-body"> 
+                                        <div id="uploads"></div>
+                                            <div class="dropzone" id="dropzone">Drop files here to upload</div>
+                                        {# <small class="text-muted d-block">Imagen</small>
+                                        <h6>{{productos.imagen}}</h6> 
+                                        <small class="text-muted d-block pt-10">Nombre</small>
+                                        <h6>{{productos.nombre}}</h6> 
+                                        <small class="text-muted d-block pt-10">Descripción</small>
+                                        <h6>{{productos.descripcion}}</h6>
+                                        <small class="text-muted d-block pt-10">Precio</small>
+                                        <h6>{{productos.precio}}€</h6>
+                                         <small class="text-muted d-block pt-10">Unidades en stock</small>
+                                        <h6>{{productos.unidadesStock}}</h6>
+                                         <small class="text-muted d-block pt-10">Categoría</small>
+                                        <h6>{{productos.categoria}}</h6>
+                                        <small class="text-muted d-block pt-10">Unidades vendidas</small>
+                                        <h6>{{productos.unidadesVendidas}}</h6> #}
+                                        <script src="/js/js-admin/upload.js"></script>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8 col-md-7">
+                                <div class="card">
+                                    <ul class="nav nav-pills custom-pills" id="pills-tab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="pills-setting-tab" data-toggle="pill" href="#previous-month" role="tab" aria-controls="pills-setting" aria-selected="false">Crear Producto</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" id="pills-tabContent">
+                                        
+                                            <div class="tab-pane fade show active" id="current-month" role="tabpanel" aria-labelledby="pills-timeline-tab">
+                                        
+                                            <div class="card-body">
+                                            
+                                            
+                                                {{form_start(form, {'attr':{'class':"form-horizontal", 'action':'', "id":"subirForm", "autocomplete":"on"}})}}
+                                                <form class="form-horizontal">
+                                                    <div class="form-group">
+ 
+                                                        <label for="newNombre">Nombre</label>
+                                                         {{form_widget(form.nombre, {'attr':{'class':'form-control', "id":"newNombre", "name":"newNombre", "autocomplete":"family-name", 'placeholder':'Nombre'}})}}
+                                                        
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="newImagen">Imagen</label>
+                                                        {{form_widget(form.imagen, {'attr':{'class':'form-control', "id":"newImagen", "name":"newImagen", "autocomplete":"family-name", 'placeholder':'Imagen'}})}}
+                                                        {# <input type="text" placeholder="{{productos.imagen}}" class="form-control" name="newImagen" id="newImagen"> #}
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="newDescripcion">Descripción</label>
+                                                        {{form_widget(form.descripcion, {'attr':{'class':'form-control', "id":"newDescripcion", "name":"newDescripcion", "autocomplete":"family-name", 'placeholder':'Descripción'}})}}
+                                                        {# <input type="text" placeholder="{{productos.descripcion}}" class="form-control" name="newDescripcion" id="newDescripcion"> #}
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
+                                                        <label for="newPrecio">Precio</label>
+                                                        {{form_widget(form.precio, {'attr':{'class':'form-control', "id":"newPrecio", "name":"newPrecio", "autocomplete":"family-name", 'placeholder':'Precio'}})}}
+                                                        {# <input type="text" placeholder="{{productos.precio}}" class="form-control" name="newPrecio" id="newPrecio"> #}
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="newStock">Unidades en stock</label>
+                                                        {{form_widget(form.unidades_stock, {'attr':{'class':'form-control', "id":"newStock", "name":"newStock", "autocomplete":"family-name", 'placeholder':'Unidades en stock'}})}}
+                                                        {# <input type="text" placeholder="{{productos.unidadesStock}}" class="form-control" id="newStock" name="newStock"> #}
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="newCategoria">Categoría</label>
+                                                        {{form_widget(form.categoria, {'attr':{'class':'form-control', "id":"newCategoria", "name":"newCategoria", "autocomplete":"family-name", 'placeholder':'Categoría'}})}}
+                                                    </div>
+                                                    {{form_widget(form.send, {'label': 'Crear', 'attr':{'class':'btn bot', 'type':'submit'}})}}
+                                                    {{form_end(form)}}
+                                                        {# {{form_start(form, {'attr':{'class':"form-horizontal", 'action':'', "id":"submissionForm", "autocomplete":"on"}})}}
+                                                              {{form_widget(form.send, {'label': 'Crear', 'attr':{'class':'btn bot', 'type':'submit'}})}}
+                                                    {{form_end(form)}} #}
+                                            </div>
+                                        </div>
+                                    </div>
+{# {% endfor %} #}
+
+                                        {% endblock %} 

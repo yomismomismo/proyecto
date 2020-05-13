@@ -1,0 +1,60 @@
+{% extends "adminPage/layout.html.twig" %}
+{% block head %}
+        
+        <link rel="stylesheet" href="/plugins/chartist/dist/chartist.min.css">
+                <link rel="stylesheet" href="/plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="/plugins/chartist/dist/chartist.min.js"></script>
+        <script src="/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
+        <script src="/plugins/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="/js/js-admin/datatables.js"></script>
+        <script src="/js/js-admin/widget-statistic.js"></script>
+{% endblock %}
+{% block contenido %}
+                              <!-- Productos admin start -->
+
+                                   <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header d-block">
+                                        <h3>Comentarios</h3>
+                                    </div>
+                                        <div class="table-responsive">
+                                                <div class="card-body">
+                                            <table id="simpletable"
+                                                   class="table table-striped table-bordered nowrap">
+                                                <thead>
+                                                <tr>
+                                                    <th>Usuario</th>
+                                                    <th>Email</th>
+                                                    <th>Fecha registro</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                      
+                                                    {% for usuario in usuarios %}
+                                                            <tr>
+                                                                <td><a href="{{ path('detalleUsuarios', {'id': usuario.id}) }}">{{ usuario.nombre }}</a></td>
+                                                                <td>{{ usuario.email }}</td>
+                                                                <td>{{ usuario.fechaRegistro ? usuario.fechaRegistro|date('Y-m-d H:i:s') : '' }}</td>
+                                                                <td><a href="#!"><i class="ik ik-edit f-16 mr-15 text-green"></i></a><a href="#!"><i class="ik ik-trash-2 f-16 text-red"></i></a></td>
+                                                            </tr>
+                                                        {% else %}
+                                                            <tr>
+                                                                <td colspan="9">no records found</td>
+                                                            </tr>
+        {% endfor %}
+
+    
+                                                    
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                <!--  Productos admin end -->
+{% block script %}{% endblock %}
+{% endblock %}
