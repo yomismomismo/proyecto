@@ -26,29 +26,9 @@ class PageAdminController extends AbstractController
              ]);
     }
 
-    /**
-     * @Route("/page/upload", name="upload")
-     */
-    public function upload()
-    {
 
-        return $this->render('adminPage/upload.html', [
-            'controller_name' => 'PageAdminController',
-            
-             ]);
-    }
 
-    /**
-     * @Route("/page/php", name="php")
-     */
-    public function php()
-    {
 
-        return $this->render('adminPage/upload.html.twig', [
-            'controller_name' => 'PageAdminController',
-            
-             ]);
-    }
 
     /**
      * @Route("/page/admin/productosAdmin", name="productosAdmin")
