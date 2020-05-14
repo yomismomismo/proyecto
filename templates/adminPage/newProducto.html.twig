@@ -42,11 +42,13 @@
                                     </div>
                                     <hr class="mb-0"> 
                                     <div class="card-body"> 
+                    
                                          <div id="uploads"></div>
     <div class="dropzone" id="dropzone">Drop files here to upload</div>
 
     <script>
-        (function() {
+    
+
             var dropzone = document.getElementById('dropzone');
 
             var displayUploads = function(data){
@@ -55,14 +57,29 @@
                     x;
 
                 for(x = 0; x < data.length; x = x + 1){
+                    
                     anchor = document.createElement('a');
+                    borrar = document.createElement('a');
                     anchor.href = data[x].file;
                     anchor.innerText = data[x].name;
-
+                    borrar.innerText = " X"
+                    borrar.style.color="red"
+                    borrar.href =data[x].file
                     uploads.appendChild(anchor);
+                    uploads.appendChild(borrar)
+                    
                 }
-            }
 
+                for(x = 0; x < data.length; x = x + 1){
+                    if(data[x].name == "thumb.jpg"){
+                        data.pop();
+                    }
+                
+                }
+
+                console.log(data);
+            }
+            
             var upload = function(files){
                 var formData = new FormData(),
                     xhr = new XMLHttpRequest(),
@@ -70,19 +87,33 @@
 
                 for(x = 0; x < files.length; x = x + 1) {
                     formData.append('file[]', files[x]);
+                    
                 }
                 xhr.onload = function(){
                     var data = JSON.parse(this.responseText);
-
+                    
                     displayUploads(data);
                     
                     
                 }
+                    this.inner = function() {
+        alert("hi");
+    }
+                function myFunction() {
+  alert("The form was submitted");
 
+}
+        let boton= document.getElementById("boton")
+
+                xhr.open('post', '{{ asset("uploadnomb.php", "script") }}');
+                xhr.send(formData);
+
+            boton.addEventListener('click', function(){
                 xhr.open('post', '{{ asset("upload.php", "script") }}');
                 xhr.send(formData);
-                
-            };
+                alert("Ha mandado la imagen")
+            })};
+
             dropzone.ondrop = function(e){
                 e.preventDefault();
                 this.className = 'dropzone';
@@ -99,7 +130,6 @@
                 return false;
             };
             
-        }());
     </script>
                                     </div>
                                 </div>
@@ -156,6 +186,12 @@
                                                         {# {{form_start(form, {'attr':{'class':"form-horizontal", 'action':'', "id":"submissionForm", "autocomplete":"on"}})}}
                                                               {{form_widget(form.send, {'label': 'Crear', 'attr':{'class':'btn bot', 'type':'submit'}})}}
                                                     {{form_end(form)}} #}
+                                                    
+                                                    <button id="boton">Click me</button>
+
+<script>
+
+</script>
                                             </div>
                                         </div>
                                     </div>
