@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<title>Productoxpedidos index</title>
+
+{% block body %}
+    <h1>Productoxpedidos index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Cantidad</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for productoxpedido in productoxpedidos %}
+            <tr>
+                <td>{{ productoxpedido.id }}</td>
+                <td>{{ productoxpedido.cantidad }}</td>
+                <td>
+                    <a href="{{ path('productoxpedidos_show', {'id': productoxpedido.id}) }}">show</a>
+                    <a href="{{ path('productoxpedidos_edit', {'id': productoxpedido.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('productoxpedidos_new') }}">Create new</a>
+{% endblock %}

@@ -76,7 +76,8 @@
             $(".qtyplus").on("click",function(){
                 var now = $(".qty").val();
                 if ($.isNumeric(now)){
+					if (parseInt(now) <99){
                     $(".qty").val(parseInt(now)+1);
-                }
+                }}
             });
 		});

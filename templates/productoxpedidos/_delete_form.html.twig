@@ -1,0 +1,14 @@
+    <script>
+
+    window.onload=function(){
+                // Una vez cargada la página, el formulario se enviara automáticamente.
+		document.forms["eliminar"].submit("return Hola");
+
+    }
+
+    </script>
+
+<form method="post" name="eliminar" action="{{ path('productoxpedidos_delete', {'id': productoxpedido.id}) }}">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ productoxpedido.id) }}">
+</form>

@@ -23,7 +23,7 @@ console.log(elemento);
 function mostrar() {
   document.getElementsByClassName("wrapper")[0].style.visibility = "visible";
   document.getElementsByClassName("lg-shadow-layer")[0].style.visibility = "visible";
-  document.getElementsByClassName("lg-shadow-layer")[0].style.zIndex = "16";
+  document.getElementsByClassName("lg-shadow-layer")[0].style.zIndex = "2";
   document.getElementsByClassName("wrapper")[0].style.cursor = "pointer"; 
 
 }

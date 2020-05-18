@@ -14,6 +14,10 @@
 				
                      	<script src="{{ asset("main.js", "script") }}"></script>
 				  <script src="{{ asset("detalle.js", "script") }}"></script>
+				  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+				  <script src="sweetalert2.all.min.js"></script>
+<!-- Optional: include a polyfill for ES6 Promises for IE11 -->
+<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
 {% endblock %}
 {% block contenido %}
 <main>
@@ -23,7 +27,15 @@
 	        <div class="heading-section">
 	            <h2>Product Details</h2>
 	        </div>
-			
+								{% set totalPuntos = 0  %}
+								{% set contaComent = 0  %}
+								{% set mediaComent = 0  %}
+									{% for comentarios in Comentario %}
+										
+										{% set totalPuntos = totalPuntos + comentarios.getPuntuacion()  %}
+										{% set contaComent = contaComent + 1  %}
+									{% endfor %}
+									{% set mediaComent = totalPuntos / contaComent %}
 	<!-- Inicio de for que saca los datos de la base de datos -->
 		{% for productos in producto %}
 		<!-- La variable imagen separa los datos que recibe de la base de datos en un array -->
@@ -65,19 +77,19 @@
 												
 		        			<div class="product-name" id="nameprod">{{productos.nombre}}</div>
 		        			<div class="reviews-counter">
-								<div class="rate">
-								    <input type="radio" id="star5" name="rate" value="5" disabled {% if puntuacion1 == "5" %} checked {% endif %}/>
+								<div class="rate" id="hoverlabeldisabled">
+								    <input type="radio" id="star5" name="rate" value="5" disabled {% if mediaComent|round(0, 'floor') == "5" %} checked {% endif %}/>
 								    <label for="star5" title="text">5 stars</label>
-								    <input type="radio" id="star4" name="rate" value="4" disabled {% if puntuacion1 == "4" %} checked {% endif %}/>
+								    <input type="radio" id="star4" name="rate" value="4" disabled {% if mediaComent|round(0, 'floor') == "4" %} checked {% endif %}/>
 								    <label for="star4" title="text">4 stars</label>
-								    <input type="radio" id="star3" name="rate" value="3" disabled {% if puntuacion1 == "3" %} checked {% endif %}/>
+								    <input type="radio" id="star3" name="rate" value="3" disabled {% if mediaComent|round(0, 'floor') == "3" %} checked {% endif %}/>
 								    <label for="star3" title="text">3 stars</label>
-								    <input type="radio" id="star2" name="rate" value="2" disabled {% if puntuacion1 == "2" %} checked {% endif %}/>
+								    <input type="radio" id="star2" name="rate" value="2" disabled {% if mediaComent|round(0, 'floor') == "2" %} checked {% endif %}/>
 								    <label for="star2" title="text">2 stars</label>
-								    <input type="radio" id="star1" name="rate" value="1" disabled{% if puntuacion1 == "1" %} checked {% endif %}/>
+								    <input type="radio" id="star1" name="rate" value="1" disabled{% if mediaComent|round(0, 'floor') == "1" %} checked {% endif %}/>
 								    <label for="star1" title="text">1 star</label>
 								  </div>
-								<span>3 Reviews</span>
+								<span>{{contaComent}} Comentarios</span>
 							</div>
 		        			<div class="product-price"><span id="product-price-detalle">{{productos.precio}} €</span></div>
 							{# <span class="line-through">$29.00</span> #}
@@ -102,37 +114,105 @@
 								</select>
 	        				</div> #}
 	        			</div>
-							
-	        			<div class="product-count">
-	        				<label for="size">Quantity</label>
-	        				{# <form action="#" class="display-flex"> #}
-							{% if user %}
-							{{form_start(form1, {'attr':{'class':"display-flex", "action":""}})}}
-							    <div class="qtyminus">-</div>
-								{{form_widget(form1.cantidad, {'attr':{'class':'qty', "name":"quantity", "type":"text", "value":"1", "style":"height: 34px;"}})}}
-							    <div class="qtyplus">+</div><br>
-								 {{form_widget(form1.send, {'attr':{'class':'round-black-btn', 'placeholder':'Enviar Comentario',  'type':'submit', "style":"margin-top: 49px;
-margin-left: -129px;"}})}}
-							{{form_end(form1)}} 
+						{% if productostock %}
+						{{dump(productostock.getCantidad())}}
+						{% endif %}
+						{% if user %}
+								{% for productos in producto %}
+									{% if productos.getUnidadesstock() > 0 %}
+											<div class="product-count">
+											<label for="size">Quantity</label>
+											{# <form action="#" class="display-flex"> #}
+											{{form_start(form1, {'attr':{'class':"display-flex", "action":"", "id":"myForm"}})}}
+											<div class="qtyminus">-</div>
+											{{form_widget(form1.cantidad, {'attr':{'class':'qty', 'id':'cantidad' ,'maxlength':'2', "name":"quantity", "type":"text", "value":"1", "style":"height: 34px;"}})}}
 
+											<div class="qtyplus">+</div><br>
+											{# {{form_widget(form1.send, {'attr':{'class':'round-black-btn', 'placeholder':'Enviar Comentario',  'type':'submit', "style":"margin-top: 49px; margin-left: -129px;"}})}} #}
+											<a href="#" class="round-black-btn" id="boton" style="margin-top: 49px; margin-left: -129px;">Add to Cart</a>
+											{{form_end(form1)}} 
+											</div>
+											
+											
+											{% if productos.getUnidadesstock() <= 10 %}
+											<br>
+												<p style="color:red; font-size: 18px">!Quedan pocos en stock¡<p>
+																					
+											{% endif %}
+											<script>
+										let cantidadselect = document.getElementById("productoxpedido_cantidad")
+										let boton = document.getElementById("boton")
+
+
+									boton.addEventListener('click', function(){
+																	{% if productostock %}
+									let respedido= {{productostock.getCantidad()}} + parseInt(cantidadselect.value);
+								{% else %}
+								 let productostock = 0 
+								 let respedido = 0 
+								{% endif %}
+										
+									
+										console.log(respedido)
+										
+											if (cantidadselect.value > {{productos.getUnidadesstock()}}){
+												Swal.fire({
+													icon: 'warning',
+													title: 'Oops...',
+													text: 'No hay suficiente stock!',
+													})
+
+											}
+												{% if productostock %} 
+											else if( respedido > {{productos.getUnidadesstock()}} ){
+												Swal.fire({
+													icon: 'warning',
+													title: 'Oops...',
+													text: 'Has superado el stock disponible!',
+													})
+
+											}
+												{% endif %}
+											else{  document.getElementById("myForm").submit();}
+											})
+											
+
+									</script>
+										{% else %}
+									<p style="color:red">¡este producto está agotado!<p>
+									{% endif %}
+								{% endfor %}
 							{% else %}
-							<div class="product-count">
-	        				<form action="#" class="display-flex">
-							    <div class="qtyminus">-</div>
-							    <input type="text" name="quantity" value="1" class="qty">
-							    <div class="qtyplus">+</div>
-							</form>
-							<a href="#" class="round-black-btn">Add to Cart</a>
-	        			</div>
+								{% for productos in producto %}
+									{% if productos.getUnidadesstock() > 0 %}
+										<div class="product-count">
+	        							<form action="#" class="display-flex">
+							   				<div class="qtyminus">-</div>
+							    			<input type="text" name="quantity" id="cantidad" value="1" class="qty">
+							    			<div class="qtyplus">+</div>
+										</form>
 
+										<a href="#" onclick="javascript:mostrar()" class="round-black-btn" id="boton">Add to Cart</a>
+										</div>
+											{% if productos.getUnidadesstock() <= 10 %}
+											<br>
+												<p style="color:red; font-size: 18px">!Quedan pocos en stock¡<p>
+											{% endif %}
+									{% else %}
+									<p style="color:red">¡este producto está agotado!<p>
+									{% endif %}
+								{% endfor %}
+							
+
+					
 							{% endif %}
 							{# </form> #}
 							 {# <a href="#" class="round-black-btn" id="addcart">Add to Cart</a> #}
+							 	        	
 	        			</div>
-	        		</div>
-
 	        	</div>
 	        </div>
+
 	        <div class="product-info-tabs">
 		        <ul class="nav nav-tabs" id="myTab" role="tablist">
 				  	<li class="nav-item">
@@ -170,18 +250,18 @@ margin-left: -129px;"}})}}
 								<b><p style="margin-left:20px;margin-top: 10px;">{{comentarios.getIdUsuario().getnombre()}} {{comentarios.getIdUsuario().getapellido()}}</p></b>
 								<p style="margin-left:40px;">{{comentarios.getComentario()}}
 								{# {% set star = "star" %} #}
-								<div class="rate" style="position:relative;">
+								<div class="rate" style="position:relative;" id="hoverlabeldisabled">
 								<span style="margin-left: 20px; margin-top:20px">{{comentarios.getFecha()|date('d-m-Y H:i')}}</span>
 								    <input type="radio" id="star5{{contador}}" name="rate{{contador}}" value="5" disabled {% if comentarios.getPuntuacion() == "5" %} checked {% endif %}/>
-								    <label for="star5{{contador}}" id="hoverlabeldisabled" title="text">5 stars</label>
+								    <label for="star5{{contador}}" title="text">5 stars</label>
 								    <input type="radio" id="star4{{contador}}"  name="rate{{contador}}" value="4" disabled {% if comentarios.getPuntuacion() == "4" %} checked {% endif %}/>
-								    <label for="star4{{contador}}" title="text" id="hoverlabeldisabled">4 stars</label>
+								    <label for="star4{{contador}}" title="text">4 stars</label>
 								    <input type="radio" id= "star3{{contador}}" name="rate{{contador}}" value="3" disabled {% if comentarios.getPuntuacion() == "3" %} checked {% endif %}/>
-								    <label for="star3{{contador}}" title="text" id="hoverlabeldisabled">3 stars</label>
+								    <label for="star3{{contador}}" title="text">3 stars</label>
 								    <input type="radio" id="star2{{contador}}" name="rate{{contador}}" value="2" disabled {% if comentarios.getPuntuacion() == "2" %} checked {% endif %}/>
-								    <label for="star2{{contador}}" title="text" id="hoverlabeldisabled">2 stars</label>
+								    <label for="star2{{contador}}" title="text">2 stars</label>
 								    <input type="radio" id="star1{{contador}}" name="rate{{contador}}" value="1" disabled {% if comentarios.getPuntuacion() == "1" %} checked {% endif %}/>
-								    <label for="star1{{contador}}" title="text" id="hoverlabeldisabled">1 star</label>
+								    <label for="star1{{contador}}" title="text">1 star</label>
 									
 									{# {{comentarios.fecha|date("m/d/Y")}} #}
 								</div>
@@ -239,9 +319,8 @@ margin-left: -129px;"}})}}
 								</div>
 							</div>
 							<textarea class="form-control" rows="10"></textarea>
-					        
-							  <button class="round-black-btn">Submit Review</button>
 			        	</form>
+								  <button onclick="javascript:mostrar()" class="round-black-btn">Submit Review</button>
 							{% endif %}
 
 
