@@ -267,8 +267,17 @@
     margin-top: 30px;
   }
 }
-#hoverlabeldisabled:hover{color:none !important;
-	pointer-events: none !important;}
-#hoverlabeldisabled:checked{color:none !important;
-		pointer-events: none !important;}
 
+		#hoverlabeldisabled.rate:not(:checked) > label:hover,
+		#hoverlabeldisabled.rate:not(:checked) > label:hover ~ label {
+			color: #ccc;  
+			cursor: default;
+		}
+		#hoverlabeldisabled.rate > input:checked + label:hover,
+		#hoverlabeldisabled.rate > input:checked + label:hover ~ label,
+		#hoverlabeldisabled.rate > input:checked ~ label:hover,
+		#hoverlabeldisabled.rate > input:checked ~ label:hover ~ label,
+		#hoverlabeldisabled.rate > label:hover ~ input:checked ~ label {
+			color: #ffc700;
+			cursor: default;
+		}

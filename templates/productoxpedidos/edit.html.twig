@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<title>Edit Productoxpedidos</title>
+
+{% block body %}
+    <h1>Edit Productoxpedidos</h1>
+
+    {{ include('productoxpedidos/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('productoxpedidos_index') }}">back to list</a>
+
+    {{ include('productoxpedidos/_delete_form.html.twig') }}
+{% endblock %}

@@ -2,7 +2,7 @@
 
 {% block body %}
 	<header>
-		<div id="logo"><a href="/"><img src="img/Logo.png" style="width: 240px; margin-top: -25px;" alt="Homepage"></a></div>
+		<div id="logo"><a href="/"><img src="/img/Logo.png" style="width: 240px; margin-top: -25px;" alt="Homepage"></a></div>
 
 		<div id="cd-hamburger-menu"><a class="cd-img-replace" href="#0">Menu</a></div>
 		<div id="cd-cart-trigger"><a class="cd-img-replace" href="#0">Cart</a></div>
@@ -96,18 +96,36 @@
 		{% if user %}
 		{% set total = 0 %}
 		{% set subtotal = 0 %}
+		{% if filtroPedido %}
 		{% for pedido in filtroPedido %}
 		
-	
+
 	   <li><div class="producto"><span class="cd-qty">X{{pedido.getCantidad()}} </span><span class="cd-name">{{pedido.getIdproducto().getNombre()}}<br></span>
 	   <span>P.V.P: {{pedido.getIdproducto().getprecio()}} €</span>
 	   {% set subtotal = pedido.getCantidad() * pedido.getIdproducto().getprecio() %}
 	   <span class="product-price"> Total: {{subtotal}}€</span>
 	   	<div class="product-removal-drop">
 <button id="button-cart-drop" href="#0" class="cd-item-remove cd-img-replace"></button>
+<form method="post" id="myFormdelete" action="{{ path('productoxpedidos_delete', {'id': pedido.getId()}) }}">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ pedido.getId()) }}">
+	 <input type="hidden" name="idprod" value="{{pedido.getIdProducto().getId() }}">
+
+</form>
+
     </div></div></li>
 	
+	<script>
+	let btndelete = document.getElementById("button-cart-drop")
+			btndelete.addEventListener('click', function(){
+				document.getElementById("myFormdelete").submit();
+
+
+			})
+
+	</script>
     {% set total = total + subtotal %}
+
 {% endfor %}
 
 		</ul> <!-- cd-cart-items -->
@@ -127,8 +145,6 @@
 		<p class="cd-go-to-cart"><a href="#0">Ir al carrito</a></p>
 		</div> <!-- cd-cart -->
 
-	        <script src="{{ asset("cart-drop.js", "script") }}"></script>
-            <script src="{{ asset("newjs.js", "script") }}"></script>
 
 			
 				
@@ -154,17 +170,38 @@
 
 			</div>
 					<p style="text-align:center;">No hay productos en el carrito</p>
-			<a href="#0" class="checkout-btn">Comprar</a>
+			<a href="#0" onclick="javascript:mostrar()" class="checkout-btn">Comprar</a>
 			<p class="cd-go-to-cart"><a href="#0">Ir al carrito</a></p>
 			
 			</div><!-- cd-cart -->
-	<script src="{{ asset("addprod-cart.js", "script") }}" ></script>
-	            <script src="{{ asset("cart-drop.js", "script") }}"></script>
-            <script src="{{ asset("newjs.js", "script") }}"></script>
+
 			
 			{#-------------------------------------------------#}
+				{% endif %}
 			{% endif %}	
-			                                   {% if user == ""%}
+			                                   {% if user == "" %}
+
+											   			<div id="lg-shadow-layer" class="lg-shadow-layer"></div>
+  			<div id="cd-shadow-layer" class="cd-shadow-layer"></div>
+
+			<div id="cd-cart">
+				<h2>Cart</h2>
+				<ul class="cd-cart-items" id="cd-cart-items">
+				</ul> <!-- cd-cart-items -->
+
+    		<div class="cd-cart-total"></div> <!-- cd-cart-total -->
+    		<dl class="total">
+      			<dd class="totals-value" id="cart-total"></dd>
+				  
+
+	  		</dl>
+
+			</div>
+					<p style="text-align:center;">No hay productos en el carrito</p>
+			<a href="#0" onclick="javascript:mostrar()" class="checkout-btn">Comprar</a>
+			<p class="cd-go-to-cart"><a href="#0">Ir al carrito</a></p>
+			
+			</div><!-- cd-cart -->
      	<div id="lg-shadow-layer" class="lg-shadow-layer"></div>
 			<article id="log" class="wrapper">
   		<form class="login" action="" method="POST">
@@ -185,6 +222,10 @@
 </article>
 		<script src="/js/login.js"></script>
 		{% endif %}	
+	
+			<script src="{{ asset("addprod-cart.js", "script") }}" ></script>
+	            <script src="{{ asset("cart-drop.js", "script") }}"></script>
+            <script src="{{ asset("newjs.js", "script") }}"></script>
 <footer>
 	<div class="container">
 		<br>

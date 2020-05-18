@@ -454,3 +454,4 @@ xkeyframes
     opacity: 1;
   }
 }
+.carousel-indicators {z-index: 2;}

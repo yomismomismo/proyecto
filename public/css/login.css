@@ -28,7 +28,7 @@ visibility: hidden;}
     width: 100%;
     min-height: 100%;
     padding: 20px;
-    position: absolute;
+    position: fixed;
     top: 20px;
     margin-left: auto;
     margin-right: auto;
@@ -153,3 +153,5 @@ visibility: hidden;}
   .login:not(.loading) button:focus {
     border-bottom-width: 4px;
   }
+
+	
