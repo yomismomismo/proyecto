@@ -17,6 +17,14 @@ class PageController extends AbstractController
      */
     public function index(Request $request, SessionInterface $session)
     {
+      $pass=password_hash("5434673012229992", PASSWORD_DEFAULT);
+      $mensaje="";
+      if (password_verify("5434673012229992", $pass)) {
+        $mensaje="Coincide correctamente";
+    } else {
+      $mensaje='Invalid password.';
+      
+    }
         $user1 = $session->get('nombre_usuario');
         $user= $request->request->get("user");
         $password= $password= $request->request->get("password");
@@ -97,7 +105,9 @@ class PageController extends AbstractController
             'page' => 'index',
             'jumbotron' => 'no',
             "user" => "",
-            "filtroPedido" => $idproducto  
+            "filtroPedido" => $idproducto,
+            "pass" => $pass,
+            "mensaje" => $mensaje
         ]);
  }
     }
@@ -173,7 +183,7 @@ class PageController extends AbstractController
                        $session->set('nombre_usuario', $usuario->getNombre());
                      }
 
-                $session->set('password', $password);
+                //$session->set('password', $password);
                    return $this->redirectToRoute('index', [
                         "user" => $user1,
                        
@@ -263,7 +273,7 @@ class PageController extends AbstractController
                        $session->set('nombre_usuario', $usuario->getNombre());
                      }
 
-                $session->set('password', $password);
+                //$session->set('password', $password);
                    return $this->redirectToRoute('index', [
                         "user" => $user1,
                        
@@ -570,7 +580,7 @@ if ($user1) {
                            $session->set('nombre_usuario', $usuario->getNombre());
                          }
    
-                    $session->set('password', $password);
+                    //$session->set('password', $password);
                        return $this->redirectToRoute('index', [
                             "user" => $user1,
                            
@@ -681,7 +691,7 @@ if ($user1) {
                            $session->set('nombre_usuario', $usuario->getNombre());
                          }
    
-                    $session->set('password', $password);
+                    //$session->set('password', $password);
                        return $this->redirectToRoute('index', [
                             "user" => $user1,
                            
@@ -771,7 +781,7 @@ if ($user1) {
                        $session->set('nombre_usuario', $usuario->getNombre());
                      }
 
-                $session->set('password', $password);
+                //$session->set('password', $password);
                    return $this->redirectToRoute('index', [
                         "user" => $user1,
                        
@@ -798,16 +808,18 @@ else{
         $contactoTo=new Usuario();
         $form=$this->CreateForm(UsuarioType::Class, $contactoTo);
         $form->handleRequest($request);
-    
+        $password= $request->request->get("password");
+        $pass=password_hash( $password, PASSWORD_DEFAULT);
         if($form->isSubmitted() && $form->isValid()){
             $entityManager=$this->getDoctrine()->getManager();
             $contactoTo->setFechaRegistro(new \DateTime('now'));
+            $contactoTo->setContrasenya($pass);
             $entityManager->persist($contactoTo);
             $entityManager->flush();}
 
             $user1 = $session->get('nombre_usuario');
             $user= $request->request->get("user");
-            $password= $password= $request->request->get("password");
+           
             $usuarioBBDD=$this->getDoctrine()
             ->getRepository(Usuario::class)
             ->findOneBy(['email' => $user]);
@@ -913,7 +925,7 @@ else{
                        $session->set('nombre_usuario', $usuario->getNombre());
                      }
 
-                $session->set('password', $password);
+                //$session->set('password', $password);
                    return $this->redirectToRoute('index', [
                         "user" => $user1,
                        
