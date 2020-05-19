@@ -50,7 +50,7 @@
     
                     
             var dropzone = document.getElementById('dropzone');
-
+var fileBuffer=[];
             var displayUploads = function(data){
                 var uploads = document.getElementById('uploads'),
                     anchor,
@@ -78,45 +78,108 @@
                   for(x = 0; x < data.length; x = x + 1){        
               document.getElementsByClassName("archivo" + x)[0].addEventListener("click", function(){
                         
-                        ejem(data)
+                        ejem(data);
               });}
             }
 
+
+
                     function ejem(idx){
 
-                        
-                            
-                              for(x = 0; x < idx.length; x = x + 1){
+                    
+                        for(x = 0; x < idx.length; x = x + 1){
                             let clasX = document.getElementsByClassName("archivo" + x)[0].className;        
                             //let documento = document.getElementById("archivo" + x).id;
                             
-                           console.log(document.getElementById("archivo" + x).id);
+                           
                             if( document.getElementById("archivo" + x).id == event.target.className){
+                                console.log(document.getElementById("archivo" + x).id);
                                 alert("Hola " + document.getElementById("archivo" + x).id);
                             }}
                             
-                           // console.log(documento);
-                            //console.log("hola" + idx[x].name)}
-                      //  for(x = 0; x < data.length; x = x + 1){
-
-                      //  }
-                      //  if("archivo2" == data[0].id){
-                       //     alert("lala");
-                       // }
-                        //for(x = 0; x < data.length; x = x + 1){
-
-                        //}
-                        //var idX = document.getElementById('uploads'),
                     }
-            var upload = function(files){
-                var formData = new FormData(),
+
+                        function ejemplo(files){
+                             // fileDialog.files is a FileList 
+        //----------------------------------------Borrar archivo especifico--------------------------------------
+                                    var fileBuffermostrar=[];
+                                    console.log(fileBuffer.length + "Fuera");
+                                    // append the file list to an array
+
+                                    if(fileBuffer.length <= 0 ){
+                                     
+                                    console.log("Hola1");
+                                    Array.prototype.push.apply( fileBuffer, files);
+                                    Array.prototype.push.apply( fileBuffermostrar, files);
+                                    console.log(fileBuffer.length + "dentro");
+                         upload(fileBuffer, fileBuffermostrar);
+                                    } 
+                                    
+                                    else{
+                                    for(x = 0; x < fileBuffer.length; x = x + 1){
+                                        console.log("hola");
+                                            console.log(fileBuffer)
+                                            var contador=0
+                                    //console.info(files[x].name);
+                                        //if(files[0].name == fileBuffer[x].name){
+                                        //    alert(files[0].name + "Ya existe");
+                                        //    break;
+                                        } // <-- here}
+                                        contador=contador+1    
+                                    }
+                                    for(x = 0; x < fileBuffer.length; x = x + 1){
+                                        
+                                    console.info(files[x].name+ "asdas");
+                                     if(fileBuffer[x].name.includes(files[x].name)) { //fileBuffer.some(food => food === files[x].name)
+                                            console.log("hola2");
+                                            
+                                            
+                                            }
+                                    else{
+                                        
+                                            Array.prototype.push.apply( fileBuffer, files);
+                                            Array.prototype.push.apply( fileBuffermostrar, files);
+                                            upload(fileBuffer, fileBuffermostrar);
+                                            break 
+                                    }
+                                            }
+                                    }// <-- here
+                                    
+                                
+                                    // And now you may manipulated the result as required
+
+                                    // shift an item off the array
+                                    //for(x = 0; x < fileBuffer.length; x = x + 1) {
+                                     //   console.log(fileBuffer[x].name)
+                                  //  }
+                                    //var file = fileBuffer.shift(0,1);  // <-- works as expected
+                                    //console.info( file.name + ", " + file.size + ", " + file.type );
+
+                                    // sort files by size
+                                    fileBuffer.sort(function(a,b) {
+                                        return a.size > b.size ? 1 : a.size < b.size ? -1 : 0;
+                                    });
+                                    
+
+
+                                           // }
+        //------------------------------------------------------------------------------
+            var upload = function(files, fileBuffermostrar){
+                var formData = new FormData()
+                var formDatamostrar = new FormData(),
                     xhr = new XMLHttpRequest(),
                     x;
 
                 for(x = 0; x < files.length; x = x + 1) {
-                    formData.append('file[]', files[x]);
-                    
+                    formData.append('file[]', fileBuffer[x]);
+                    console.log();
                 }
+                for(x = 0; x < files.length; x = x + 1) {
+                    formDatamostrar.append('file[]', fileBuffermostrar[x]);
+                    console.log();
+                }
+                
+
                 xhr.onload = function(){
                     var data = JSON.parse(this.responseText);
                     
@@ -124,28 +187,28 @@
                     return data;
                     
                 }
-                
-                    this.inner = function() {
-        alert("hi");
-    }
-                function myFunction() {
-  alert("The form was submitted");
 
-}
+
+
         let boton= document.getElementById("boton")
 
                 xhr.open('post', '{{ asset("uploadnomb.php", "script") }}');
-                xhr.send(formData);
+                xhr.send(formDatamostrar);
 
             boton.addEventListener('click', function(){
                 xhr.open('post', '{{ asset("upload.php", "script") }}');
                 xhr.send(formData);
                 alert("Ha mandado la imagen")
             })};
+
+
+                
+
             dropzone.ondrop = function(e){
                 e.preventDefault();
                 this.className = 'dropzone';
-                upload(e.dataTransfer.files);
+                ejemplo(e.dataTransfer.files);
+               
             };
 
             dropzone.ondragover = function() {
