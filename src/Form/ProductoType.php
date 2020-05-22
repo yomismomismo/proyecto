@@ -20,13 +20,13 @@ class ProductoType extends AbstractType
         //     'data' => '0',
         // ])
             ->add('precio')
-            ->add('categoria',ChoiceType::class, [
-                'choices' => [
-                    '- selecciona -' => '',
-                    'Comida' => 'Comida',
-                    'Juguetes' => 'Juguetes',
-                    'Henos' => 'Henos',
-                    'Accesorios' => 'Accesorios',]])
+            // ->add('categoria',ChoiceType::class, [
+            //     'choices' => [
+            //         '- selecciona -' => '',
+            //         'Comida' => 'Comida',
+            //         'Juguetes' => 'Juguetes',
+            //         'Henos' => 'Henos',
+            //         'Accesorios' => 'Accesorios',]])
 
             ->add('send', SubmitType::class,['label' => 'Actualizar'])
         ;

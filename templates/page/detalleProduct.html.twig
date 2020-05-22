@@ -30,12 +30,15 @@
 								{% set totalPuntos = 0  %}
 								{% set contaComent = 0  %}
 								{% set mediaComent = 0  %}
+								{% if Comentario %}
 									{% for comentarios in Comentario %}
 										
 										{% set totalPuntos = totalPuntos + comentarios.getPuntuacion()  %}
 										{% set contaComent = contaComent + 1  %}
 									{% endfor %}
+
 									{% set mediaComent = totalPuntos / contaComent %}
+									{% endif %}
 	<!-- Inicio de for que saca los datos de la base de datos -->
 		{% for productos in producto %}
 		<!-- La variable imagen separa los datos que recibe de la base de datos en un array -->

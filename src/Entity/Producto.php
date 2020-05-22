@@ -19,6 +19,12 @@ class Producto
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Categoria", inversedBy="productos")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $categoria_id;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $imagen;
@@ -39,19 +45,9 @@ class Producto
     private $unidades_stock;
 
     /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $categoria;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $unidades_vendidas;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comentario", mappedBy="id_producto")
-     */
-    private $comentariosRL;
 
     /**
      * @ORM\Column(type="integer")
@@ -59,21 +55,36 @@ class Producto
     private $precio;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Productoxpedidos", mappedBy="id_producto", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Comentario", mappedBy="id_producto")
+     */
+    private $comentarios;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Productoxpedidos", mappedBy="id_producto")
      */
     private $productoxpedidos;
 
-
     public function __construct()
     {
-        $this->comentariosRL = new ArrayCollection();
         $this->productoxpedidos = new ArrayCollection();
-
     }
+
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getCategoriaId(): ?categoria
+    {
+        return $this->categoria_id;
+    }
+
+    public function setCategoriaId(?categoria $categoria_id): self
+    {
+        $this->categoria_id = $categoria_id;
+
+        return $this;
     }
 
     public function getImagen(): ?string
@@ -124,18 +135,6 @@ class Producto
         return $this;
     }
 
-    public function getCategoria(): ?string
-    {
-        return $this->categoria;
-    }
-
-    public function setCategoria(string $categoria): self
-    {
-        $this->categoria = $categoria;
-
-        return $this;
-    }
-
     public function getUnidadesVendidas(): ?int
     {
         return $this->unidades_vendidas;
@@ -144,37 +143,6 @@ class Producto
     public function setUnidadesVendidas(int $unidades_vendidas): self
     {
         $this->unidades_vendidas = $unidades_vendidas;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Comentario[]
-     */
-    public function getComentariosRL(): Collection
-    {
-        return $this->comentariosRL;
-    }
-
-    public function addComentariosRL(Comentario $comentariosRL): self
-    {
-        if (!$this->comentariosRL->contains($comentariosRL)) {
-            $this->comentariosRL[] = $comentariosRL;
-            $comentariosRL->setIdProducto($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComentariosRL(Comentario $comentariosRL): self
-    {
-        if ($this->comentariosRL->contains($comentariosRL)) {
-            $this->comentariosRL->removeElement($comentariosRL);
-            // set the owning side to null (unless already changed)
-            if ($comentariosRL->getIdProducto() === $this) {
-                $comentariosRL->setIdProducto(null);
-            }
-        }
 
         return $this;
     }
@@ -190,31 +158,32 @@ class Producto
 
         return $this;
     }
-        /**
-     * @return Collection|Productoxpedido[]
+
+    /**
+     * @return Collection|Comentario[]
      */
-    public function getProductoRL(): Collection
+    public function getComentarios(): Collection
     {
-        return $this->productosRL;
+        return $this->comentarios;
     }
 
-    public function addProductoRLRL(Pedidos $pedidosRL): self
+    public function addComentario(Comentario $comentario): self
     {
-        if (!$this->productosRL->contains($productosRL)) {
-            $this->productosRL[] = $productosRL;
-            $productosRL->setIdProducto($this);
+        if (!$this->comentarios->contains($comentario)) {
+            $this->comentarios[] = $comentario;
+            $comentario->setIdProducto($this);
         }
 
         return $this;
     }
 
-    public function removeProductoRL(Pedidos $productosRL): self
+    public function removeComentario(Comentario $comentario): self
     {
-        if ($this->productosRL->contains($productosRL)) {
-            $this->productosRL->removeElement($productosRL);
+        if ($this->comentarios->contains($comentario)) {
+            $this->comentarios->removeElement($comentario);
             // set the owning side to null (unless already changed)
-            if ($productosRL->getIdProducto() === $this) {
-                $productosRL->setIdProducto(null);
+            if ($comentario->getIdProducto() === $this) {
+                $comentario->setIdProducto(null);
             }
         }
 
@@ -234,7 +203,6 @@ class Producto
         if (!$this->productoxpedidos->contains($productoxpedido)) {
             $this->productoxpedidos[] = $productoxpedido;
             $productoxpedido->setIdProducto($this);
-            $productoxpedido->setIdPedido($this);
         }
 
         return $this;
@@ -248,17 +216,9 @@ class Producto
             if ($productoxpedido->getIdProducto() === $this) {
                 $productoxpedido->setIdProducto(null);
             }
-            if ($productoxpedido->getIdPedidos() === $this) {
-                $productoxpedido->setIdPedidos(null);
-            }
         }
 
         return $this;
     }
-//   public function __toString()
-//     {
-//         // return $this->setIdUsuario();
-//         return $this->IdProducto();
-//     }
 
 }

@@ -14,9 +14,33 @@ footer{background-color: #31353d;
     color: white;}
 
 
-
-
-
+#imgindex1{    
+  width: 100%;
+  background-color: #0003;
+  height: 145px;
+  background-image: url("/img/conejosInicio.jpg");
+  background-attachment: fixed;
+  background-blend-mode: soft-light;
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
+#imgindex2{    
+  width: 50%;
+  background-color: #0003;
+  height: 645px;
+  background-image: url("/img/conejo.jpeg");
+  background-blend-mode: soft-light;
+  margin-top: 80px;
+  margin-bottom: 80px;
+  background-size: cover;
+  -webkit-box-shadow: 35px 2px 84px -47px rgba(0,0,0,0.75);
+  -moz-box-shadow: 35px 2px 84px -47px rgba(0,0,0,0.75);
+  box-shadow: 35px 2px 84px -47px rgba(0,0,0,1);
+  z-index: 2;
+}
+#cajatexto{background-color: white;
+  height: 644px;
+  margin-top: 80px;}
 /* .container-fluid{padding-left: 0px !important;
 padding-right: 0px !important;} */
 
