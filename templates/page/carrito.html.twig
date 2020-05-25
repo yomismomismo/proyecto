@@ -7,6 +7,11 @@
 
 {% endblock %}
 {% block contenido %}
+
+<script> 
+    window.onload = recalculateCart();
+</script>
+
 <section class="container">
 	<br>
 	<div class="container">
@@ -21,179 +26,110 @@
 	<label class="product-removal">Remove</label>
 	<label class="product-line-price">Total</label>
   </div>
-  
+  		{# {% if user %}
+		{% set total = 0 %}
+		{% set subtotal = 0 %}
+		{% if filtroPedido %}
+  {% for pedido in filtroPedido %}
+		
+
+	   <li><div class="producto"><span class="cd-qty">X{{pedido.getCantidad()}} </span><span class="cd-name">{{pedido.getIdproducto().getNombre()}}<br></span>
+	   <span>P.V.P: {{pedido.getIdproducto().getprecio()}} €</span>
+	   {% set subtotal = pedido.getCantidad() * pedido.getIdproducto().getprecio() %}
+	   <span class="product-price"> Total: {{subtotal}}€</span>
+	   	<div class="product-removal-drop">
+<button id="button-cart-drop" href="#0" class="cd-item-remove cd-img-replace"></button>
+<form method="post" id="myFormdelete" action="{{ path('productoxpedidos_delete', {'id': pedido.getId()}) }}">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ pedido.getId()) }}">
+	 <input type="hidden" name="idprod" value="{{pedido.getIdProducto().getId() }}">
+
+</form>
+
+    </div></div></li>
+	 #}
+	{# <script>
+	let btndelete = document.getElementById("boton-borrar")
+			btndelete.addEventListener('click', function(){
+				document.getElementById("myFormdelete").submit();
+			})
+
+	</script> #}
+	{% if user == false %}
+	{% set TotalTodo = 0 %}
+	{% set shipping = 0 %}
+	{% endif %}
+{% if user %}
+		{% set XV = 0 %}
+		{% set total = 0 %}
+		{% set subtotal = 0 %}
+		{% if filtroPedido %}
+		{% set TotalTodo = 0 %}
+	{% for pedido in filtroPedido %}
+
+    {% set total = total + subtotal %}
+	{% set subtotal = pedido.getCantidad() * pedido.getIdproducto().getprecio() %}
+	   <!-- La variable imagen separa los datos que recibe de la base de datos en un array -->
+	{% set imagen = pedido.getIdproducto().imagen|split('|') %}
+	<!-- For rutaImg saca el primer dato del array que debe ser siempre la ruta de la imagen -->
+	{% set ruta = "" %}
+	{% for rutaImg in imagen|slice(0, 1) %}
+		{% set ruta = rutaImg %}
+		{% set TotalTodo =  TotalTodo + subtotal %}
+	{% endfor %}
+
+    
   <div class="product">
 	<div class="product-image">
-	  <img src="https://s.cdpn.io/3/dingo-dog-bones.jpg">
+	{% for imagen in imagen|slice(1,1) %}
+	  <img src="{{ruta}}{{imagen}}">
+	{% endfor %}
 	</div>
 	<div class="product-details">
-	  <div class="product-title">Dingo Dog Bones</div>
-	  <p class="product-description">The best dog bones of all time. Holy crap. Your dog will be begging for these things! I got curious once and ate one myself. I'm a fan.</p>
+		 
+	  <div class="product-title">{{pedido.getIdproducto().getNombre()}}</div>
+	  <p class="product-description">{{pedido.getIdproducto().getDescripcion()}}</p>
 	</div>
-	<div class="product-price">12.99</div>
-	<div class="product-quantity">
-	  <input type="number" value="2" min="1">
+	<div class="product-price">{{pedido.getIdproducto().getprecio()}}</div>
+
+	<!-- Cambia la cantidad del producto -->
+	
+	<div id="cambio{{pedido.getId()}}" class="product-quantity">
+	
+		<form method="post" id="changeCantidad{{pedido.getId()}}" action="{{ path('changeCantidad', {'id': pedido.getId()}) }}">
+    		<input type="hidden" name="_method" value="POST">
+    		<input type="hidden" name="_token" value="{{ csrf_token('modify' ~ pedido.getId()) }}">
+	 		<input type="hidden" name="idprod" value="{{pedido.getIdProducto().getId() }}">
+	  		<input type="number" name="subject{{pedido.getId()}}" value="{{pedido.getCantidad()}}" min="1">
+	  	</form>
 	</div>
+	{% set XV = XV + 1 %}
+	
+	<!--  -->
+<div id="test" data-is-test="{{ test|json_encode }}"></div>
+
+	<!-- Elimina el producto -->
 	<div class="product-removal">
-	  <button class="remove-product">
-		<i class="fas fa-times"></i>
-	  </button>
+	<button onclick="enviar_formulario()" id="boton-borrar" class="remove-product" role="button"><i class="fas fa-times"></i></button> 
+	<form method="post" id="myFormdelete" action="{{ path('borrarCarrito', {'id': pedido.getId()}) }}">
+    	<input type="hidden" name="_method" value="DELETE">
+    	<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ pedido.getId()) }}">
+	 	<input type="hidden" name="idprod" value="{{pedido.getIdProducto().getId() }}">
+	</form>
 	</div>
-	<div class="product-line-price">25.98</div>
+	<!--  -->
+
+	<div class="product-line-price">{{subtotal}}</div>
   </div>
-  <div class="product">
-	<div class="product-image">
-	  <img src="https://s.cdpn.io/3/dingo-dog-bones.jpg">
-	</div>
-	<div class="product-details">
-	  <div class="product-title">Dingo Dog Bones</div>
-	  <p class="product-description">The best dog bones of all time. Holy crap. Your dog will be begging for these things! I got curious once and ate one myself. I'm a fan.</p>
-	</div>
-	<div class="product-price">12.99</div>
-	<div class="product-quantity">
-	  <input type="number" value="2" min="1">
-	</div>
-	<div class="product-removal">
-	  <button class="remove-product">
-		<i class="fas fa-times"></i>
-	  </button>
-	</div>
-	<div class="product-line-price">25.98</div>
-  </div>
-  <div class="product">
-	<div class="product-image">
-	  <img src="https://s.cdpn.io/3/dingo-dog-bones.jpg">
-	</div>
-	<div class="product-details">
-	  <div class="product-title">Dingo Dog Bones</div>
-	  <p class="product-description">The best dog bones of all time. Holy crap. Your dog will be begging for these things! I got curious once and ate one myself. I'm a fan.</p>
-	</div>
-	<div class="product-price">12.99</div>
-	<div class="product-quantity">
-	  <input type="number" value="2" min="1">
-	</div>
-	<div class="product-removal">
-	  <button class="remove-product">
-		<i class="fas fa-times"></i>
-	  </button>
-	</div>
-	<div class="product-line-price">25.98</div>
-  </div>
-  <div class="product">
-	<div class="product-image">
-	  <img src="https://s.cdpn.io/3/dingo-dog-bones.jpg">
-	</div>
-	<div class="product-details">
-	  <div class="product-title">Dingo Dog Bones</div>
-	  <p class="product-description">The best dog bones of all time. Holy crap. Your dog will be begging for these things! I got curious once and ate one myself. I'm a fan.</p>
-	</div>
-	<div class="product-price">12.99</div>
-	<div class="product-quantity">
-	  <input type="number" value="2" min="1">
-	</div>
-	<div class="product-removal">
-	  <button class="remove-product">
-		<i class="fas fa-times"></i>
-	  </button>
-	</div>
-	<div class="product-line-price">25.98</div>
-  </div>
-  <div class="product">
-	<div class="product-image">
-	  <img src="https://s.cdpn.io/3/dingo-dog-bones.jpg">
-	</div>
-	<div class="product-details">
-	  <div class="product-title">Dingo Dog Bones</div>
-	  <p class="product-description">The best dog bones of all time. Holy crap. Your dog will be begging for these things! I got curious once and ate one myself. I'm a fan.</p>
-	</div>
-	<div class="product-price">12.99</div>
-	<div class="product-quantity">
-	  <input type="number" value="2" min="1">
-	</div>
-	<div class="product-removal">
-	  <button class="remove-product">
-		<i class="fas fa-times"></i>
-	  </button>
-	</div>
-	<div class="product-line-price">25.98</div>
-  </div>
-  <div class="product">
-	<div class="product-image">
-	  <img src="https://s.cdpn.io/3/dingo-dog-bones.jpg">
-	</div>
-	<div class="product-details">
-	  <div class="product-title">Dingo Dog Bones</div>
-	  <p class="product-description">The best dog bones of all time. Holy crap. Your dog will be begging for these things! I got curious once and ate one myself. I'm a fan.</p>
-	</div>
-	<div class="product-price">12.99</div>
-	<div class="product-quantity">
-	  <input type="number" value="2" min="1">
-	</div>
-	<div class="product-removal">
-	  <button class="remove-product">
-		<i class="fas fa-times"></i>
-	  </button>
-	</div>
-	<div class="product-line-price">25.98</div>
-  </div>
-  <div class="product">
-	<div class="product-image">
-	  <img src="https://s.cdpn.io/3/dingo-dog-bones.jpg">
-	</div>
-	<div class="product-details">
-	  <div class="product-title">Dingo Dog Bones</div>
-	  <p class="product-description">The best dog bones of all time. Holy crap. Your dog will be begging for these things! I got curious once and ate one myself. I'm a fan.</p>
-	</div>
-	<div class="product-price">12.99</div>
-	<div class="product-quantity">
-	  <input type="number" value="2" min="1">
-	</div>
-	<div class="product-removal">
-	  <button class="remove-product">
-		<i class="fas fa-times"></i>
-	  </button>
-	</div>
-	<div class="product-line-price">25.98</div>
-  </div>
-  <div class="product">
-	<div class="product-image">
-	  <img src="https://s.cdpn.io/3/dingo-dog-bones.jpg">
-	</div>
-	<div class="product-details">
-	  <div class="product-title">Dingo Dog Bones</div>
-	  <p class="product-description">The best dog bones of all time. Holy crap. Your dog will be begging for these things! I got curious once and ate one myself. I'm a fan.</p>
-	</div>
-	<div class="product-price">12.99</div>
-	<div class="product-quantity">
-	  <input type="number" value="2" min="1">
-	</div>
-	<div class="product-removal">
-	  <button class="remove-product">
-		<i class="fas fa-times"></i>
-	  </button>
-	</div>
-	<div class="product-line-price">25.98</div>
-  </div>
-  <div class="product">
-	<div class="product-image">
-	  <img src="https://s.cdpn.io/3/large-NutroNaturalChoiceAdultLambMealandRiceDryDogFood.png">
-	</div>
-	<div class="product-details">
-	  <div class="product-title">Nutro™ Adult Lamb and Rice Dog Food</div>
-	  <p class="product-description">Who doesn't like lamb and rice? We've all hit the halal cart at 3am while quasi-blackout after a night of binge drinking in Manhattan. Now it's your dog's turn!</p>
-	</div>
-	<div class="product-price">45.99</div>
-	<div class="product-quantity">
-	  <input type="number" value="1" min="1">
-	</div>
-	<div class="product-removal">
-	  <button class="remove-product">
-		<i class="fas fa-times"></i>
-	  </button>
-	</div>
-	<div class="product-line-price">45.99</div>
-  </div>
-	  
+  <script>
+function enviar_formulario(){
+document.getElementById("myFormdelete").submit();
+}
+</script> 
+{% endfor %}
+			{% endif %}
+			{% endif %}	
+
   
   </div>
   
@@ -201,18 +137,37 @@
 	<div class="cd-cart-total">
 		<dl class="subtotal">
 			  <dt>Subtotal</dt>
-			  <dd class="totals-value" id="cart-subtotal">71.97</dd>
+			  {% set iva = TotalTodo * 0.21 %}
+			  {% set TsinIva = TotalTodo - iva %}
+			  <dd class="totals-value" id="cart-subtotal">{{TsinIva}}</dd>
 			  <dt><a href="/taxes">Estimated Taxes & Fees</a></dt>
-			  <dd class="totals-value" id="cart-tax">3.60</dd>
+			  
+			  <dd class="totals-value" id="cart-tax">{{iva}}</dd>
 			</dl>
 				</div> <!-- cd-cart-total -->
 	<dl class="total">
 	  <dt>Total</dt>
-	  <dd class="totals-value" id="cart-total">90.57</dd>
+	  	{% if user == false %}
+		{% set shipping = 0 %}
+	{% endif %}
+		
+	  {% if user %}
+	  	{% if TotalTodo >= 30 %}
+	  		{% set shipping = 0 %}
+	  	{% endif %}
+	  	{% if TotalTodo < 30 %}
+	  		{% set shipping = 7 %}
+			{% set TotalTodo = TotalTodo + 7 %}
+	  	{% endif %}
+	  {% endif %}
+	  
+	  <dd class="totals-value" id="cart-total">{{TotalTodo}}</dd>
 	</dl>
 	<dl class="support">
 	  <dt><a href="/savings/">Shipping</a></dt>
-	  <dd class="totals-value" id="cart-shipping">15.00</dd>
+
+
+	  <dd class="totals-value" id="cart-shipping">{{shipping}}</dd>
 	  <dt><a href="/promocode/add">Have a promocode?</a></dt>
 	</dl>
 	<div class="payment">
@@ -239,5 +194,5 @@
 		<p class="cd-go-to-cart"><a href="#0">Go to cart page</a></p>
 	</div> 
 
-	    <script src="js/js.js"></script>
+	    <script src="js/pagCarritoCalc.js"></script>
 {% endblock %}

@@ -1,10 +1,15 @@
 
         document.addEventListener('DOMContentLoaded', () => {
      window.setTimeout(() => {
+
 /* Set rates + misc */
-var taxRate = 0.05;
-var shippingRate = 15.00; 
+var taxRate = 0.21;
 var fadeTime = 300;
+let test = "";
+
+$(document).ready(function() {
+   test = $('#test').data("isTest");
+});
 
 
 /* Assign actions */
@@ -29,12 +34,25 @@ function recalculateCart()
   
   /* Calculate totals */
   var tax = subtotal * taxRate;
-  var shipping = (subtotal > 0 ? shippingRate : 0);
-  var total = subtotal + tax + shipping;
+  var shipping = 7;
+  var totalNoShipping = 0;
+  var totalNoShipping =  totalNoShipping + subtotal;
+  var total = 0;
+  var subNoIva = subtotal - tax;
+  console.log(total + " fuera")
+  
+  if ( totalNoShipping >= 30 ) {
+    shipping = 0;
+    total = totalNoShipping;
+  }
+  else{
+    total = total + subtotal + shipping;
+  }
+
   
   /* Update totals display */
   $('.totals-value').fadeOut(fadeTime, function() {
-    $('#cart-subtotal').html(subtotal.toFixed(2));
+    $('#cart-subtotal').html(subNoIva.toFixed(2));
     $('#cart-tax').html(tax.toFixed(2));
     $('#cart-shipping').html(shipping.toFixed(2));
     $('#cart-total').html(total.toFixed(2));
@@ -51,9 +69,16 @@ function recalculateCart()
 /* Update quantity */
 function updateQuantity(quantityInput)
 {
+
+
+
+
   /* Calculate line price */
   var productRow = $(quantityInput).parent().parent();
-  var price = parseFloat(productRow.children('.product-price').text());
+
+
+  var price = productRow.children('.product-price').text();
+
   var quantity = $(quantityInput).val();
   var linePrice = price * quantity;
   
@@ -64,9 +89,18 @@ function updateQuantity(quantityInput)
       recalculateCart();
       $(this).fadeIn(fadeTime);
     });
-  });  
-}
-
+  });
+  
+  var delayInMilliseconds = 2000;
+  
+for (let i = 0; i < test.length; i++) {
+  $('#cambio' + test[i]).change( function() {
+    setTimeout(function() {
+      document.getElementById("changeCantidad" + test[i]).submit();
+    }, delayInMilliseconds);
+  });
+  
+}}
 
 /* Remove item from cart */
 function removeItem(removeButton)
@@ -78,5 +112,6 @@ function removeItem(removeButton)
     recalculateCart();
   });
 }
+
  }, 800)
 })

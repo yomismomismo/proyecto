@@ -12,7 +12,7 @@ class ProductoxpedidoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('cantidad', TextType::class)
+            ->add('cantidad',)
             ->add('id_producto', HiddenType::class)
             ->add('id_pedido', HiddenType::class)
             // ->add('send', SubmitType::class)

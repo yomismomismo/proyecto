@@ -77,7 +77,6 @@ var fileBuffer=[];
                   //      data.pop();        
                   for(x = 0; x < data.length; x = x + 1){        
               document.getElementsByClassName("archivo" + x)[0].addEventListener("click", function(){
-                        
                         ejem(data);
               });}
             }
@@ -132,15 +131,14 @@ var fileBuffer=[];
                                     console.info(files[x].name+ "asdas");
                                      if(fileBuffer[x].name.includes(files[x].name)) { //fileBuffer.some(food => food === files[x].name)
                                             console.log("hola2");
-                                            
-                                            
+
                                             }
                                     else{
                                         
                                             Array.prototype.push.apply( fileBuffer, files);
                                             Array.prototype.push.apply( fileBuffermostrar, files);
                                             upload(fileBuffer, fileBuffermostrar);
-                                            break 
+                                            break;
                                     }
                                             }
                                     }// <-- here

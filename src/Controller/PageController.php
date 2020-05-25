@@ -5,10 +5,12 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use App\Repository\ProductoxpedidosRepository;
 use App\Entity\{Mensaje,Comentario, Usuario, Producto, Productoxpedidos, Pedidos};
 use Symfony\Component\HttpFoundation\Request;
-use App\Form\{MensajeType, ComentarioType, UsuarioType, ProductoxpedidoType, PedidosType};
+use App\Form\{MensajeType, ComentarioType, UsuarioType, ProductoxpedidosType, PedidosType, ProductoxpedidoType};
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 class PageController extends AbstractController
 {
@@ -59,6 +61,7 @@ class PageController extends AbstractController
         $idproducto=$this->getDoctrine()
               ->getRepository(Productoxpedidos::class)
               ->findBy(['id_pedido' => $idpedidoEstado]);
+              
                     
                                    
         $filtroPedido=$this->getDoctrine()
@@ -593,7 +596,8 @@ if ($user1) {
             "filtroPedido" => $idproducto,
             "Comentario" => $comentarios,
             "productostock" => $idproductoRepe,
-            "filtroPedido" => $idproducto  
+            "filtroPedido" => $idproducto,
+            "idpag" => $id,
 
         ]);
             }
@@ -701,10 +705,46 @@ if ($user1) {
     }
     }
     /**
-     * @Route("/carrito", name="carrito")
+     * @Route("/carrito", name="carrito",  methods={"GET","POST"})
      */
-    public function carrito(Request $request, SessionInterface $session)
+    public function carrito(Request $request, SessionInterface $session,EntityManagerInterface $entityManager, ProductoxpedidosRepository $productoxpedidosRepository)
     {
+
+      $test=array();
+      $idpedidoprod= $request->request->get("idpedidoprod");
+
+               $fil=$this->getDoctrine()
+                ->getRepository(Productoxpedidos::Class)
+                ->findAll(
+                    ['id']
+                  );
+                  $XV = 0;
+                    foreach ($fil as $key) {
+                      var_dump($key->getId());
+                      $asas = $key->getId();
+                      $XV = $XV + 1; 
+                      array_push($test, $asas);
+                    }
+                    
+      
+    //   $filtroP=$this->getDoctrine()
+    //   ->getRepository(Productoxpedidos::Class)
+    //   ->findAll();
+    //   
+    //   foreach ($fil as $x) {
+    //     $XV = $XV + 1;
+    //     array_push($test, $x);
+    // };
+            // foreach ($filtroP as $filtroPedid) {
+              $form = $this->createForm(ProductoxpedidosType::class );
+              $form->handleRequest($request);
+            // }
+    
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->getDoctrine()->getManager()->flush();}
+    
+
+
         $user1 = $session->get('nombre_usuario');
         $user= $request->request->get("user");
         $password= $password= $request->request->get("password");
@@ -781,11 +821,14 @@ if ($user1) {
 else{
         return $this->render('page/carrito.html.twig', [
             'controller_name' => 'PageController',
+            'form' => $form->CreateView(),
             'page' => 'carrito',
             'jumbotron' => 'no',
             "user" => "",
             "user" => $user1,
-            "filtroPedido" => $idproducto  
+            "filtroPedido" => $idproducto,
+            'NumCols' => $XV,
+            'test' => $test
         ]);
 }
     }

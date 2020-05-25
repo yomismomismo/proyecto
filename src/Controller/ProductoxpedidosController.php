@@ -94,4 +94,54 @@ class ProductoxpedidosController extends AbstractController
             "id" => $idproducto
         ]);
     }
+
+    /**
+     * @Route("/{id}/borrar", name="borrarCarrito", methods={"DELETE"})
+     */
+    public function borrarCarrito( $id, Request $request, Productoxpedidos $productoxpedido): Response
+    {
+       
+        if ($this->isCsrfTokenValid('delete'.$productoxpedido->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($productoxpedido);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('carrito', [
+            
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/changeCantidad", name="changeCantidad", methods={"GET","POST"})
+     */
+    public function changeCantidad( $id, Request $request, Productoxpedidos $productoxpedido): Response
+    {
+        
+        if ($this->isCsrfTokenValid('modify'.$productoxpedido->getId(), $request->request->get('_token'))) {
+            $filtroP=$this->getDoctrine()
+            ->getRepository(Productoxpedidos::Class)
+            ->findAll();
+            // $XV = -1;
+            // foreach ($filtroP as $x) {
+            //     $XV = $XV + 1;
+            //     if ($x->get == $XV) {
+                    
+                // }
+                
+                
+            // };
+            $entityManager = $this->getDoctrine()->getManager();
+            $productoxpedido->setCantidad($_POST['subject'.$id]);
+            
+
+            
+            $entityManager->flush($productoxpedido);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('carrito', [
+
+        ]);
+    }
 }
