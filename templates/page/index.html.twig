@@ -16,104 +16,22 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                <h5 class="mb-4">Owl Carousel Basic</h5>
+                            <br>
                                 <div class="row">
                                     <div class="col-md-12 mb-4 pl-0 pr-0">
                                         <div class="owl-container">
                                             <div class="owl-carousel basic">
+                                        {% for categoria in categorias %}
                                                 <div class="card flex-row">
-                                                    <div class="w-50 position-relative">
-                                                        <img class="card-img-left" src="../../img/portfolio-1.jpg" alt="Card image cap">
-                                                        <span class="badge badge-pill badge-primary position-absolute badge-top-left">New</span>
-                                                    </div>
-                                                    <div class="w-50">
-                                                        <div class="card-body">
-                                                            <h6 class="mb-4">Homemade Cheesecake with Fresh Berries and Mint</h6>
 
-                                                            <footer>
-                                                                <p class="text-muted text-small mb-0 font-weight-light">09.04.2018</p>
-                                                            </footer>
+                                                    <div class="w-50" style="display:contents;">
+                                                        <div class="card-body">
+                                                            <h6 class="mb-4" style="text-align:center; margin-top:20px;">{{categoria.getCategoria()}}</h6>
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                <div class="card flex-row">
-                                                    <div class="w-50 position-relative">
-                                                        <img class="card-img-left" src="../../img/portfolio-2.jpg" alt="Card image cap">
-                                                        <span class="badge badge-pill badge-primary position-absolute badge-top-left">New</span>
-                                                    </div>
-                                                    <div class="w-50">
-                                                        <div class="card-body">
-                                                            <h6 class="mb-4">Wedding Cake with Flowers Macarons and Blueberries</h6>
-                                                            <footer>
-                                                                <p class="text-muted text-small mb-0 font-weight-light">09.04.2018</p>
-                                                            </footer>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="card flex-row">
-                                                    <div class="w-50 position-relative">
-                                                        <img class="card-img-left" src="../../img/portfolio-3.jpg" alt="Card image cap">
-                                                        <span class="badge badge-pill badge-primary position-absolute badge-top-left">New</span>
-                                                    </div>
-                                                    <div class="w-50">
-                                                        <div class="card-body">
-                                                            <h6 class="mb-4">Cheesecake with Chocolate Cookies and Cream Biscuits</h6>
-
-                                                            <footer>
-                                                                <p class="text-muted text-small mb-0 font-weight-light">09.04.2018</p>
-                                                            </footer>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="card flex-row">
-                                                    <div class="w-50 position-relative">
-                                                        <img class="card-img-left" src="../../img/portfolio-4.jpg" alt="Card image cap">
-                                                        <span class="badge badge-pill badge-primary position-absolute badge-top-left">New</span>
-                                                    </div>
-                                                    <div class="w-50">
-                                                        <div class="card-body">
-                                                            <h6 class="mb-4">Cheesecake with Chocolate Cookies and Cream Biscuits</h6>
-
-                                                            <footer>
-                                                                <p class="text-muted text-small mb-0 font-weight-light">09.04.2018</p>
-                                                            </footer>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="card flex-row">
-                                                    <div class="w-50 position-relative">
-                                                        <img class="card-img-left" src="../../img/portfolio-5.jpg" alt="Card image cap">
-                                                        <span class="badge badge-pill badge-primary position-absolute badge-top-left">New</span>
-                                                    </div>
-                                                    <div class="w-50">
-                                                        <div class="card-body">
-                                                            <h6 class="mb-4">Homemade Cheesecake with Fresh Berries and Mint</h6>
-
-                                                            <footer>
-                                                                <p class="text-muted text-small mb-0 font-weight-light">09.04.2018</p>
-                                                            </footer>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="card flex-row">
-                                                    <div class="w-50 position-relative">
-                                                        <img class="card-img-left" src="../../img/portfolio-6.jpg" alt="Card image cap">
-                                                        <span class="badge badge-pill badge-primary position-absolute badge-top-left">New</span>
-                                                    </div>
-                                                    <div class="w-50">
-                                                        <div class="card-body">
-                                                            <h6 class="mb-4">Cheesecake with Chocolate Cookies and Cream Biscuits</h6>
-                                                            <footer>
-                                                                <p class="text-muted text-small mb-0 font-weight-light">09.04.2018</p>
-                                                            </footer>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                        {% endfor %} 
+                            
                                             </div>
                                             <div class="slider-nav text-center">
                                                 <a href="#" class="left-arrow owl-prev">
@@ -133,19 +51,44 @@
 
 <hr style="margin-top: 100px;">
 <div class="clearboth"></div>
-<section>
-	<div class="container" style="margin-top: 65px;margin-bottom: 100px;">
-		<h1>Sobre Nosotros</h1>
-		<div class="row" style="text-align: justify; margin-top: 60px;">
-			<div class="col-sm-12 col-md-12  col-xl-12" style="margin-top: 10px;">Lorem ipsum dolor sit amet
-				consectetur adipisicing elit. Cum dolore delectus nostrum, rerum harum aut sed eius nisi error
-				officia quaerat. Dolores molestiae placeat voluptates vero. Nulla eligendi saepe mollitia.Lorem
-				ipsum dolor sit amet consectetur adipisicing elit. Cum dolore delectus nostrum, rerum harum aut sed
-				eius nisi error officia quaerat. Dolores molestiae placeat voluptates vero. Nulla eligendi saepe
-				mollitia.Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum dolore delectus nostrum, rerum
-				harum aut sed eius nisi error officia quaerat. Dolores molestiae placeat voluptates vero. Nulla
-				eligendi saepe mollitia.</div>
-	</div>
+<section class="container">
+	<h1 style="text-align: center; margin-bottom:56px;">Lo más vendido</h1>
+			<div class="row">
+             {% for producto in productos|reverse|slice(0, 8)  %}
+				<div class="col-6 col-lg-3" > <img style="width:247px;" src="img/thumb.jpg" alt="Preview image">
+					<div id="products"><p>{{producto.getUnidadesVendidas()}}</p>
+					<p>Precio</p></div></div>
+                      {% endfor %} 
+					</div>
+                  
+	
 
 </section>
+	<div id="imgindex1"></div>		
+<section class="container">
+	<h1 style="text-align: center; margin-bottom:56px;">Últimas unidades</h1>
+			<div class="row">
+
+                            {% for stocks in stock|reverse|slice(0, 8) %}
+                            {% if stocks.getUnidadesStock < 10 %}
+				                <div class="col-6 col-lg-3"> <img style="width:247px;" src="img/thumb.jpg" alt="Preview image">
+                                         <div id="products"><p>{{stocks.getNombre()}}</p>
+					<p>Precio</p></div></div>
+                            {% else %}
+                {% endif %}{% endfor %} 
+                   
+					</div>
+                  
+				
+
+</section>
+                        <div class="row">
+                        
+	<div id="imgindex2" class="col-md-6"></div>
+    <div id="cajatexto" class="col-md-6" style="background-color:white;">
+		<h1>Sobre Nosotros</h1>
+			<p id="texto">Productos para conejo de las mejores marcas</p>
+    </div>
+
+</div>
 {% endblock %}

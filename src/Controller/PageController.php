@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\ProductoxpedidosRepository;
-use App\Entity\{Mensaje,Comentario, Usuario, Producto, Productoxpedidos, Pedidos};
+use App\Entity\{Mensaje,Comentario, Usuario, Producto, Productoxpedidos, Pedidos, Categoria};
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\{MensajeType, ComentarioType, UsuarioType, ProductoxpedidosType, PedidosType, ProductoxpedidoType};
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -21,11 +21,26 @@ class PageController extends AbstractController
     {
         $user1 = $session->get('nombre_usuario');
         $user= $request->request->get("user");
-        $password= $password= $request->request->get("password");
+        $password=  $request->request->get("password");
+
         $usuarioBBDD=$this->getDoctrine()
             ->getRepository(Usuario::class)
             ->findOneBy(['email' => $user]);
-                                 //Filtro Pedido 
+        $categorias=$this->getDoctrine()
+            ->getRepository(Categoria::class)
+            ->findAll();
+        $productos=$this->getDoctrine()
+            ->getRepository(Producto::class)
+            ->findBy(array(), array('unidades_vendidas' => 'ASC'));
+        $productosStock=$this->getDoctrine()
+            ->getRepository(Producto::class)
+            ->findBy(array(), array('unidades_stock' => 'ASC'));         
+        $puntuacion= $this->getDoctrine()
+        ->getRepository(Comentario::class)
+        ->findBy(array(), array('puntuacion' => 'ASC'));
+
+
+       //Filtro Pedido      
     if ($user1) {
         $iduser=$this->getDoctrine()
             ->getRepository(Usuario::class)
@@ -76,34 +91,40 @@ class PageController extends AbstractController
                          
                                              
 
-
-  if ($usuarioBBDD){
-      if ($usuarioBBDD->getContrasenya()==$password) {
+    //Recoger contraseña encriptada y comprobar si el inicio de sesion es correcto                             
+    $userIniciado="";
+    $mensaje="";
+  if ($usuarioBBDD) {
+    $passHash=$usuarioBBDD->getContrasenya();
+    if (password_verify($password,  $passHash)) {
               $usuarioIniciado=$this->getDoctrine()
                   ->getRepository(Usuario::Class)
-                  ->findBy(['email' => $user], 
+                  ->findOneBy(['email' => $user], 
                            ['id' => 'ASC']);
-              foreach ($usuarioIniciado as $usuario) {
-                   $session->set('nombre_usuario', $usuario->getNombre());}}
-                   return $this->render('page/index.html.twig', [
-                    'controller_name' => 'PageController',
-                    'page' => 'index',
-                    'jumbotron' => 'no',
-                    "user" => $user1,  
-                    "filtroPedido" => $idproducto  
-                ]);
- 
-}
- else{
-        return $this->render('page/index.html.twig', [
-            'controller_name' => 'PageController',
-            'page' => 'index',
-            'jumbotron' => 'no',
-            "user" => "",
-            "filtroPedido" => $idproducto  
-        ]);
- }
-    }
+                   $session->set('nombre_usuario', $usuarioIniciado->getNombre());
+                   return $this->redirectToRoute('index');
+                   }
+            else{
+              $mensaje="La contraseña o el email son incorrectos";
+                  }
+                }
+    //--------------------------------------------------------------------------------
+                   
+            return $this->render('page/index.html.twig', [
+                'controller_name' => 'PageController',
+                'page' => 'index',
+                'jumbotron' => 'no',
+                "user" => $user1,
+                "filtroPedido" => $idproducto,
+                "mensaje" => $mensaje,
+                "categorias" => $categorias,
+                "productos" => $productos,
+                "puntuacion" => $puntuacion,
+                "stock" => $productosStock
+
+
+            ]);
+        }
 
     /**
      * @Route("/productos", name="productos")
@@ -112,10 +133,14 @@ class PageController extends AbstractController
     {
         $user1 = $session->get('nombre_usuario');
         $user= $request->request->get("user");
-        $password= $password= $request->request->get("password");
+        $password=  $request->request->get("password");
         $usuarioBBDD=$this->getDoctrine()
         ->getRepository(Usuario::class)
         ->findOneBy(['email' => $user]);
+      
+        $Productos=$this->getDoctrine()
+        ->getRepository(Producto::class)
+        ->findAll();
         if ($user1) {
         $iduser=$this->getDoctrine()
             ->getRepository(Usuario::class)
@@ -163,37 +188,33 @@ class PageController extends AbstractController
            $idproductoRepe="";
            $filtroPedido="";
           }
-        if ($usuarioBBDD){
-            if ($usuarioBBDD->getContrasenya()==$password) {
-                
-                 $usuarioIniciado=$this->getDoctrine()
-                   ->getRepository(Usuario::Class)
-                   ->findBy(
-                       ['email' => $user], 
-                       ['id' => 'ASC']
-                     );
-                     foreach ($usuarioIniciado as $usuario) {
-                       $session->set('nombre_usuario', $usuario->getNombre());
-                     }
-
-                $session->set('password', $password);
-                   return $this->redirectToRoute('index', [
-                        "user" => $user1,
-                       
-               ]);
-           }
-}
- else{
+          $userIniciado="";
+          $mensaje="";
+        if ($usuarioBBDD) {
+          $passHash=$usuarioBBDD->getContrasenya();
+          if (password_verify($password,  $passHash)) {
+                    $usuarioIniciado=$this->getDoctrine()
+                        ->getRepository(Usuario::Class)
+                        ->findOneBy(['email' => $user], 
+                                 ['id' => 'ASC']);
+                         $session->set('nombre_usuario', $usuarioIniciado->getNombre());
+                         $userIniciado=$user1;
+                         return $this->redirectToRoute('productos');}
+                  else{
+                    $mensaje="La contraseña o el email son incorrectos";
+                        }
+                      }
         return $this->render('page/productos.html.twig', [
             'controller_name' => 'PageController',
             'page' => 'productos',
             'jumbotron' => 'si',
-            'user' => "",
+            'mensaje' => $mensaje,
             "user" => $user1,
-            "filtroPedido" => $idproducto  
+            "filtroPedido" => $idproducto,
+            "productos" => $Productos
         ]);
- }
-    }
+      }
+  
 
     /**
      * @Route("/servicios", name="servicios")
@@ -202,7 +223,7 @@ class PageController extends AbstractController
     {
         $user1 = $session->get('nombre_usuario');
         $user= $request->request->get("user");
-        $password= $password= $request->request->get("password");
+        $password=  $request->request->get("password");
         $usuarioBBDD=$this->getDoctrine()
         ->getRepository(Usuario::class)
         ->findOneBy(['email' => $user]);
@@ -253,37 +274,35 @@ class PageController extends AbstractController
            $idproductoRepe="";
            $filtroPedido="";
           }
-        if ($usuarioBBDD){
-            if ($usuarioBBDD->getContrasenya()==$password) {
-                
-                 $usuarioIniciado=$this->getDoctrine()
-                   ->getRepository(Usuario::Class)
-                   ->findBy(
-                       ['email' => $user], 
-                       ['id' => 'ASC']
-                     );
-                     foreach ($usuarioIniciado as $usuario) {
-                       $session->set('nombre_usuario', $usuario->getNombre());
-                     }
+            //Recoger contraseña encriptada y comprobar si el inicio de sesion es correcto                             
+    $userIniciado="";
+    $mensaje="";
+  if ($usuarioBBDD) {
+    $passHash=$usuarioBBDD->getContrasenya();
+    if (password_verify($password,  $passHash)) {
+              $usuarioIniciado=$this->getDoctrine()
+                  ->getRepository(Usuario::Class)
+                  ->findOneBy(['email' => $user], 
+                           ['id' => 'ASC']);
+                   $session->set('nombre_usuario', $usuarioIniciado->getNombre());
+                   return $this->redirectToRoute('servicios');
+                   }
+            else{
+              $mensaje="La contraseña o el email son incorrectos";
+                  }
+                }
+    //--------------------------------------------------------------------------------
 
-                $session->set('password', $password);
-                   return $this->redirectToRoute('index', [
-                        "user" => $user1,
-                       
-               ]);
-           }
-}
- else{
         return $this->render('page/servicios.html.twig', [
             'controller_name' => 'PageController',
             'page' => 'servicios',
             'jumbotron' => 'si',
-            "user" => "",
             "user" => $user1, 
-            "filtroPedido" => $idproducto  
+            "filtroPedido" => $idproducto,
+            "mensaje" => $mensaje,
             ]);
         }
-        }
+    
     /**
      * @Route("/detalleprodc/{id}", name="detalleprod")
      */
@@ -556,52 +575,49 @@ if ($user1) {
           //Inicio de sesión de usuario
             $user1 = $session->get('nombre_usuario');
             $user= $request->request->get("user");
-            $password= $password= $request->request->get("password");
+            $password=  $request->request->get("password");
             $usuarioBBDD=$this->getDoctrine()
             ->getRepository(Usuario::class)
             ->findOneBy(['email' => $user]);
-            if ($usuarioBBDD){
-                if ($usuarioBBDD->getContrasenya()==$password) {
-                    
-                     $usuarioIniciado=$this->getDoctrine()
-                       ->getRepository(Usuario::Class)
-                       ->findBy(
-                           ['email' => $user], 
-                           ['id' => 'ASC']
-                         );
-                         foreach ($usuarioIniciado as $usuario) {
-                           $session->set('nombre_usuario', $usuario->getNombre());
-                         }
-   
-                    $session->set('password', $password);
-                       return $this->redirectToRoute('index', [
-                            "user" => $user1,
-                           
-                   ]);
-               }
-
-   }
-      //Fin inicio de sesión de usuario
+    //Recoger contraseña encriptada y comprobar si el inicio de sesion es correcto                             
+    $userIniciado="";
+    $mensaje="";
+  if ($usuarioBBDD) {
+    $passHash=$usuarioBBDD->getContrasenya();
+    if (password_verify($password,  $passHash)) {
+              $usuarioIniciado=$this->getDoctrine()
+                  ->getRepository(Usuario::Class)
+                  ->findOneBy(['email' => $user], 
+                           ['id' => 'ASC']);
+                   $session->set('nombre_usuario', $usuarioIniciado->getNombre());
+                   return $this->redirectToRoute('detalleprod', [
+                    "id" => $id,
+           ]);
+                   }
             else{
+              $mensaje="La contraseña o el email son incorrectos";
+                  }
+                }
+    //--------------------------------------------------------------------------------
         return $this->render('page/detalleProduct.html.twig', [
             'controller_name' => 'PageController',
             'page' => 'detalle',
             'form' => $form->CreateView(),
             'form1' => $formpedido->CreateView(),
             'jumbotron' => 'no',
-            "user" => "",
             "user" => $user1, 
             "producto" => $filtroProducto,
             "puntuacion1" => "3",
             "filtroPedido" => $idproducto,
             "Comentario" => $comentarios,
             "productostock" => $idproductoRepe,
-            "filtroPedido" => $idproducto,
-            "idpag" => $id,
+            "filtroPedido" => $idproducto,  
+            "mensaje" => $mensaje
 
         ]);
-            }
+            
     }
+    
     /**
      * @Route("/contacto", name="contacto")
      */
@@ -621,7 +637,7 @@ if ($user1) {
 
             $user1 = $session->get('nombre_usuario');
             $user= $request->request->get("user");
-            $password= $password= $request->request->get("password");
+            $password=  $request->request->get("password");
             $usuarioBBDD=$this->getDoctrine()
             ->getRepository(Usuario::class)
             ->findOneBy(['email' => $user]);
@@ -672,27 +688,24 @@ if ($user1) {
            $idproductoRepe="";
            $filtroPedido="";
           }
-            if ($usuarioBBDD){
-                if ($usuarioBBDD->getContrasenya()==$password) {
-                    
-                     $usuarioIniciado=$this->getDoctrine()
-                       ->getRepository(Usuario::Class)
-                       ->findBy(
-                           ['email' => $user], 
-                           ['id' => 'ASC']
-                         );
-                         foreach ($usuarioIniciado as $usuario) {
-                           $session->set('nombre_usuario', $usuario->getNombre());
-                         }
-   
-                    $session->set('password', $password);
-                       return $this->redirectToRoute('index', [
-                            "user" => $user1,
-                           
-                   ]);
-               }
-   }
-    else{
+    //Recoger contraseña encriptada y comprobar si el inicio de sesion es correcto                             
+    $userIniciado="";
+    $mensaje="";
+  if ($usuarioBBDD) {
+    $passHash=$usuarioBBDD->getContrasenya();
+    if (password_verify($password,  $passHash)) {
+              $usuarioIniciado=$this->getDoctrine()
+                  ->getRepository(Usuario::Class)
+                  ->findOneBy(['email' => $user], 
+                           ['id' => 'ASC']);
+                   $session->set('nombre_usuario', $usuarioIniciado->getNombre());
+                   return $this->redirectToRoute('contacto');
+                   }
+            else{
+              $mensaje="La contraseña o el email son incorrectos";
+                  }
+                }
+    //--------------------------------------------------------------------------------
         return $this->render('page/contacto.html.twig', [
             'controller_name' => 'PageController',
             'page' => 'contacto',
@@ -700,9 +713,9 @@ if ($user1) {
             'jumbotron' => 'si',
             "user" => "",
             "user" => $user1, 
-            "filtroPedido" => $idproducto  
+            "filtroPedido" => $idproducto,
+            "mensaje" => $mensaje 
         ]);
-    }
     }
     /**
      * @Route("/carrito", name="carrito",  methods={"GET","POST"})
@@ -747,7 +760,7 @@ if ($user1) {
 
         $user1 = $session->get('nombre_usuario');
         $user= $request->request->get("user");
-        $password= $password= $request->request->get("password");
+        $password=  $request->request->get("password");
         $usuarioBBDD=$this->getDoctrine()
         ->getRepository(Usuario::class)
         ->findOneBy(['email' => $user]);
@@ -798,39 +811,36 @@ if ($user1) {
            $idproductoRepe="";
            $filtroPedido="";
           }
-        if ($usuarioBBDD){
-            if ($usuarioBBDD->getContrasenya()==$password) {
-                
-                 $usuarioIniciado=$this->getDoctrine()
-                   ->getRepository(Usuario::Class)
-                   ->findBy(
-                       ['email' => $user], 
-                       ['id' => 'ASC']
-                     );
-                     foreach ($usuarioIniciado as $usuario) {
-                       $session->set('nombre_usuario', $usuario->getNombre());
-                     }
-
-                $session->set('password', $password);
-                   return $this->redirectToRoute('index', [
-                        "user" => $user1,
-                       
-               ]);
-           }
-}
-else{
+    //Recoger contraseña encriptada y comprobar si el inicio de sesion es correcto                             
+    $userIniciado="";
+    $mensaje="";
+  if ($usuarioBBDD) {
+    $passHash=$usuarioBBDD->getContrasenya();
+    if (password_verify($password,  $passHash)) {
+              $usuarioIniciado=$this->getDoctrine()
+                  ->getRepository(Usuario::Class)
+                  ->findOneBy(['email' => $user], 
+                           ['id' => 'ASC']);
+                   $session->set('nombre_usuario', $usuarioIniciado->getNombre());
+                   return $this->redirectToRoute('carrito');
+                   }
+            else{
+              $mensaje="La contraseña o el email son incorrectos";
+                  }
+                }
+    //--------------------------------------------------------------------------------
         return $this->render('page/carrito.html.twig', [
             'controller_name' => 'PageController',
             'form' => $form->CreateView(),
             'page' => 'carrito',
             'jumbotron' => 'no',
-            "user" => "",
+            "mensaje" => $mensaje,
             "user" => $user1,
             "filtroPedido" => $idproducto,
             'NumCols' => $XV,
             'test' => $test
         ]);
-}
+
     }
     /**
      * @Route("/login", name="login")
@@ -841,16 +851,21 @@ else{
         $contactoTo=new Usuario();
         $form=$this->CreateForm(UsuarioType::Class, $contactoTo);
         $form->handleRequest($request);
-    
+        $password= $request->request->get("password");
+        $passwordReg= $request->request->get("PasswordReg");
+        var_dump($passwordReg);
+        $pass=password_hash( $passwordReg, CRYPT_BLOWFISH);
+        var_dump($pass);
         if($form->isSubmitted() && $form->isValid()){
             $entityManager=$this->getDoctrine()->getManager();
             $contactoTo->setFechaRegistro(new \DateTime('now'));
+            $contactoTo->setContrasenya($pass);
             $entityManager->persist($contactoTo);
             $entityManager->flush();}
 
             $user1 = $session->get('nombre_usuario');
             $user= $request->request->get("user");
-            $password= $password= $request->request->get("password");
+           
             $usuarioBBDD=$this->getDoctrine()
             ->getRepository(Usuario::class)
             ->findOneBy(['email' => $user]);
@@ -901,26 +916,24 @@ else{
            $idproductoRepe="";
            $filtroPedido="";
           }
-            if ($usuarioBBDD){
-                if ($usuarioBBDD->getContrasenya()==$password) {
-                    
-                     $usuarioIniciado=$this->getDoctrine()
-                       ->getRepository(Usuario::Class)
-                       ->findBy(
-                           ['email' => $user], 
-                           ['id' => 'ASC']
-                         );
-                         foreach ($usuarioIniciado as $usuario) {
-                           $session->set('nombre_usuario', $usuario->getNombre());
-                         }
-   
-                    $session->set('password', $password);
-                       return $this->redirectToRoute('index', [
-                            "user" => $user1,
-                           
-                   ]);
-               }
-   }
+    //Recoger contraseña encriptada y comprobar si el inicio de sesion es correcto                             
+    $userIniciado="";
+    $mensaje="";
+  if ($usuarioBBDD) {
+    $passHash=$usuarioBBDD->getContrasenya();
+    if (password_verify($password,  $passHash)) {
+              $usuarioIniciado=$this->getDoctrine()
+                  ->getRepository(Usuario::Class)
+                  ->findOneBy(['email' => $user], 
+                           ['id' => 'ASC']);
+                   $session->set('nombre_usuario', $usuarioIniciado->getNombre());
+                   return $this->redirectToRoute('login');
+                   }
+            else{
+              $mensaje="La contraseña o el email son incorrectos";
+                  }
+                }
+    //--------------------------------------------------------------------------------
 
         return $this->render('page/registro.html.twig', [
             'page' => 'carrito',
@@ -928,7 +941,8 @@ else{
             'form' => $form->CreateView(),
             "user" => "",
             "user" => $user1,
-            "filtroPedido" => $idproducto   
+            "filtroPedido" => $idproducto,
+            "mensaje" => $mensaje   
 
         ]);}
 
@@ -939,7 +953,7 @@ else{
     {
         $user1 = $session->get('nombre_usuario');
         $user= $request->request->get("user");
-        $password= $password= $request->request->get("password");
+        $password=  $request->request->get("password");
         $usuarioBBDD=$this->getDoctrine()
         ->getRepository(Usuario::class)
         ->findOneBy(['email' => $user]);
@@ -956,7 +970,7 @@ else{
                        $session->set('nombre_usuario', $usuario->getNombre());
                      }
 
-                $session->set('password', $password);
+                //$session->set('password', $password);
                    return $this->redirectToRoute('index', [
                         "user" => $user1,
                        

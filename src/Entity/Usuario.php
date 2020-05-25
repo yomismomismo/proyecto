@@ -24,6 +24,11 @@ class Usuario
     private $nombre;
 
     /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $apellido;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $email;
@@ -31,7 +36,7 @@ class Usuario
     /**
      * @ORM\Column(type="datetime")
      */
-    private $fecha_Registro;
+    private $fecha_registro;
 
     /**
      * @ORM\Column(type="integer")
@@ -49,6 +54,11 @@ class Usuario
     private $direccion;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $cod_postal;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $contrasenya;
@@ -56,27 +66,22 @@ class Usuario
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Pedidos", mappedBy="id_cliente")
      */
-    private $pedidosRL;
+    private $pedidos;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comentario", mappedBy="id_usuario")
      */
-    private $comentarioUsuRL;
+    private $comentarios;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\OneToMany(targetEntity="App\Entity\CuentasBank", mappedBy="id_cliente")
      */
-    private $cod_postal;
-
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $apellido;
+    private $cuentasBanks;
 
     public function __construct()
     {
-        $this->pedidosRL = new ArrayCollection();
-        $this->comentarioUsuRL = new ArrayCollection();
+        $this->comentarios = new ArrayCollection();
+        $this->cuentasBanks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -88,15 +93,22 @@ class Usuario
     {
         return $this->nombre;
     }
-    public function setId(int $id): self
-    {
-        $this->id = $id;
 
-        return $this;
-    }
     public function setNombre(string $nombre): self
     {
         $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    public function getApellido(): ?string
+    {
+        return $this->apellido;
+    }
+
+    public function setApellido(string $apellido): self
+    {
+        $this->apellido = $apellido;
 
         return $this;
     }
@@ -115,12 +127,12 @@ class Usuario
 
     public function getFechaRegistro(): ?\DateTimeInterface
     {
-        return $this->fecha_Registro;
+        return $this->fecha_registro;
     }
 
-    public function setFechaRegistro(\DateTimeInterface $fecha_Registro): self
+    public function setFechaRegistro(\DateTimeInterface $fecha_registro): self
     {
-        $this->fecha_Registro = $fecha_Registro;
+        $this->fecha_registro = $fecha_registro;
 
         return $this;
     }
@@ -161,6 +173,18 @@ class Usuario
         return $this;
     }
 
+    public function getCodPostal(): ?int
+    {
+        return $this->cod_postal;
+    }
+
+    public function setCodPostal(int $cod_postal): self
+    {
+        $this->cod_postal = $cod_postal;
+
+        return $this;
+    }
+
     public function getContrasenya(): ?string
     {
         return $this->contrasenya;
@@ -176,28 +200,28 @@ class Usuario
     /**
      * @return Collection|Pedidos[]
      */
-    public function getPedidosRL(): Collection
+    public function getPedidos(): Collection
     {
-        return $this->pedidosRL;
+        return $this->pedidos;
     }
 
-    public function addPedidosRL(Pedidos $pedidosRL): self
+    public function addPedido(Pedidos $pedido): self
     {
-        if (!$this->pedidosRL->contains($pedidosRL)) {
-            $this->pedidosRL[] = $pedidosRL;
-            $pedidosRL->setIdCliente($this);
+        if (!$this->pedidos->contains($pedido)) {
+            $this->pedidos[] = $pedido;
+            $pedido->setIdCliente($this);
         }
 
         return $this;
     }
 
-    public function removePedidosRL(Pedidos $pedidosRL): self
+    public function removePedido(Pedidos $pedido): self
     {
-        if ($this->pedidosRL->contains($pedidosRL)) {
-            $this->pedidosRL->removeElement($pedidosRL);
+        if ($this->pedidos->contains($pedido)) {
+            $this->pedidos->removeElement($pedido);
             // set the owning side to null (unless already changed)
-            if ($pedidosRL->getIdCliente() === $this) {
-                $pedidosRL->setIdCliente(null);
+            if ($pedido->getIdCliente() === $this) {
+                $pedido->setIdCliente(null);
             }
         }
 
@@ -207,60 +231,63 @@ class Usuario
     /**
      * @return Collection|Comentario[]
      */
-    public function getComentarioUsuRL(): Collection
+    public function getComentarios(): Collection
     {
-        return $this->comentarioUsuRL;
+        return $this->comentarios;
     }
 
-    public function addComentarioUsuRL(Comentario $comentarioUsuRL): self
+    public function addComentario(Comentario $comentario): self
     {
-        if (!$this->comentarioUsuRL->contains($comentarioUsuRL)) {
-            $this->comentarioUsuRL[] = $comentarioUsuRL;
-            $comentarioUsuRL->setIdUsuario($this);
+        if (!$this->comentarios->contains($comentario)) {
+            $this->comentarios[] = $comentario;
+            $comentario->setIdUsuario($this);
         }
 
         return $this;
     }
 
-    public function removeComentarioUsuRL(Comentario $comentarioUsuRL): self
+    public function removeComentario(Comentario $comentario): self
     {
-        if ($this->comentarioUsuRL->contains($comentarioUsuRL)) {
-            $this->comentarioUsuRL->removeElement($comentarioUsuRL);
+        if ($this->comentarios->contains($comentario)) {
+            $this->comentarios->removeElement($comentario);
             // set the owning side to null (unless already changed)
-            if ($comentarioUsuRL->getIdUsuario() === $this) {
-                $comentarioUsuRL->setIdUsuario(null);
+            if ($comentario->getIdUsuario() === $this) {
+                $comentario->setIdUsuario(null);
             }
         }
 
         return $this;
     }
 
-    public function getCodPostal(): ?int
+    /**
+     * @return Collection|CuentasBank[]
+     */
+    public function getCuentasBanks(): Collection
     {
-        return $this->cod_postal;
+        return $this->cuentasBanks;
     }
 
-    public function setCodPostal(int $cod_postal): self
+    public function addCuentasBank(CuentasBank $cuentasBank): self
     {
-        $this->cod_postal = $cod_postal;
+        if (!$this->cuentasBanks->contains($cuentasBank)) {
+            $this->cuentasBanks[] = $cuentasBank;
+            $cuentasBank->setIdCliente($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCuentasBank(CuentasBank $cuentasBank): self
+    {
+        if ($this->cuentasBanks->contains($cuentasBank)) {
+            $this->cuentasBanks->removeElement($cuentasBank);
+            // set the owning side to null (unless already changed)
+            if ($cuentasBank->getIdCliente() === $this) {
+                $cuentasBank->setIdCliente(null);
+            }
+        }
 
         return $this;
     }
 
-    public function getApellido(): ?string
-    {
-        return $this->apellido;
-    }
-
-    public function setApellido(string $apellido): self
-    {
-        $this->apellido = $apellido;
-
-        return $this;
-    }
-    public function __toString()
-    {
-         return $this->getId();
-    
-    }
 }

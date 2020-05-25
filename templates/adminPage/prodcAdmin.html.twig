@@ -32,6 +32,7 @@
                                                     <th>Precio</th>
                                                     <th>Unidades Vendidas</th>
                                                     <th>Unidades Stock</th>
+                                                    <th>Categoría</th>
                                                     <th>Acciones</th>
                                                 </tr>
                                                 </thead>
@@ -59,6 +60,7 @@
                                                                 <td>{{ producto.precio }}€</td>
                                                                 <td>{{ producto.UnidadesVendidas }}</td>
                                                                 <td>{{ producto.UnidadesStock }}</td>
+                                                                <td>{{ producto.getCategoriaId().getCategoria() }}</td>
                                                                 <td>
                                                                      <a href="{{ path('detalleProducto', {'id': producto.id}) }}"><i class="ik ik-edit f-16 mr-15 text-green"></i></a>
                                                                     {{ include('producto/_delete_form.html.twig') }}
@@ -77,7 +79,7 @@
                                                                 </tr>
                                                             {% else %}
                                                                 <tr>
-                                                                    <td colspan="4">no records found</td>
+                                                                    <td colspan="8" align="center">no records found</td>
                                                                 </tr>
                                                             {% endfor %}
                                                 </tbody>

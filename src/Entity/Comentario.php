@@ -17,13 +17,13 @@ class Comentario
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Producto", inversedBy="comentariosRL")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Producto", inversedBy="comentarios")
      * @ORM\JoinColumn(nullable=false)
      */
     private $id_producto;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Usuario", inversedBy="comentarioUsuRL")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Usuario", inversedBy="comentarios")
      * @ORM\JoinColumn(nullable=false)
      */
     private $id_usuario;
@@ -107,9 +107,4 @@ class Comentario
 
         return $this;
     }
-    // public function __toString()
-    // {
-    //     return $this->setIdUsuario();
-    //     // return $this->id_producto;
-    // }
 }

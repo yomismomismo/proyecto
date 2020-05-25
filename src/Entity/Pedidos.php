@@ -19,7 +19,7 @@ class Pedidos
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Usuario", inversedBy="pedidosRL")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Usuario", inversedBy="pedidos")
      * @ORM\JoinColumn(nullable=false)
      */
     private $id_cliente;
@@ -54,18 +54,28 @@ class Pedidos
      */
     private $estado;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Productoxpedidos", mappedBy="id_pedido")
+     */
+    private $productoxpedidos;
+
+    public function __construct()
+    {
+        $this->productoxpedidos = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getIdCliente(): ?Usuario
+    public function getIdCliente(): ?usuario
     {
         return $this->id_cliente;
     }
 
-    public function setIdCliente(?Usuario $id_cliente): self
+    public function setIdCliente(?usuario $id_cliente): self
     {
         $this->id_cliente = $id_cliente;
 
@@ -140,6 +150,37 @@ class Pedidos
     public function setEstado(string $estado): self
     {
         $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Productoxpedidos[]
+     */
+    public function getProductoxpedidos(): Collection
+    {
+        return $this->productoxpedidos;
+    }
+
+    public function addProductoxpedido(Productoxpedidos $productoxpedido): self
+    {
+        if (!$this->productoxpedidos->contains($productoxpedido)) {
+            $this->productoxpedidos[] = $productoxpedido;
+            $productoxpedido->setIdPedido($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductoxpedido(Productoxpedidos $productoxpedido): self
+    {
+        if ($this->productoxpedidos->contains($productoxpedido)) {
+            $this->productoxpedidos->removeElement($productoxpedido);
+            // set the owning side to null (unless already changed)
+            if ($productoxpedido->getIdPedido() === $this) {
+                $productoxpedido->setIdPedido(null);
+            }
+        }
 
         return $this;
     }
