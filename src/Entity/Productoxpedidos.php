@@ -31,7 +31,7 @@ class Productoxpedidos
     private $cantidad;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\pedidos", inversedBy="productoxpedidos")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Pedidos", inversedBy="productoxpedidos")
      * @ORM\JoinColumn(nullable=false)
      */
     private $id_pedido;

@@ -59,6 +59,13 @@ class Pedidos
      */
     private $productoxpedidos;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\CuentasBank", inversedBy="pedidos")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $tarjeta_id;
+
+
     public function __construct()
     {
         $this->productoxpedidos = new ArrayCollection();
@@ -181,6 +188,18 @@ class Pedidos
                 $productoxpedido->setIdPedido(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTarjetaId(): ?CuentasBank
+    {
+        return $this->tarjeta_id;
+    }
+
+    public function setTarjetaId(?CuentasBank $tarjeta_id): self
+    {
+        $this->tarjeta_id = $tarjeta_id;
 
         return $this;
     }
