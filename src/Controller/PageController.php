@@ -587,7 +587,9 @@ if ($user1) {
                   ->findOneBy(['email' => $user], 
                            ['id' => 'ASC']);
                    $session->set('nombre_usuario', $usuarioIniciado->getNombre());
-                   return $this->redirectToRoute('detalleprod');
+                   return $this->redirectToRoute('detalleprod', [
+                    "id" => $id,
+           ]);
                    }
             else{
               $mensaje="La contraseña o el email son incorrectos";
