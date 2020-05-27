@@ -26,7 +26,7 @@
 
                                                     <div class="w-50" style="display:contents;">
                                                         <div class="card-body">
-                                                            <h6 class="mb-4" style="text-align:center; margin-top:20px;">{{categoria.getCategoria()}}</h6>
+                                                            <h6 class="mb-4" style="text-align:center; margin-top:20px;"><a href={{ path('producto', {'id': categoria.getId()}) }}>{{categoria.getCategoria()}}</a></h6>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -53,13 +53,23 @@
 <div class="clearboth"></div>
 <section class="container">
 	<h1 style="text-align: center; margin-bottom:56px;">Lo más vendido</h1>
-			<div class="row">
-             {% for producto in productos|reverse|slice(0, 8)  %}
-				<div class="col-6 col-lg-3" > <img style="width:247px;" src="img/thumb.jpg" alt="Preview image">
-					<div id="products"><p>{{producto.getUnidadesVendidas()}}</p>
-					<p>Precio</p></div></div>
-                      {% endfor %} 
-					</div>
+	<div class="row">
+
+        {% for producto in productos|reverse|slice(0, 8)  %}
+            {% set imagen = producto.getImagen()|split('|') %}
+	        {% set ruta = "" %}
+	            {% for rutaImg in imagen|slice(0, 1) %}
+		    {% set ruta = rutaImg %}
+	            {% endfor %}
+			<div class="col-6 col-lg-3" > 
+            {% for imagen in imagen|slice(1,1) %}
+                <img src="{{ruta}}{{imagen}}" alt="Preview image" width=257>
+			{% endfor %}
+                <div id="products"><p style="display: inline-block;margin-top: 10px;" title={{producto.getNombre()}}><a href={{ path('detalleprod', {'id': producto.getId()}) }} >{% if producto.getNombre()|length > 38 %} {{producto.getNombre()|slice(0,37)}}...  {% else %}{{producto.getNombre()}}{% endif %}</a></p>
+					<br><p>{{producto.getPrecio()}}</p></div></div>
+        {% endfor %} 
+
+	</div>
                   
 	
 
@@ -68,12 +78,22 @@
 <section class="container">
 	<h1 style="text-align: center; margin-bottom:56px;">Últimas unidades</h1>
 			<div class="row">
-
-                            {% for stocks in stock|reverse|slice(0, 8) %}
-                            {% if stocks.getUnidadesStock < 10 %}
-				                <div class="col-6 col-lg-3"> <img style="width:247px;" src="img/thumb.jpg" alt="Preview image">
-                                         <div id="products"><p>{{stocks.getNombre()}}</p>
+            {% for stocks in stock|reverse|slice(0, 8) %}
+{% set imagen = stocks.getImagen()|split('|') %}
+	{# <!-- For rutaImg saca el primer dato del array que debe ser siempre la ruta de la imagen --> #}
+	{% set ruta = "" %}
+	{% for rutaImg in imagen|slice(0, 1) %}
+		{% set ruta = rutaImg %}
+	{% endfor %}
+    {% if stocks.getUnidadesStock < 50 %}
+	<div class="col-6 col-sm-5 col-md-4 col-lg-3" >
+		    {% for imagen in imagen|slice(1,1) %}
+				 <img src="{{ruta}}{{imagen}}" alt="Preview image" width=257>
+                 
+                    <div id="products"><p>{{stocks.getNombre()}}</p>
 					<p>Precio</p></div></div>
+    					{% endfor %}
+
                             {% else %}
                 {% endif %}{% endfor %} 
                    

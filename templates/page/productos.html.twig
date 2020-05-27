@@ -1,6 +1,7 @@
 {% extends "page/layout.html.twig" %}
 {% block head %}
 <link rel="stylesheet" href="css/productos.css">
+		<link rel="stylesheet" href="{{ asset("estilosproDetalle.css", "estilos") }}">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 {% endblock %}
 {% block contenido %}
@@ -9,13 +10,77 @@
 
 		<h1 style="text-align: center; margin-bottom:56px;">Productos</h1>
 
+			{% for categoria in categorias %}
+					<h3>{{categoria.getCategoria()}}<span style="font-size:14px; margin-left:10px;"> <a href={{ path('producto', {'id': categoria.getId()}) }}>Ver todo</a></span></h3>
 			<div class="row">
+					
+					{% set contador = 0 %}
+
 			{% for producto in productos %}
-				<div class="col-6 col-lg-4" > <img src="img/thumb.jpg" alt="Preview image">
-					<div id="products"><p style="width:219px;display: inline-block;margin-top: 10px;">{{producto.getNombre()}}</p>
-					<p>{{producto.getPrecio()}}</p></div> </div>
+								{% set totalPuntos = 0  %}
+								{% set contaComent = 0  %}
+								{% set mediaComent = 0  %}
+ 
+								{% if Comentario %}
+									{% for comentarios in Comentario %}
+										{% if comentarios.getIdProducto().getId() == producto.getId() %}
+											{% set totalPuntos = totalPuntos + comentarios.getPuntuacion()  %}
+											{% set contaComent = contaComent + 1  %}
+										{% set mediaComent = totalPuntos / contaComent %}
+										{% endif %}
+										
+									{% endfor %}
+
+								{% endif %}
+{% if contador < 4 %}
+				{% if categoria.getCategoria() == producto.getCategoriaId().getCategoria %} 
+				{% set contador = contador + 1 %}
+ <!-- La variable imagen separa los datos que recibe de la base de datos en un array -->
+	{% set imagen = producto.getImagen()|split('|') %}
+	<!-- For rutaImg saca el primer dato del array que debe ser siempre la ruta de la imagen -->
+	{% set ruta = "" %}
+	{% for rutaImg in imagen|slice(0, 1) %}
+		{% set ruta = rutaImg %}
+	{% endfor %}
+	<br>
+	<div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3" >
+	
+		    {% for imagen in imagen|slice(1,1) %}
+				 <img src="{{ ruta}}{{imagen}}" alt="Preview image" width=257>
+    					{% endfor %}
+
+						{% set star = "star" %}
+					<div id="products"><p style="display: inline-block;margin-top: 10px;padding: 10px;" title={{producto.getNombre()}}><a href={{ path('detalleprod', {'id': producto.getId()}) }} >{% if producto.getNombre()|length > 38 %} {{producto.getNombre()|slice(0,37)}}...  {% else %}{{producto.getNombre()}}{% endif %}</a></p>
+					<br>		
+							<div class="reviews-counter ">
+								<div class="rate" style="position:relative;margin-left: -14px;" id="hoverlabeldisabled">
+								<span style="margin-left: 20px; margin-top:20px"></span>
+								    <input type="radio" id="star5{{ producto.getId()}}" name="rate{{ producto.getId()}}" value="5" disabled {% if mediaComent == "5" %} checked {% endif %}/>
+								    <label for="star5{{producto.getId()}}" title="text">5 stars</label>
+								    <input type="radio" id="star4{{ producto.getId()}}"  name="rate{{ producto.getId()}}" value="4" disabled {% if mediaComent == "4" %} checked {% endif %}/>
+								    <label for="star4{{producto.getId()}}" title="text">4 stars</label>
+								    <input type="radio" id= "star3{{ producto.getId()}}" name="rate{{ producto.getId()}}" value="3" disabled {% if mediaComent == "3" %} checked {% endif %}/>
+								    <label for="star3{{producto.getId()}}" title="text">3 stars</label>
+								    <input type="radio" id="star2{{ producto.getId()}}" name="rate{{ producto.getId()}}" value="2" disabled {% if mediaComent == "2" %} checked {% endif %}/>
+								    <label for="star2{{producto.getId()}}" title="text">2 stars</label>
+								    <input type="radio" id="star1{{ producto.getId()}}" name="rate{{ producto.getId()}}" value="1" disabled {% if mediaComent == "1" %} checked {% endif %}/>
+								    <label for="star1{{producto.getId()}}" title="text">1 star</label></div>
+								<span style="float:left;">{{contaComent}}</span>
+								<span style="font-size:24px;margin-left: 10px;">{{producto.getPrecio()}}€</span>
+								</div>
+								<br>
+							</div>
+<br>
+					</div>
+					{% endif %}
+								
+									{% endif %}	
+									
 					{% endfor %}
+			
 				</div>
-		
-</section>
+				<br>
+			{% endfor %}
+			
+			</section>
 {% endblock %}

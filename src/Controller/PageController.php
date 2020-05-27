@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\ProductoxpedidosRepository;
-use App\Entity\{Mensaje,Comentario, Usuario, Producto, Productoxpedidos, Pedidos, Categoria};
+use App\Entity\{Mensaje,Comentario, Usuario, Producto, Productoxpedidos, Pedidos, Categoria, CuentasBank};
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\{MensajeType, ComentarioType, UsuarioType, ProductoxpedidosType, PedidosType, ProductoxpedidoType};
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -63,7 +63,8 @@ class PageController extends AbstractController
               ->findOneBy(['estado' => "incompleto", 'id_cliente' => $idusario->getId()]);}
                       else {
                               $estado="";
-                              $pedidos="";}
+                              $pedidos="";
+                              $idusario="";}
                                      
    if ( $estado && $pedidos) {
                    
@@ -120,8 +121,8 @@ class PageController extends AbstractController
                 "categorias" => $categorias,
                 "productos" => $productos,
                 "puntuacion" => $puntuacion,
-                "stock" => $productosStock
-
+                "stock" => $productosStock,
+                "iduser" =>$idusario,
 
             ]);
         }
@@ -137,10 +138,17 @@ class PageController extends AbstractController
         $usuarioBBDD=$this->getDoctrine()
         ->getRepository(Usuario::class)
         ->findOneBy(['email' => $user]);
-      
+        $comentarios=$this->getDoctrine()
+        ->getRepository(Comentario::Class)
+        ->findAll();
+        $categorias= $this->getDoctrine()
+        ->getRepository(Categoria::class)
+        ->findAll();
+
         $Productos=$this->getDoctrine()
         ->getRepository(Producto::class)
         ->findAll();
+
         if ($user1) {
         $iduser=$this->getDoctrine()
             ->getRepository(Usuario::class)
@@ -164,7 +172,8 @@ class PageController extends AbstractController
               ->findOneBy(['estado' => "incompleto", 'id_cliente' => $idusario->getId()]);}
                       else {
                               $estado="";
-                              $pedidos="";}
+                              $pedidos="";
+                              $idusario="";}
                                      
    if ( $estado && $pedidos) {
                    
@@ -211,7 +220,107 @@ class PageController extends AbstractController
             'mensaje' => $mensaje,
             "user" => $user1,
             "filtroPedido" => $idproducto,
-            "productos" => $Productos
+            "productos" => $Productos,
+            "categorias" => $categorias,
+            "Comentario" => $comentarios,
+            "iduser" =>$idusario,
+        ]);
+      }
+
+  /**
+     * @Route("/producto/{id}", name="producto")
+     */
+    public function producto($id, Request $request, SessionInterface $session)
+    {
+        $user1 = $session->get('nombre_usuario');
+        $user= $request->request->get("user");
+        $password=  $request->request->get("password");
+        $usuarioBBDD=$this->getDoctrine()
+        ->getRepository(Usuario::class)
+        ->findOneBy(['email' => $user]);
+        $comentarios=$this->getDoctrine()
+        ->getRepository(Comentario::Class)
+        ->findAll();
+
+        $Productos=$this->getDoctrine()
+        ->getRepository(Producto::class)
+        ->findBy(["categoria_id" => $id]);
+
+        if ($user1) {
+        $iduser=$this->getDoctrine()
+            ->getRepository(Usuario::class)
+            ->findOneBy(['nombre' => $user1]);
+
+        $idusuario= $iduser->getId();
+
+        $idusario=$this->getDoctrine()
+            ->getRepository(Usuario::class)
+            ->findOneBy(['id' => $idusuario]);
+                                   
+                             
+
+        $pedidos=$this->getDoctrine()
+             ->getRepository(Pedidos::class)
+             ->findOneBy(['id_cliente' => $iduser->getId()]);
+                             
+                               
+        $estado=$this->getDoctrine()
+              ->getRepository(Pedidos::class)
+              ->findOneBy(['estado' => "incompleto", 'id_cliente' => $idusario->getId()]);}
+                      else {
+                              $estado="";
+                              $pedidos="";
+                              $idusario="";}
+                                     
+   if ( $estado && $pedidos) {
+                   
+        $idestado=$this->getDoctrine()
+              ->getRepository(Pedidos::class)
+              ->findBy(['id' => $estado->getId()]);
+                               
+        $idpedidoEstado=$estado->getId();
+                   
+        $idproducto=$this->getDoctrine()
+              ->getRepository(Productoxpedidos::class)
+              ->findBy(['id_pedido' => $idpedidoEstado]);
+                    
+                                   
+        $filtroPedido=$this->getDoctrine()
+              ->getRepository(Pedidos::Class)
+              ->findBy(['id' => $idpedidoEstado], 
+                       ['id' => 'ASC']);}
+      else{
+           $idproducto="";
+           $idproductoRepe="";
+           $filtroPedido="";
+          }
+          $userIniciado="";
+          $mensaje="";
+        if ($usuarioBBDD) {
+          $passHash=$usuarioBBDD->getContrasenya();
+          if (password_verify($password,  $passHash)) {
+                    $usuarioIniciado=$this->getDoctrine()
+                        ->getRepository(Usuario::Class)
+                        ->findOneBy(['email' => $user], 
+                                 ['id' => 'ASC']);
+                         $session->set('nombre_usuario', $usuarioIniciado->getNombre());
+                         $userIniciado=$user1;
+                         return $this->redirectToRoute('productos');}
+                  else{
+                    $mensaje="La contraseña o el email son incorrectos";
+                        }
+                      }
+        return $this->render('page/todoProductos.html.twig', [
+            'controller_name' => 'PageController',
+            'page' => 'productos',
+            'jumbotron' => 'no',
+            'mensaje' => $mensaje,
+            "user" => $user1,
+            "filtroPedido" => $idproducto,
+            "productos" => $Productos,
+            "Comentario" => $comentarios,
+            "iduser" =>$idusario,
+
         ]);
       }
   
@@ -250,7 +359,8 @@ class PageController extends AbstractController
               ->findOneBy(['estado' => "incompleto", 'id_cliente' => $idusario->getId()]);}
                       else {
                               $estado="";
-                              $pedidos="";}
+                              $pedidos="";
+                              $idusario="";}
                                      
    if ( $estado && $pedidos) {
                    
@@ -300,6 +410,7 @@ class PageController extends AbstractController
             "user" => $user1, 
             "filtroPedido" => $idproducto,
             "mensaje" => $mensaje,
+            "iduser" =>$idusario,
             ]);
         }
     
@@ -358,6 +469,7 @@ if ($user1) {
                       }else {
                         $estado="";
                         $pedidos="";
+                        $idusario="";
 
                       }
                      
@@ -612,7 +724,8 @@ if ($user1) {
             "Comentario" => $comentarios,
             "productostock" => $idproductoRepe,
             "filtroPedido" => $idproducto,  
-            "mensaje" => $mensaje
+            "mensaje" => $mensaje,
+            "iduser" =>$idusario,
 
         ]);
             
@@ -664,7 +777,8 @@ if ($user1) {
               ->findOneBy(['estado' => "incompleto", 'id_cliente' => $idusario->getId()]);}
                       else {
                               $estado="";
-                              $pedidos="";}
+                              $pedidos="";
+                              $idusario="";}
                                      
    if ( $estado && $pedidos) {
                    
@@ -714,7 +828,8 @@ if ($user1) {
             "user" => "",
             "user" => $user1, 
             "filtroPedido" => $idproducto,
-            "mensaje" => $mensaje 
+            "mensaje" => $mensaje,
+            "iduser" =>$idusario,
         ]);
     }
     /**
@@ -787,7 +902,8 @@ if ($user1) {
               ->findOneBy(['estado' => "incompleto", 'id_cliente' => $idusario->getId()]);}
                       else {
                               $estado="";
-                              $pedidos="";}
+                              $pedidos="";
+                              $idusario="";}
                                      
    if ( $estado && $pedidos) {
                    
@@ -838,7 +954,8 @@ if ($user1) {
             "user" => $user1,
             "filtroPedido" => $idproducto,
             'NumCols' => $XV,
-            'test' => $test
+            'test' => $test,
+            "iduser" =>$idusario,
         ]);
 
     }
@@ -892,7 +1009,8 @@ if ($user1) {
               ->findOneBy(['estado' => "incompleto", 'id_cliente' => $idusario->getId()]);}
                       else {
                               $estado="";
-                              $pedidos="";}
+                              $pedidos="";
+                              $idusario="";}
                                      
    if ( $estado && $pedidos) {
                    
@@ -942,52 +1060,187 @@ if ($user1) {
             "user" => "",
             "user" => $user1,
             "filtroPedido" => $idproducto,
-            "mensaje" => $mensaje   
+            "mensaje" => $mensaje,
+            "iduser" =>$idusario,
 
         ]);}
 
-    /**
-     * @Route("/pruebainicio", name="pruebainicio")
+      /**
+     * @Route("/perfil/{id}/{currentPage?1}", name="perfil" )
      */
-    public function pruebainicio(Request $request, SessionInterface $session)
+    public function perfil($id, $currentPage,Request $request, SessionInterface $session, Usuario $usuario)
     {
         $user1 = $session->get('nombre_usuario');
         $user= $request->request->get("user");
         $password=  $request->request->get("password");
-        $usuarioBBDD=$this->getDoctrine()
-        ->getRepository(Usuario::class)
-        ->findOneBy(['email' => $user]);
-        if ($usuarioBBDD){
-            if ($usuarioBBDD->getContrasenya()==$password) {
-                
-                 $usuarioIniciado=$this->getDoctrine()
-                   ->getRepository(Usuario::Class)
-                   ->findBy(
-                       ['email' => $user], 
-                       ['id' => 'ASC']
-                     );
-                     foreach ($usuarioIniciado as $usuario) {
-                       $session->set('nombre_usuario', $usuario->getNombre());
-                     }
 
-                //$session->set('password', $password);
-                   return $this->redirectToRoute('index', [
-                        "user" => $user1,
-                       
-               ]);
-           }
-}
-else{
-        return $this->render('page/pruebainicio.html.twig', [
-            'controller_name' => 'PageController',
-            'page' => 'carrito',
-            'jumbotron' => 'no',
-            "user" => "",
-            "user" => $user1,
-            "filtroPedido" => $idproducto   
-        ]);
-    }
-}
+        $usuarioBBDD=$this->getDoctrine()
+            ->getRepository(Usuario::class)
+            ->findOneBy(['email' => $user]);
+        $categorias=$this->getDoctrine()
+            ->getRepository(Categoria::class)
+            ->findAll();
+        $pedido=$this->getDoctrine()
+            ->getRepository(Pedidos::class)
+            ->findAll();
+        $puntuacion= $this->getDoctrine()
+        ->getRepository(Comentario::class)
+        ->findBy(array(), array('puntuacion' => 'ASC'));
+        $creditBank= $this->getDoctrine()
+        ->getRepository(CuentasBank::class)
+        ->findBy(['id' => $id]); 
+
+       //Filtro Pedido      
+    if ($user1) {
+        $iduser=$this->getDoctrine()
+            ->getRepository(Usuario::class)
+            ->findOneBy(['nombre' => $user1]);
+
+        $idusuario= $iduser->getId();
+
+        $idusario=$this->getDoctrine()
+            ->getRepository(Usuario::class)
+            ->findOneBy(['id' => $idusuario]);
+                                   
+        $pedidos=$this->getDoctrine()
+            ->getRepository(Pedidos::class)
+            ->findOneBy(['id_cliente' => $iduser->getId()]);     
+                           
+        $pedidosCompleto=$this->getDoctrine()
+             ->getRepository(Pedidos::class)
+             ->findBy(['id_cliente' => $iduser->getId(), "estado" => "completo"]);
+                               
+        $estado=$this->getDoctrine()
+              ->getRepository(Pedidos::class)
+              ->findOneBy(['estado' => "incompleto", 'id_cliente' => $idusario->getId()]);}
+                      else {
+                              $estado="";
+                              $pedidos="";
+                              $idusario="";
+                              
+                              }
+                              if ($pedidosCompleto && $pedidos) {
+                                foreach ($pedidosCompleto as $key) {
+                                  $idpedidoEstadoCompleto=$key->getId();
+                                }
+
+                                $idestadoCompleto=$this->getDoctrine()
+                                ->getRepository(Pedidos::class)
+                                ->findBy(['id' => $idpedidoEstadoCompleto]);
+                                                 
+
+                                  $pedidoCompleto=$this->getDoctrine()
+                                 ->getRepository(Pedidos::Class)
+                                 ->findBy(['id' => $idpedidoEstadoCompleto], 
+                                         ['id' => 'ASC']);  
+
+                              }else{$pedidosCompleto="";}
+
+   if ( $estado && $pedidos) {
+                   
+        $idestado=$this->getDoctrine()
+              ->getRepository(Pedidos::class)
+              ->findBy(['id' => $estado->getId()]);
+                               
+        $idpedidoEstado=$estado->getId();
+
+        
+                   
+        $idproducto=$this->getDoctrine()
+              ->getRepository(Productoxpedidos::class)
+              ->findBy(['id_pedido' => $idpedidoEstado]);
+              
+                    
+                                   
+        $filtroPedido=$this->getDoctrine()
+              ->getRepository(Pedidos::Class)
+              ->findBy(['id' => $idpedidoEstado], 
+                       ['id' => 'ASC']);}
+
+
+
+      else{
+           $idproducto="";
+           $idproductoRepe="";
+           $filtroPedido="";
+           
+          }
+                         
+          $equiposFiltro=$this->getDoctrine()
+          ->getRepository(Usuario::Class)
+          ->findBy(
+              ['id' => $id], 
+              ['id' => 'ASC']
+            );
+            $comentarioUsuario=$this->getDoctrine()
+            ->getRepository(Comentario::Class)
+            ->findBy(
+                ['id_usuario' => $id], 
+                ['id' => 'ASC']
+              );
+            $pedidoUsuario=$this->getDoctrine()
+              ->getRepository(Pedidos::Class)
+              ->findBy(
+                  ['id_cliente' => $id], 
+                  ['id' => 'ASC']
+                );
+          $form=$this->CreateForm(UsuarioType::Class, $usuario);
+          $form->handleRequest($request);
+          if($form->isSubmitted() && $form->isValid()){
+            $usuarioIniciado=$this->getDoctrine()
+                  ->getRepository(Usuario::Class)
+                  ->findOneBy(['id' => $id], 
+                           ['id' => 'ASC']);
+                   $session->set('nombre_usuario', $usuarioIniciado->getNombre());
+              $this->getDoctrine()->getManager()->flush();
+              return $this->redirectToRoute('perfil', [
+                  "id" => $id,
+                 
+         ]);                         }               
+
+    //Recoger contraseña encriptada y comprobar si el inicio de sesion es correcto                             
+    $userIniciado="";
+    $mensaje="";
+  if ($usuarioBBDD) {
+    $passHash=$usuarioBBDD->getContrasenya();
+    if (password_verify($password,  $passHash)) {
+              $usuarioIniciado=$this->getDoctrine()
+                  ->getRepository(Usuario::Class)
+                  ->findOneBy(['email' => $user], 
+                           ['id' => 'ASC']);
+                   $session->set('nombre_usuario', $usuarioIniciado->getNombre());
+                   return $this->redirectToRoute('index');
+                   }
+            else{
+              $mensaje="La contraseña o el email son incorrectos";
+                  }
+                }
+    //--------------------------------------------------------------------------------
+                   
+            return $this->render('page/perfil.html.twig', [
+
+                'controller_name' => 'PageController',
+                'page' => 'index',
+                'jumbotron' => 'no',
+                "user" => $user1,
+                "iduser" =>$idusario,
+                "filtroPedido" => $idproducto,
+                'filtroPedidoCompleto' => $pedidoCompleto,
+                "mensaje" => $mensaje,
+                "categorias" => $categorias,
+                "puntuacion" => $puntuacion,
+                'usuario' => $equiposFiltro,
+                'comentarioUsuario' => $comentarioUsuario,
+                'currentPage' => $currentPage,
+                'data' => $comentarioUsuario,
+                'id' => $id,
+                'pedidoUsuario' => $pedidoUsuario,
+                'form' => $form->CreateView(),
+                'creditCard' => $creditBank,
+                'pedidoUsuario' => $pedido,
+
+            ]);
+        }
        /**
      * @Route("/logOut", name="logOut")
      */
