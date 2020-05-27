@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -46,6 +48,16 @@ class CuentasBank
      * @ORM\Column(type="string", length=100)
      */
     private $cvv;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Pedidos", mappedBy="tarjeta_id")
+     */
+    private $pedidos;
+
+    public function __construct()
+    {
+        $this->pedidos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -123,4 +135,36 @@ class CuentasBank
 
         return $this;
     }
+
+    /**
+     * @return Collection|Pedidos[]
+     */
+    public function getPedidos(): Collection
+    {
+        return $this->pedidos;
+    }
+
+    public function addPedido(Pedidos $pedido): self
+    {
+        if (!$this->pedidos->contains($pedido)) {
+            $this->pedidos[] = $pedido;
+            $pedido->setTarjetaId($this);
+        }
+
+        return $this;
+    }
+
+    public function removePedido(Pedidos $pedido): self
+    {
+        if ($this->pedidos->contains($pedido)) {
+            $this->pedidos->removeElement($pedido);
+            // set the owning side to null (unless already changed)
+            if ($pedido->getTarjetaId() === $this) {
+                $pedido->setTarjetaId(null);
+            }
+        }
+
+        return $this;
+    }
+
 }
