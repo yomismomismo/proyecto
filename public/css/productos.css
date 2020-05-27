@@ -2,5 +2,8 @@
     border-radius: 0px 0px 7px 7px;
     text-align: center;
     font-size: 18px;
+
+    overflow:hidden;
+    text-overflow: ellipsis;
 }
 #products:hover{background-color: rgb(175, 175, 175);}

@@ -1,0 +1,304 @@
+{% extends "page/layout.html.twig" %}
+{% block head %}
+        
+        {# <script>window.jQuery || document.write('<script src="../src/js/vendor/jquery-3.3.1.min.js"><\/script>')</script> #}
+        		<link rel="stylesheet" href="{{ asset("estilosproDetalle.css", "estilos") }}">
+                <link rel="stylesheet" href="{{ asset("creditCard.css", "estilos") }}">
+        <link rel="stylesheet" href="/plugins/chartist/dist/chartist.min.css">
+        <link rel="stylesheet" href="/plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="/plugins/flot-charts/jquery.flot.js"></script>
+        <script src="/plugins/flot-charts/curvedLines.js"></script>
+        <script src="/plugins/chartist/dist/chartist.min.js"></script>
+        <script src="/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
+        <script src="/plugins/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="/js/js-admin/tables.js"></script>
+        <script src="/js/js-admin/datatables.js"></script>
+        <script src="/js/js-admin/widget-data.js"></script>
+        <script src="/js/js-admin/widget-statistic.js"></script>
+{% endblock %}
+{% block contenido %}         
+                    <div class="container-fluid">
+
+                        <div class="row">
+                            <div class="col-lg-4 col-md-5">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="text-center"> 
+                                            <img src="/img/user.png" class="rounded-circle" width="150" />
+                                            {% for usuarios in usuario %}
+                                            <h4 class="card-title mt-10">{{usuarios.nombre}}</h4>
+                                            <p class="card-subtitle">Front End Developer</p>
+                                            <div class="row text-center justify-content-md-center">
+                                                <div class="col-4"><a href="javascript:void(0)" class="link"><i class="ik ik-user"></i> <font class="font-medium">254</font></a></div>
+                                                <div class="col-4"><a href="javascript:void(0)" class="link"><i class="ik ik-image"></i> <font class="font-medium">54</font></a></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="mb-0"> 
+                                    <div class="card-body" style="margin-bottom: 68px;"> 
+                                        <small class="text-muted d-block">Email address </small>
+                                        <h6>{{usuarios.email}}</h6> 
+                                        <small class="text-muted d-block pt-10">Phone</small>
+                                        <h6>{{usuarios.telefono}}</h6> 
+                                        <small class="text-muted d-block pt-10">Dirección</small>
+                                        <h6>{{usuarios.direccion}}</h6>
+                                        <h6>{{usuarios.provincia}}</h6>
+                                        <h6>{{usuarios.codpostal}}</h6>
+                                        <small class="text-muted d-block pt-30">Social Profile</small>
+                                        <br/>
+                                        <button class="btn btn-icon btn-facebook"><i class="fab fa-facebook-f"></i></button>
+                                        <button class="btn btn-icon btn-twitter"><i class="fab fa-twitter"></i></button>
+                                        <button class="btn btn-icon btn-instagram"><i class="fab fa-instagram"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8 col-md-7">
+                                <div class="card">
+                                    <ul class="nav nav-pills custom-pills" id="pills-tab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="pills-timeline-tab" data-toggle="pill" href="#current-month" role="tab" aria-controls="pills-timeline" aria-selected="true">Comentarios</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="pills-products-tab" data-toggle="pill" href="#next-month" role="tab" aria-controls="pills-products" aria-selected="true">Pedidos</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="pills-setting-tab" data-toggle="pill" href="#previous-month" role="tab" aria-controls="pills-setting" aria-selected="false">Setting</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="pills-setting-tab" data-toggle="pill" href="#previous1-month" role="tab" aria-controls="pills-setting" aria-selected="false">Setting</a>
+                                        </li>                                       
+                                    </ul>
+
+    {# ----------------------------------------------------------------------Comentarios---------------------------------------------------------------- #}
+                                    <div class="tab-content" id="pills-tabContent">
+                                        <div class="tab-pane fade show active" id="current-month" role="tabpanel" aria-labelledby="pills-timeline-tab">
+                                            <div class="card-body">
+                                                <div class="profiletimeline mt-0">
+                                                		{% set contador = 0 %}
+                                                    {% set itemsPerpage = 4 %}
+			                                        {% set lowerLimit = (currentPage - 1) * itemsPerpage %}
+			                                        {% set upperLimit = currentPage * itemsPerpage %}
+                                                {% for comentario in comentarioUsuario %}
+                                                    {% if loop.index0 >= lowerLimit and loop.index0 < upperLimit %}
+                                                    <div class="sl-item">
+                                                        <div class="sl-left">  </div>
+                                                        {# <img src="../img/users/1.jpg" alt="user" class="rounded-circle" /> #}
+                                                        <div class="sl-right">
+                                                            <div><a href="javascript:void(0)" class="link">{{comentario.getIdUsuario().getNombre()}} {{comentario.getIdUsuario().getApellido()}}</a> <span class="sl-date">{{comentario.getFecha()|date("d-m-Y H:i")}}</span>
+                                                            <br>
+                                                            <br>
+                                                                <p>{{comentario.getComentario()}}</a></p>
+
+                                                                <div class="like-comm"> 
+								<div class="rate" style="position:relative;">
+								    <input type="radio" id="star5{{contador}}" name="rate{{contador}}" value="5" disabled {% if comentario.getPuntuacion() == "5" %} checked {% endif %}/>
+								    <label for="star5{{contador}}" id="hoverlabeldisabled" title="text">5 stars</label>
+								    <input type="radio" id="star4{{contador}}"  name="rate{{contador}}" value="4" disabled {% if comentario.getPuntuacion() == "4" %} checked {% endif %}/>
+								    <label for="star4{{contador}}" title="text" id="hoverlabeldisabled">4 stars</label>
+								    <input type="radio" id= "star3{{contador}}" name="rate{{contador}}" value="3" disabled {% if comentario.getPuntuacion() == "3" %} checked {% endif %}/>
+								    <label for="star3{{contador}}" title="text" id="hoverlabeldisabled">3 stars</label>
+								    <input type="radio" id="star2{{contador}}" name="rate{{contador}}" value="2" disabled {% if comentario.getPuntuacion() == "2" %} checked {% endif %}/>
+								    <label for="star2{{contador}}" title="text" id="hoverlabeldisabled">2 stars</label>
+								    <input type="radio" id="star1{{contador}}" name="rate{{contador}}" value="1" disabled {% if comentario.getPuntuacion() == "1" %} checked {% endif %}/>
+								    <label for="star1{{contador}}" title="text" id="hoverlabeldisabled">1 star</label>
+									
+									{# {{comentarios.fecha|date("m/d/Y")}} #}
+								</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div><br>
+                                                    <hr>
+                                                    
+                                                    {% set contador =  contador + 1 %}
+                                                {% endif %}
+                                            {% endfor %}
+<div style="text-align:center">
+                                              {% set totalItems = data|length %}
+			                                    {% set lastPage = (totalItems / itemsPerpage)|round(0,'ceil') %}
+			                                    {% set lastPageItems = (itemsPerpage * lastPage) - totalItems %}
+                                                {% if currentPage > 1 %}
+				<a href="{{ path('detalleUsuarios',{'id':id, 'currentPage':currentPage - 1}) }}" class="tm-btn tm-btn-default tm-right">Previous</a>
+				&nbsp;&nbsp;
+			{% else %}
+				<span class="tm-btn tm-btn-default tm-right">Previous</span>
+				&nbsp;&nbsp;
+			{% endif %}
+			{% for i in 1..lastPage %}
+				{% if currentPage == i %}
+					<span class="tm-btn tm-btn-default tm-right" style="background-color:#98999A; color:white">{{ i }}</span>
+
+				{% else %}
+					<a href="{{ path('detalleUsuarios',{'id':id, 'currentPage':i}) }}" class="tm-btn tm-btn-default tm-right">{{ i }}</a>
+				{% endif %}
+				{% if not loop.last %}&nbsp;&nbsp;
+				{% endif %}
+			{% endfor %}
+
+			{% if currentPage != lastPage %}
+				&nbsp;&nbsp;
+				<a href="{{ path('detalleUsuarios',{'id':id, 'currentPage':currentPage + 1}) }}" class="tm-btn tm-btn-default tm-right">Next</a>
+			{% else %}
+				&nbsp;&nbsp;
+				<span class="tm-btn tm-btn-default tm-right">Next</span>
+			{% endif %}
+            </div>
+                                                </div>
+                                            </div>
+                                        </div>
+    {# ------------------------------------------------------------------------------------------------------------------------------------------------ #}
+
+    {# ------------------------------------------------------Pedidos----------------------------------------------------------------------------------- #}
+                                
+                                        <div class="tab-pane fade " id="next-month" role="tabpanel" aria-labelledby="pills-products-tab">
+                                            <div class="card-body">
+                                                <div class="profiletimeline mt-0">
+ {{dump(filtroPedidoCompleto, "Hola")}}
+                                                {% for pedido in filtroPedidoCompleto %}
+                                                   
+                                                    <div class="sl-item">
+                                                        <div class="sl-left"> <img src="../img/users/1.jpg" alt="user" class="rounded-circle" /> </div>
+                                                        <div class="sl-right">
+                                                            <div>{{pedido.getIdCliente().getNombre()}} {{pedido.getIdcliente().getApellido()}} <span class="sl-date">{{pedido.getFechaPedido()|date("d-m-Y H:i")}}</span>
+                                                                <p>Ver factura <a href="javascript:void(0)"> Design weblayout</a></p>
+                                                                <div class="row">
+                                                                     {% for producto in productos|reverse|slice(0, 8)  %}
+            {% set imagen = producto.getImagen()|split('|') %}
+	        {% set ruta = "" %}
+	            {% for rutaImg in imagen|slice(0, 1) %}
+		    {% set ruta = rutaImg %}
+	            {% endfor %}
+			<div class="col-6 col-lg-3" > 
+            {% for imagen in imagen|slice(1,1) %}
+                <img src="{{ruta}}{{imagen}}" alt="Preview image" width=257>
+			{% endfor %}
+                <div id="products"><p style="display: inline-block;margin-top: 10px;" title={{producto.getNombre()}}><a href={{ path('detalleprod', {'id': producto.getId()}) }} >{% if producto.getNombre()|length > 38 %} {{producto.getNombre()|slice(0,37)}}...  {% else %}{{producto.getNombre()}}{% endif %}</a></p>
+					<br><p>{{producto.getPrecio()}}</p></div></div>
+        {% endfor %}      
+                                                                    <div class="col-lg-3 col-md-6 mb-20"><img src="/img/conejos.jpg" class="img-fluid rounded" /></div>
+                                                         
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    
+                                                {% endfor %}
+                                              
+                                                </div>
+                                            </div>
+                                        </div>
+    {# ------------------------------------------------------------------------------------------------------------------------------------------------ #}
+
+    {# ------------------------------------------------------Ajustes de usuario------------------------------------------------------------------------ #}
+                                        <div class="tab-pane fade" id="previous-month" role="tabpanel" aria-labelledby="pills-setting-tab">
+                                            <div class="card-body">
+                                                {# <form class="form-horizontal"> #}
+                                            {{form_start(form, {'attr':{'class':"form-horizontal", 'action':'', "id":"submissionForm", "autocomplete":"on"}})}}
+                                                    <div class="form-group">
+                                                        <label for="example-name">Nombre</label>
+                                                        {# <input type="text" placeholder="{{usuarios.nombre}}" class="form-control" name="example-name" id="example-name"> #}
+                                            {{form_widget(form.nombre, {'attr':{'class':'form-control', "id":"firstName", "name":"given-name", "autocomplete":"given-name", 'required':'', "aria-required":"true", "autofocus":""}})}}
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="example-name">Apellidos</label>
+                                                        {# <input type="text" placeholder="{{usuarios.apellido}}" class="form-control" name="example-name" id="example-name"> #}
+                                            {{form_widget(form.apellido, {'attr':{'class':'form-control', "id":"lastName", "name":"given-apellido", "autocomplete":"given-apellido", 'required':'', "aria-required":"true", "autofocus":""}})}}
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="example-email">Email</label>
+                                                        {# <input type="email" placeholder="{{usuarios.email}}" class="form-control" name="example-email" id="example-email"> #}
+                                            {{form_widget(form.email, {'attr':{'class':'form-control', "id":"email", "name":"given-email", "autocomplete":"given-email", 'required':'', "aria-required":"true", "autofocus":""}})}}
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="example-phone">Teléfono</label>
+                                            {{form_widget(form.direccion, {'attr':{'class':'form-control', "id":"direccion", "name":"given-direccion", "autocomplete":"given-direccion", 'required':'', "aria-required":"true", "autofocus":""}})}}
+                                                    </div>
+                                                   <div class="form-group">
+                                                    <label for="example-phone">Dirección</label>
+                                                        {# <input type="text" placeholder="{{usuarios.telefono}}" id="example-phone" name="example-phone" class="form-control"> #}
+                                            {{form_widget(form.telefono, {'attr':{'class':'form-control', "id":"telefono", "name":"given-telefono", "autocomplete":"given-telefono", 'required':'', "aria-required":"true", "autofocus":""}})}}
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="example-phone">Código Postal</label>
+                                                        {# <input type="text" placeholder="{{usuarios.codpostal}}" id="example-phone" name="example-phone" class="form-control"> #}
+                                                        {{form_widget(form.cod_postal, {'attr':{'class':'form-control', "id":"cod_postal", "name":"given-cod_postal", "autocomplete":"given-cod_postal", 'required':'', "aria-required":"true", "autofocus":""}})}}
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="example-country">Select Country</label>
+                                                        {{form_widget(form.provincia, {'attr':{'class':'form-control', "id":"provincia", "name":"given-provincia", "autocomplete":"given-provincia", 'required':'', "aria-required":"true", "autofocus":""}})}}
+                                                        {# <select name="example-message" id="example-message" class="form-control">
+                                                            <option selected>{{usuarios.provincia}}</option>
+                                                            <option>India</option>
+                                                            <option>Usa</option>
+                                                            <option>Canada</option>
+                                                            <option>Thailand</option>
+                                                        </select> #}
+                                                    </div>
+                                                    {# <div class="form-group">
+                                                        <label for="example-password">Password</label>
+                                                        <input type="password" value="password" class="form-control" name="example-password" id="example-password">
+                                                    </div> #}
+                                                    {# <button class="btn btn-success" type="submit">Update Profile</button> #}
+                                                {{form_widget(form.send, {'type':'submit', 'attr':{'class':'btn btn-success', 'placeholder':'Enviar',  }})}}
+                                                {# </form> #}
+                                                         {{form_end(form)}}   
+                                            </div>
+                                        </div>
+    {# ------------------------------------------------------------------------------------------------------------------------------------------------ #}
+    {# ------------------------------------------------------Tarjeta credito----------------------------------------------------------------------------------- #}
+                                
+                                        <div class="tab-pane fade " id="previous1-month" role="tabpanel" aria-labelledby="pills-credit-tab">
+                                            <div class="card-body">
+                                                    <div class="sl-item">
+                                                        <div class="sl-right">
+                                                        <div class="container">
+                                                            <div class="row">
+                                                                {% for card in creditCard %}
+                                                                <div class="columna col-10 col-sm-12 col-md-12 col-lg-12  col-xl-6">
+                                                                    <div class="card1">
+                                                                        <div class="bank-name" title="BestBank">CreditBank</div>
+                                                                        <div class="chip">
+                                                                            <div class="side left"></div>
+                                                                            <div class="side right"></div>
+                                                                            <div class="vertical top"></div>
+                                                                            <div class="vertical bottom"></div>
+                                                                        </div>
+                                                                        <div class="data">
+                                                                            <div class="pan" title="4123 4567 8910 1112">XXXX XXXX XXXX {{card.getUltimosDigitos()}}</div>
+                                                                            <div class="exp-date-wrapper">
+                                                                                <div class="left-label">EXPIRES END</div>
+                                                                                <div class="exp-date">
+                                                                                    <div class="upper-labels">MONTH/YEAR</div>
+                                                                                    <div class="date" title="01/17">{{card.getFechaCaducidad()}}</div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="name-on-card" title="John Doe">{{card.getTitular()}}</div>
+                                                                        </div>
+                                                                        <div class="lines-down"></div>
+                                                                        <div class="lines-up"></div>
+                                                                    </div>
+                                                                    </div>
+                                                                    <br>
+                                                            {% endfor %}
+                                                           </div>
+                                                           </div>
+                                                        </div>
+                                                    </div>
+
+                                                 <hr>
+                                                    
+                                              
+                                            </div>
+                                        </div>
+                                    </div>
+    {# ------------------------------------------------------------------------------------------------------------------------------------------------ #}
+                                            </div>
+                                         </div>
+                                     </div>
+                                </div>
+                            </div>
+{% endfor %}
+
+                                        {% endblock %} 

@@ -21,7 +21,7 @@
 			        {% endif %}
 					
 					{% if user != "" %}
-<li><a>{{user}}</a></li> 
+<li><a href="{{ path('perfil', {'id':iduser.id})}}">{{user}}</a></li> 
 <li><a href="{{ path('logOut')}}"><i class="fas fa-sign-out-alt" style="font-size: 20px;"></i></a></li>
 
 

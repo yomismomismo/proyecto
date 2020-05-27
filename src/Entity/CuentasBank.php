@@ -25,7 +25,7 @@ class CuentasBank
     private $id_cliente;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=100)
      */
     private $num_tarjeta;
 
@@ -45,7 +45,7 @@ class CuentasBank
     private $fecha_caducidad;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=100)
      */
     private $cvv;
 
