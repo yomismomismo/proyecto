@@ -800,7 +800,7 @@ if ($user1) {
         $idproducto=$this->getDoctrine()
               ->getRepository(Productoxpedidos::class)
               ->findBy(['id_pedido' => $idpedidoEstado]);
-                    
+                        
                                    
         $filtroPedido=$this->getDoctrine()
               ->getRepository(Pedidos::Class)
@@ -811,6 +811,7 @@ if ($user1) {
            $idproductoRepe="";
            $filtroPedido="";
           }
+          
     //Recoger contraseña encriptada y comprobar si el inicio de sesion es correcto                             
     $userIniciado="";
     $mensaje="";

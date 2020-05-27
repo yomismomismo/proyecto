@@ -7,9 +7,11 @@ var taxRate = 0.21;
 var fadeTime = 300;
 let test = "";
 
+
 $(document).ready(function() {
    test = $('#test').data("isTest");
 });
+
 
 
 /* Assign actions */
@@ -80,6 +82,7 @@ function updateQuantity(quantityInput)
   var price = productRow.children('.product-price').text();
 
   var quantity = $(quantityInput).val();
+
   var linePrice = price * quantity;
   
   /* Update line price display and recalc cart totals */
@@ -92,15 +95,16 @@ function updateQuantity(quantityInput)
   });
   
   var delayInMilliseconds = 2000;
-  
+
 for (let i = 0; i < test.length; i++) {
   $('#cambio' + test[i]).change( function() {
-    setTimeout(function() {
-      document.getElementById("changeCantidad" + test[i]).submit();
-    }, delayInMilliseconds);
-  });
+      setTimeout(function() {
+        document.getElementById("changeCantidad" + test[i]).submit();
+      }, delayInMilliseconds);
+});
   
-}}
+}
+}
 
 /* Remove item from cart */
 function removeItem(removeButton)
