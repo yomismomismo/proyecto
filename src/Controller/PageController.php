@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Repository\ProductoxpedidosRepository;
 use App\Entity\{Mensaje,Comentario, Usuario, Producto, Productoxpedidos, Pedidos, Categoria, CuentasBank};
 use Symfony\Component\HttpFoundation\Request;
-use App\Form\{MensajeType, ComentarioType, UsuarioType, ProductoxpedidosType, PedidosType, ProductoxpedidoType};
+use App\Form\{MensajeType, ComentarioType, UsuarioType, ProductoxpedidosType, PedidosType, ProductoxpedidoType, CuentasBankType};
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -841,6 +841,7 @@ if ($user1) {
       $test=array();
       $idpedidoprod= $request->request->get("idpedidoprod");
 
+
                $fil=$this->getDoctrine()
                 ->getRepository(Productoxpedidos::Class)
                 ->findAll(
@@ -848,37 +849,26 @@ if ($user1) {
                   );
                   $XV = 0;
                     foreach ($fil as $key) {
-                      var_dump($key->getId());
                       $asas = $key->getId();
                       $XV = $XV + 1; 
                       array_push($test, $asas);
                     }
                     
-      
-    //   $filtroP=$this->getDoctrine()
-    //   ->getRepository(Productoxpedidos::Class)
-    //   ->findAll();
-    //   
-    //   foreach ($fil as $x) {
-    //     $XV = $XV + 1;
-    //     array_push($test, $x);
-    // };
-            // foreach ($filtroP as $filtroPedid) {
               $form = $this->createForm(ProductoxpedidosType::class );
               $form->handleRequest($request);
-            // }
-    
-            if ($form->isSubmitted() && $form->isValid()) {
+              if ($form->isSubmitted() && $form->isValid()) {
                 $this->getDoctrine()->getManager()->flush();}
-    
-
 
         $user1 = $session->get('nombre_usuario');
         $user= $request->request->get("user");
+        $ultDigits= $request->request->get("UltDigits");
+        $numTarje= $request->request->get("inputNumber1");
+        $cvv= $request->request->get("inputCvv");
         $password=  $request->request->get("password");
         $usuarioBBDD=$this->getDoctrine()
         ->getRepository(Usuario::class)
         ->findOneBy(['email' => $user]);
+
         if ($user1) {
         $iduser=$this->getDoctrine()
             ->getRepository(Usuario::class)
@@ -890,7 +880,10 @@ if ($user1) {
             ->getRepository(Usuario::class)
             ->findOneBy(['id' => $idusuario]);
                                    
-                             
+            $BankTarj=$this->getDoctrine()
+            ->getRepository(CuentasBank::Class)
+            ->findBy(['id_cliente' => $idusario], 
+              ['id' => 'ASC']);
 
         $pedidos=$this->getDoctrine()
              ->getRepository(Pedidos::class)
@@ -903,7 +896,9 @@ if ($user1) {
                       else {
                               $estado="";
                               $pedidos="";
-                              $idusario="";}
+                              $idusario="";
+                              $BankTarj="";}
+                              
                                      
    if ( $estado && $pedidos) {
                    
@@ -927,7 +922,23 @@ if ($user1) {
            $idproductoRepe="";
            $filtroPedido="";
           }
-          
+
+          $contactoTo=new CuentasBank();
+          $formTarjeta=$this->CreateForm(CuentasBankType::Class, $contactoTo);
+          $formTarjeta->handleRequest($request);
+
+          $numTar=password_hash( $numTarje, CRYPT_BLOWFISH);
+          $nCvv=password_hash( $cvv, CRYPT_BLOWFISH);
+          if($formTarjeta->isSubmitted() && $formTarjeta->isValid()){
+              $entityManager=$this->getDoctrine()->getManager();
+              $contactoTo->setUltimosdigitos($ultDigits);
+              $contactoTo->setNumtarjeta($numTar);
+              $contactoTo->setCvv($nCvv);
+              $contactoTo->setIdCliente($idusario);
+              $entityManager->persist($contactoTo);
+              $entityManager->flush();
+              return $this->redirectToRoute('carrito');
+            }
     //Recoger contraseña encriptada y comprobar si el inicio de sesion es correcto                             
     $userIniciado="";
     $mensaje="";
@@ -949,14 +960,17 @@ if ($user1) {
         return $this->render('page/carrito.html.twig', [
             'controller_name' => 'PageController',
             'form' => $form->CreateView(),
+            'formTarjeta' => $formTarjeta->CreateView(),
             'page' => 'carrito',
             'jumbotron' => 'no',
             "mensaje" => $mensaje,
             "user" => $user1,
             "filtroPedido" => $idproducto,
+            "filtroTarjetas" => $BankTarj,
             'NumCols' => $XV,
             'test' => $test,
             "iduser" =>$idusario,
+            "numT" => $numTarje
         ]);
 
     }
@@ -971,9 +985,7 @@ if ($user1) {
         $form->handleRequest($request);
         $password= $request->request->get("password");
         $passwordReg= $request->request->get("PasswordReg");
-        var_dump($passwordReg);
         $pass=password_hash( $passwordReg, CRYPT_BLOWFISH);
-        var_dump($pass);
         if($form->isSubmitted() && $form->isValid()){
             $entityManager=$this->getDoctrine()->getManager();
             $contactoTo->setFechaRegistro(new \DateTime('now'));

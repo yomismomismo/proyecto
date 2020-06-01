@@ -30,7 +30,7 @@ class CuentasBank
     private $num_tarjeta;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=100)
      */
     private $ultimos_digitos;
 
@@ -76,12 +76,12 @@ class CuentasBank
         return $this;
     }
 
-    public function getNumTarjeta(): ?int
+    public function getNumTarjeta(): ?string
     {
         return $this->num_tarjeta;
     }
 
-    public function setNumTarjeta(int $num_tarjeta): self
+    public function setNumTarjeta(string $num_tarjeta): self
     {
         $this->num_tarjeta = $num_tarjeta;
 
@@ -124,12 +124,12 @@ class CuentasBank
         return $this;
     }
 
-    public function getCvv(): ?int
+    public function getCvv(): ?string
     {
         return $this->cvv;
     }
 
-    public function setCvv(int $cvv): self
+    public function setCvv(string $cvv): self
     {
         $this->cvv = $cvv;
 
