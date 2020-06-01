@@ -15,7 +15,7 @@ html * {
 }
 
 body {
-  font-size: 100%;
+  font-size: 1em !important;
   font-family: "PT Sans", sans-serif;
   color: #31353d;
   background-color: #eeeff7 !important;

@@ -1,0 +1,168 @@
+{% extends "page/layout.html.twig" %}
+{% block head %}
+        
+        {# <script>window.jQuery || document.write('<script src="../src/js/vendor/jquery-3.3.1.min.js"><\/script>')</script> #}
+        		<link rel="stylesheet" href="{{ asset("estilosproDetalle.css", "estilos") }}">
+                <link rel="stylesheet" href="{{ asset("creditCard.css", "estilos") }}">
+        <link rel="stylesheet" href="/plugins/chartist/dist/chartist.min.css">
+        <link rel="stylesheet" href="/plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="/plugins/flot-charts/jquery.flot.js"></script>
+        <script src="/plugins/flot-charts/curvedLines.js"></script>
+        <script src="/plugins/chartist/dist/chartist.min.js"></script>
+        <script src="/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
+        <script src="/plugins/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="/js/js-admin/tables.js"></script>
+        <script src="/js/js-admin/datatables.js"></script>
+        <script src="/js/js-admin/widget-data.js"></script>
+        <script src="/js/js-admin/widget-statistic.js"></script>
+{% endblock %}
+{% block contenido %} 
+{# ------------------------------------------------------- #}
+
+                        <div class="card" style="margin-left: 7%;width: 84% !important;margin-top: 63px;margin-bottom: 77px;">
+                            <div class="card-header"><h3 class="d-block w-100"><a href="{{ path('perfil', {'id':iduser.id})}}"> <i class="fas fa-arrow-left"></i> Volver</a><small class="float-right">Date: </small></h3></div>
+                            <div class="card-body">
+                                <div class="row invoice-info">
+                                    <div class="col-sm-4 invoice-col">
+                                        From
+                                        <address>
+                                            <strong>ThemeKit,</strong><br>795 Folsom Ave, Suite 546 <br>San Francisco, CA 54656 <br>Phone: (123) 123-4567<br>Email: info@themekit.com
+                                        </address>
+                                    </div>
+                                    <div class="col-sm-4 invoice-col">
+                                        To
+                                        <address>
+                                        {% for direccion in cliente %}
+                                            <strong> {{ direccion.nombre }}</strong>
+                                             <br>
+                                             {{ direccion.direccion }}
+                                             <br>
+                                             {{ direccion.provincia }}, {{ direccion.codPostal }}<br>
+                                             Phone: {{ direccion.telefono }}<br>
+                                             Email: {{ direccion.Email }}
+                                             
+                                            {% endfor %}
+                                            
+
+                                        </address>
+                                    </div>
+                                    <div class="col-sm-4 invoice-col">
+                                        <b>Invoice #007612</b><br>
+                                        <br>
+                                        <b>Order ID:</b> 4F3S8J<br>
+                                        <b>Payment Due:</b> 2/22/2014<br>
+                                        <b>Account:</b> 968-34567
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12 table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                                                               
+                                                    
+
+                                                    
+                                                    
+                                                <tr>
+                                                    <th>Qty</th>
+                                                    <th>Product</th>
+                                                    <th>Serial #</th>
+                                                    <th>Description</th>
+                                                    <th>Precio</th>
+                                                    <th>Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                             {% for producto in productos %}
+                                             	{% set totalprecio = producto.IdProducto.precio * producto.cantidad %}
+                                                <tr>
+                                                    <td>{{producto.cantidad}}</td>
+                                                    <td>{{producto.IdProducto.nombre}}</td>
+                                                    <td>{{producto.IdProducto.id}}</td>
+                                                    <td>{{producto.IdProducto.descripcion}}</td>
+                                                    <td>{{producto.IdProducto.precio}}€</td>
+                                                    <td>{{totalprecio}}€</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <p class="lead">Payment Methods:</p>
+                                        <img src="../img/credit/visa.png" alt="Visa">
+                                        <img src="../img/credit/mastercard.png" alt="Mastercard">
+                                        <img src="../img/credit/american-express.png" alt="American Express">
+                                        <img src="../img/credit/paypal2.png" alt="Paypal">
+                                        
+                                        <div class="alert alert-secondary mt-20">
+                                          Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+                                        </div>
+                                    </div>
+                                    {% set subtotal = '0' %}
+                            {% for producto in productos %}
+							{% set totalprecio = producto.IdProducto.precio * producto.cantidad %} 
+					        {% set subtotal = subtotal + totalprecio %}
+								 {% endfor %}
+                                    <div class="col-6">
+                                        <p class="lead">Amount Due 10/11/2018</p>
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tr>
+                                                    <th style="width:50%">Subtotal:</th>
+                                                    <td style="color:red margin-left:100px">{{subtotal}}€</td>
+                                                </tr>
+                            {% set tasa = subtotal * 21 / 100 %}
+                                                <tr>
+                                                    <th>Tasas (21%)</th>
+                                                    <td>{{tasa}}€</td>
+                                                </tr>
+                            {% set envio = 20 %}
+                                                <tr>
+                                                    <th>Envio:</th>
+                                                    <td>{{envio}}€</td>
+                                                </tr>
+                            {% set totalpedido = subtotal + tasa + envio %}
+                                                <tr>
+                                                    <th>Total:</th>
+                                                    <td>{{totalpedido}}€</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row no-print">
+                                    <div class="col-12">
+                                       <a href="{{ path('pdf', {'id': idpedido, 'name':'iduser'}) }}"> <button type="button" class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment</button>
+
+                                        <a href="{{ path('pdf', {'id': idpedido, 'name':'iduser'}) }}"> <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-download"></i> Generar PDF</button></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+ </div>
+
+
+
+
+
+
+
+
+
+{# ------------------------------------------------------- #}
+                                            </div>
+                                         </div>
+                                     </div>
+                                </div>
+                            </div>
+
+
+                                        {% endblock %} 

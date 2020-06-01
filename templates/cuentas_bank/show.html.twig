@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<title>CuentasBank</title>
+
+{% block body %}
+    <h1>CuentasBank</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cuentas_bank.id }}</td>
+            </tr>
+            <tr>
+                <th>Num_tarjeta</th>
+                <td>{{ cuentas_bank.numTarjeta }}</td>
+            </tr>
+            <tr>
+                <th>Ultimos_digitos</th>
+                <td>{{ cuentas_bank.ultimosDigitos }}</td>
+            </tr>
+            <tr>
+                <th>Titular</th>
+                <td>{{ cuentas_bank.titular }}</td>
+            </tr>
+            <tr>
+                <th>Fecha_caducidad</th>
+                <td>{{ cuentas_bank.fechaCaducidad }}</td>
+            </tr>
+            <tr>
+                <th>Cvv</th>
+                <td>{{ cuentas_bank.cvv }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('cuentas_bank_index') }}">back to list</a>
+
+    <a href="{{ path('cuentas_bank_edit', {'id': cuentas_bank.id}) }}">edit</a>
+
+    {{ include('cuentas_bank/_delete_form.html.twig') }}
+{% endblock %}

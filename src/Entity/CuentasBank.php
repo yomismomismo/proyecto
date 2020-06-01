@@ -54,9 +54,20 @@ class CuentasBank
      */
     private $pedidos;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Pedidos", mappedBy="id_tarjeta")
+     */
+    private $pedido_tarjeta;
+
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    private $estado;
+
     public function __construct()
     {
         $this->pedidos = new ArrayCollection();
+        $this->pedido_tarjeta = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -164,6 +175,48 @@ class CuentasBank
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * @return Collection|Pedidos[]
+     */
+    public function getPedidoTarjeta(): Collection
+    {
+        return $this->pedido_tarjeta;
+    }
+
+    public function addPedidoTarjetum(Pedidos $pedidoTarjetum): self
+    {
+        if (!$this->pedido_tarjeta->contains($pedidoTarjetum)) {
+            $this->pedido_tarjeta[] = $pedidoTarjetum;
+            $pedidoTarjetum->setIdTarjeta($this);
+        }
+
+        return $this;
+    }
+
+    public function removePedidoTarjetum(Pedidos $pedidoTarjetum): self
+    {
+        if ($this->pedido_tarjeta->contains($pedidoTarjetum)) {
+            $this->pedido_tarjeta->removeElement($pedidoTarjetum);
+            // set the owning side to null (unless already changed)
+            if ($pedidoTarjetum->getIdTarjeta() === $this) {
+                $pedidoTarjetum->setIdTarjeta(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getEstado(): ?string
+    {
+        return $this->estado;
+    }
+
+    public function setEstado(string $estado): self
+    {
+        $this->estado = $estado;
         return $this;
     }
 

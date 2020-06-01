@@ -5,10 +5,10 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
-use App\Repository\ProductoxpedidosRepository;
+use App\Repository\{ProductoxpedidosRepository, CuentasBankRepository};
 use App\Entity\{Mensaje,Comentario, Usuario, Producto, Productoxpedidos, Pedidos, Categoria, CuentasBank};
 use Symfony\Component\HttpFoundation\Request;
-use App\Form\{MensajeType, ComentarioType, UsuarioType, ProductoxpedidosType, PedidosType, ProductoxpedidoType};
+use App\Form\{MensajeType, ComentarioType, UsuarioType, ProductoxpedidosType, PedidosType, ProductoxpedidoType, CuentasBankType};
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -1068,7 +1068,7 @@ if ($user1) {
       /**
      * @Route("/perfil/{id}/{currentPage?1}", name="perfil" )
      */
-    public function perfil($id, $currentPage,Request $request, SessionInterface $session, Usuario $usuario)
+    public function perfil($id, $currentPage,Request $request, SessionInterface $session, Usuario $usuario, CuentasBank $cuentasBank, EntityManagerInterface $entityManager)
     {
         $user1 = $session->get('nombre_usuario');
         $user= $request->request->get("user");
@@ -1088,7 +1088,7 @@ if ($user1) {
         ->findBy(array(), array('puntuacion' => 'ASC'));
         $creditBank= $this->getDoctrine()
         ->getRepository(CuentasBank::class)
-        ->findBy(['id' => $id]); 
+        ->findBy(['id_cliente' => $id, "estado" => "activa"]); 
 
        //Filtro Pedido      
     if ($user1) {
@@ -1119,43 +1119,28 @@ if ($user1) {
                               $idusario="";
                               
                               }
-                              if ($pedidosCompleto && $pedidos) {
-                                foreach ($pedidosCompleto as $key) {
-                                  $idpedidoEstadoCompleto=$key->getId();
-                                }
 
-                                $idestadoCompleto=$this->getDoctrine()
+
+                    if ( $estado && $pedidos) {
+                                    
+                          $idestado=$this->getDoctrine()
                                 ->getRepository(Pedidos::class)
-                                ->findBy(['id' => $idpedidoEstadoCompleto]);
-                                                 
+                                ->findBy(['id' => $estado->getId()]);
+                                                
+                          $idpedidoEstado=$estado->getId();
 
-                                  $pedidoCompleto=$this->getDoctrine()
-                                 ->getRepository(Pedidos::Class)
-                                 ->findBy(['id' => $idpedidoEstadoCompleto], 
-                                         ['id' => 'ASC']);  
-
-                              }else{$pedidosCompleto="";}
-
-   if ( $estado && $pedidos) {
-                   
-        $idestado=$this->getDoctrine()
-              ->getRepository(Pedidos::class)
-              ->findBy(['id' => $estado->getId()]);
-                               
-        $idpedidoEstado=$estado->getId();
-
-        
-                   
-        $idproducto=$this->getDoctrine()
-              ->getRepository(Productoxpedidos::class)
-              ->findBy(['id_pedido' => $idpedidoEstado]);
-              
-                    
-                                   
-        $filtroPedido=$this->getDoctrine()
-              ->getRepository(Pedidos::Class)
-              ->findBy(['id' => $idpedidoEstado], 
-                       ['id' => 'ASC']);}
+                          
+                                    
+                          $idproducto=$this->getDoctrine()
+                                ->getRepository(Productoxpedidos::class)
+                                ->findBy(['id_pedido' => $idpedidoEstado]);
+                                
+                                      
+                                                    
+                          $filtroPedido=$this->getDoctrine()
+                                ->getRepository(Pedidos::Class)
+                                ->findBy(['id' => $idpedidoEstado], 
+                                        ['id' => 'ASC']);}
 
 
 
@@ -1196,7 +1181,28 @@ if ($user1) {
               return $this->redirectToRoute('perfil', [
                   "id" => $id,
                  
-         ]);                         }               
+         ]);                         }     
+         
+         $delete= $request->request->get("_method");
+         $eliminarTarjeta= $request->request->get("_token");
+                  
+                  // $form = $this->createForm(CuentasBankType::class, $cuentasBank);
+                  // $form->handleRequest($request);
+         if ($delete && $eliminarTarjeta) {
+          $filtroP=$this->getDoctrine()
+          ->getRepository(CuentasBank::Class)
+          ->findOneBy(["id" => $eliminarTarjeta]);
+          $entityManager = $this->getDoctrine()->getManager();
+          $filtroP->setEstado("eliminida");
+          $entityManager->flush($filtroP);
+          $entityManager->flush();
+          return $this->redirectToRoute('perfil', [
+            "id" => $id,
+           
+   ]);  
+
+         }
+         
 
     //Recoger contraseña encriptada y comprobar si el inicio de sesion es correcto                             
     $userIniciado="";
@@ -1220,12 +1226,12 @@ if ($user1) {
             return $this->render('page/perfil.html.twig', [
 
                 'controller_name' => 'PageController',
-                'page' => 'index',
+                'page' => 'perfil',
                 'jumbotron' => 'no',
                 "user" => $user1,
                 "iduser" =>$idusario,
                 "filtroPedido" => $idproducto,
-                'filtroPedidoCompleto' => $pedidoCompleto,
+                'filtroPedidoCompleto' => $pedidosCompleto,
                 "mensaje" => $mensaje,
                 "categorias" => $categorias,
                 "puntuacion" => $puntuacion,
@@ -1241,7 +1247,113 @@ if ($user1) {
 
             ]);
         }
-       /**
+
+    /**
+     * @Route("/detallepedido/{id}", name="detallepedidouser", methods={"GET","POST"})
+     */
+    public function detallepedido(Request $request, $id, SessionInterface $session)
+    {
+      $user1 = $session->get('nombre_usuario');
+      $user= $request->request->get("user");
+      $password=  $request->request->get("password");
+
+      $usuarioBBDD=$this->getDoctrine()
+          ->getRepository(Usuario::class)
+          ->findOneBy(['email' => $user]);
+          if ($user1) {
+            $iduser=$this->getDoctrine()
+                ->getRepository(Usuario::class)
+                ->findOneBy(['nombre' => $user1]);
+    
+            $idusuario= $iduser->getId();
+    
+            $idusario=$this->getDoctrine()
+                ->getRepository(Usuario::class)
+                ->findOneBy(['id' => $idusuario]);
+                                       
+            $pedidos=$this->getDoctrine()
+                ->getRepository(Pedidos::class)
+                ->findOneBy(['id_cliente' => $iduser->getId()]);     
+                               
+            $pedidosCompleto=$this->getDoctrine()
+                 ->getRepository(Pedidos::class)
+                 ->findBy(['id_cliente' => $iduser->getId(), "estado" => "completo"]);
+                                   
+            $estado=$this->getDoctrine()
+                  ->getRepository(Pedidos::class)
+                  ->findOneBy(['estado' => "incompleto", 'id_cliente' => $idusario->getId()]);}
+                          else {
+                                  $estado="";
+                                  $pedidos="";
+                                  $idusario="";
+                                  
+                                  }
+    
+    
+                        if ( $estado && $pedidos) {
+                                        
+                              $idestado=$this->getDoctrine()
+                                    ->getRepository(Pedidos::class)
+                                    ->findBy(['id' => $estado->getId()]);
+                                                    
+                              $idpedidoEstado=$estado->getId();
+    
+                              
+                                        
+                              $idproducto=$this->getDoctrine()
+                                    ->getRepository(Productoxpedidos::class)
+                                    ->findBy(['id_pedido' => $idpedidoEstado]);
+                                    
+                                          
+                                                        
+                              $filtroPedido=$this->getDoctrine()
+                                    ->getRepository(Pedidos::Class)
+                                    ->findBy(['id' => $idpedidoEstado], 
+                                            ['id' => 'ASC']);}
+    
+    
+    
+          else{
+               $idproducto="";
+               $idproductoRepe="";
+               $filtroPedido="";
+
+              }
+        $pedidoFiltro=$this->getDoctrine()
+        ->getRepository(Pedidos::Class)
+        ->findBy(
+            ['id' => $id], 
+            ['id' => 'ASC']
+          );
+          $productosFiltro=$this->getDoctrine()
+          ->getRepository(Productoxpedidos::Class)
+          ->findBy(
+              ['id_pedido' => $id], 
+              ['id' => 'ASC']
+            );
+            foreach ($pedidoFiltro as $cliente) {
+                $idcliente= $this->getDoctrine()
+                ->getRepository(Usuario::Class)
+                ->findBy(
+                    ['id' => $cliente->getIdCliente()], 
+                    ['id' => 'ASC']
+                  );
+            }
+        return $this->render('page/verFactura.html.twig', [
+            'controller_name' => 'PageAdminController',
+            'page' => 'factura',
+            'jumbotron' => 'no',
+            'productos' => $productosFiltro,
+            'idpedido'=> $id,
+            'cliente' => $idcliente,
+            "user" => "",
+            "user" => $user1,
+            "iduser" =>$idusario,
+            "filtroPedido" => $idproducto,
+        ]);
+    }
+
+    /**
      * @Route("/logOut", name="logOut")
      */
     public function logOut(Request $request, SessionInterface $session)

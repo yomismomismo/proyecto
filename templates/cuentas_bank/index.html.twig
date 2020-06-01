@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<title>CuentasBank index</title>
+
+{% block body %}
+    <h1>CuentasBank index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Num_tarjeta</th>
+                <th>Ultimos_digitos</th>
+                <th>Titular</th>
+                <th>Fecha_caducidad</th>
+                <th>Cvv</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cuentas_bank in cuentas_banks %}
+            <tr>
+                <td>{{ cuentas_bank.id }}</td>
+                <td>{{ cuentas_bank.numTarjeta }}</td>
+                <td>{{ cuentas_bank.ultimosDigitos }}</td>
+                <td>{{ cuentas_bank.titular }}</td>
+                <td>{{ cuentas_bank.fechaCaducidad }}</td>
+                <td>{{ cuentas_bank.cvv }}</td>
+                <td>
+                    <a href="{{ path('cuentas_bank_show', {'id': cuentas_bank.id}) }}">show</a>
+                    <a href="{{ path('cuentas_bank_edit', {'id': cuentas_bank.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('cuentas_bank_new') }}">Create new</a>
+{% endblock %}

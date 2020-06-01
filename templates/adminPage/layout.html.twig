@@ -48,7 +48,7 @@
                             <span class="text" style="margin-left: 10px;">Dashboard</span>
                         </a>
                         <button type="button" class="nav-toggle"><i data-toggle="expanded" class="ik ik-toggle-right toggle-icon"></i></button>
-                        <button id="sidebarClose" class="nav-close"><i class="ik ik-x"></i></button>
+                        <button id="sidebarClose" class="nav-close"><i class="ik ik-x cerrar"></i></button>
                     </div>
                     
                     <div class="sidebar-content">
@@ -82,5 +82,12 @@
                     <div class="container-fluid">
                     {% block contenido %}{% endblock %}
                 </div>
-                                                      
+                       <script>
+                      var barraLateral = document.getElementById("oculto")
+                            $('.cerrar').click(function() {
+                              barraLateral.classList.add("ocultar");
+                              //  cv2.classList.add("front2");
+  
+                            });
+                       </script>                             
 {% endblock %}
