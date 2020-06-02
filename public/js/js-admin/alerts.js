@@ -36,27 +36,27 @@
     })
   };
   showDangerToast = function() {
-    'use strict';
     resetToastPosition();
     $.toast({
-      heading: 'Danger',
-      text: 'And these were just the basic demos! Scroll down to check further details on how to customize the output.',
+ 
+      heading: 'Atención',
+      text: 'Esta tarjeta ya está en uso, por favor, introduzca otra',
       showHideTransition: 'slide',
       icon: 'error',
       loaderBg: '#f2a654',
-      position: 'top-right'
+      position: 'top-center'
     })
   };
   showToastPosition = function(position) {
     'use strict';
     resetToastPosition();
     $.toast({
-      heading: 'Positioning',
-      text: 'Specify the custom position object or use one of the predefined ones',
+      heading: 'Atención',
+      text: 'Esta tarjeta ya está en uso, por favor, introduzca otra',
       position: String(position),
-      icon: 'success',
+      icon: 'error',
       stack: false,
-      loaderBg: '#f96868'
+      loaderBg: '#f2a654'
     })
   }
   showToastInCustomPosition = function() {

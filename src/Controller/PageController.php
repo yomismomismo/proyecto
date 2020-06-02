@@ -858,7 +858,8 @@ if ($user1) {
               $form->handleRequest($request);
               if ($form->isSubmitted() && $form->isValid()) {
                 $this->getDoctrine()->getManager()->flush();}
-
+                $mensajeRepe="";
+                $limitTarjeta = "";
         $user1 = $session->get('nombre_usuario');
         $user= $request->request->get("user");
         $ultDigits= $request->request->get("UltDigits");
@@ -881,9 +882,28 @@ if ($user1) {
             ->findOneBy(['id' => $idusuario]);
                                    
             $BankTarj=$this->getDoctrine()
-            ->getRepository(CuentasBank::Class)
-            ->findBy(['id_cliente' => $idusario], 
+              ->getRepository(CuentasBank::Class)
+              ->findBy(['id_cliente' => $idusario, "estado" => "activa"], 
               ['id' => 'ASC']);
+
+              $tarjetaRepe=$this->getDoctrine()
+              ->getRepository(CuentasBank::Class)
+              ->findBy(['ultimos_digitos' => $ultDigits, "estado" => "activa", "id_cliente" => $idusuario ], 
+              ['id' => 'ASC']);
+
+                  foreach ( $tarjetaRepe as $repe) {
+                    var_dump("hola");
+                    if (password_verify($numTarje,  $repe->getNumTarjeta())) {
+
+                        $mensajeRepe="Esta tarjeta ya está en uso";
+                        $repetar="true";
+                        
+                  }      }   
+                $contador=0;
+                  foreach ($BankTarj as $nada) {
+                     $contador=$contador+1;
+
+                  }
 
         $pedidos=$this->getDoctrine()
              ->getRepository(Pedidos::class)
@@ -925,20 +945,33 @@ if ($user1) {
 
           $contactoTo=new CuentasBank();
           $formTarjeta=$this->CreateForm(CuentasBankType::Class, $contactoTo);
+
+          if (!$mensajeRepe) {
+          
+          if ($contador <4 ) {
           $formTarjeta->handleRequest($request);
 
           $numTar=password_hash( $numTarje, CRYPT_BLOWFISH);
           $nCvv=password_hash( $cvv, CRYPT_BLOWFISH);
-          if($formTarjeta->isSubmitted() && $formTarjeta->isValid()){
-              $entityManager=$this->getDoctrine()->getManager();
-              $contactoTo->setUltimosdigitos($ultDigits);
-              $contactoTo->setNumtarjeta($numTar);
-              $contactoTo->setCvv($nCvv);
-              $contactoTo->setIdCliente($idusario);
-              $entityManager->persist($contactoTo);
-              $entityManager->flush();
-              return $this->redirectToRoute('carrito');
-            }
+
+          
+
+            if($formTarjeta->isSubmitted() && $formTarjeta->isValid()){
+                $entityManager=$this->getDoctrine()->getManager();
+                $contactoTo->setUltimosdigitos($ultDigits);
+                $contactoTo->setNumtarjeta($numTar);
+                $contactoTo->setCvv($nCvv);
+                $contactoTo->setEstado("Activa");
+                $contactoTo->setIdCliente($idusario);
+                $entityManager->persist($contactoTo);
+                $entityManager->flush();
+                return $this->redirectToRoute('carrito');
+              }
+          } 
+          else {
+            $limitTarjeta="No puedes agregar más tarjetas";
+          }}
+
     //Recoger contraseña encriptada y comprobar si el inicio de sesion es correcto                             
     $userIniciado="";
     $mensaje="";
@@ -970,7 +1003,9 @@ if ($user1) {
             'NumCols' => $XV,
             'test' => $test,
             "iduser" =>$idusario,
-            "numT" => $numTarje
+            "numT" => $numTarje,
+            "mensajeLimite" => $limitTarjeta,
+            "tarjetaRepe" => $mensajeRepe
         ]);
 
     }
