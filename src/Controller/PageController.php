@@ -1005,10 +1005,190 @@ if ($user1) {
             "iduser" =>$idusario,
             "numT" => $numTarje,
             "mensajeLimite" => $limitTarjeta,
-            "tarjetaRepe" => $mensajeRepe
+            "tarjetaRepe" => $mensajeRepe,
+            'TotalTodo' => 0,
         ]);
 
     }
+  
+  /**
+   * @Route("/detalleProductouser", name="detalleProductouser",  methods={"GET","POST"})
+   */
+  public function detalleProductouser(Request $request, SessionInterface $session,EntityManagerInterface $entityManager, ProductoxpedidosRepository $productoxpedidosRepository)
+  {
+
+    $test=array();
+    $idpedidoprod= $request->request->get("idpedidoprod");
+
+
+             $fil=$this->getDoctrine()
+              ->getRepository(Productoxpedidos::Class)
+              ->findAll(
+                  ['id']
+                );
+                $XV = 0;
+                  foreach ($fil as $key) {
+                    $asas = $key->getId();
+                    $XV = $XV + 1; 
+                    array_push($test, $asas);
+                  }
+                  
+            $form = $this->createForm(ProductoxpedidosType::class );
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+              $this->getDoctrine()->getManager()->flush();}
+              $mensajeRepe="";
+              $limitTarjeta = "";
+      $user1 = $session->get('nombre_usuario');
+      $user= $request->request->get("user");
+      $ultDigits= $request->request->get("UltDigits");
+      $numTarje= $request->request->get("inputNumber1");
+      $cvv= $request->request->get("inputCvv");
+      $password=  $request->request->get("password");
+      $usuarioBBDD=$this->getDoctrine()
+      ->getRepository(Usuario::class)
+      ->findOneBy(['email' => $user]);
+
+      if ($user1) {
+      $iduser=$this->getDoctrine()
+          ->getRepository(Usuario::class)
+          ->findOneBy(['nombre' => $user1]);
+
+      $idusuario= $iduser->getId();
+
+      $idusario=$this->getDoctrine()
+          ->getRepository(Usuario::class)
+          ->findOneBy(['id' => $idusuario]);
+                                 
+          $BankTarj=$this->getDoctrine()
+            ->getRepository(CuentasBank::Class)
+            ->findBy(['id_cliente' => $idusario, "estado" => "activa"], 
+            ['id' => 'ASC']);
+
+            $tarjetaRepe=$this->getDoctrine()
+            ->getRepository(CuentasBank::Class)
+            ->findBy(['ultimos_digitos' => $ultDigits, "estado" => "activa", "id_cliente" => $idusuario ], 
+            ['id' => 'ASC']);
+
+                foreach ( $tarjetaRepe as $repe) {
+                  var_dump("hola");
+                  if (password_verify($numTarje,  $repe->getNumTarjeta())) {
+
+                      $mensajeRepe="Esta tarjeta ya está en uso";
+                      $repetar="true";
+                      
+                }      }   
+              $contador=0;
+                foreach ($BankTarj as $nada) {
+                   $contador=$contador+1;
+
+                }
+
+      $pedidos=$this->getDoctrine()
+           ->getRepository(Pedidos::class)
+           ->findOneBy(['id_cliente' => $iduser->getId()]);
+                           
+                             
+      $estado=$this->getDoctrine()
+            ->getRepository(Pedidos::class)
+            ->findOneBy(['estado' => "incompleto", 'id_cliente' => $idusario->getId()]);}
+                    else {
+                            $estado="";
+                            $pedidos="";
+                            $idusario="";
+                            $BankTarj="";}
+                            
+                                   
+ if ( $estado && $pedidos) {
+                 
+      $idestado=$this->getDoctrine()
+            ->getRepository(Pedidos::class)
+            ->findBy(['id' => $estado->getId()]);
+                             
+      $idpedidoEstado=$estado->getId();
+                 
+      $idproducto=$this->getDoctrine()
+            ->getRepository(Productoxpedidos::class)
+            ->findBy(['id_pedido' => $idpedidoEstado]);
+                      
+                                 
+      $filtroPedido=$this->getDoctrine()
+            ->getRepository(Pedidos::Class)
+            ->findBy(['id' => $idpedidoEstado], 
+                     ['id' => 'ASC']);}
+    else{
+         $idproducto="";
+         $idproductoRepe="";
+         $filtroPedido="";
+        }
+
+        $contactoTo=new CuentasBank();
+        $formTarjeta=$this->CreateForm(CuentasBankType::Class, $contactoTo);
+
+        if (!$mensajeRepe) {
+        
+        if ($contador <4 ) {
+        $formTarjeta->handleRequest($request);
+
+        $numTar=password_hash( $numTarje, CRYPT_BLOWFISH);
+        $nCvv=password_hash( $cvv, CRYPT_BLOWFISH);
+
+        
+
+          if($formTarjeta->isSubmitted() && $formTarjeta->isValid()){
+              $entityManager=$this->getDoctrine()->getManager();
+              $contactoTo->setUltimosdigitos($ultDigits);
+              $contactoTo->setNumtarjeta($numTar);
+              $contactoTo->setCvv($nCvv);
+              $contactoTo->setEstado("Activa");
+              $contactoTo->setIdCliente($idusario);
+              $entityManager->persist($contactoTo);
+              $entityManager->flush();
+              return $this->redirectToRoute('carrito');
+            }
+        } 
+        else {
+          $limitTarjeta="No puedes agregar más tarjetas";
+        }}
+
+  //Recoger contraseña encriptada y comprobar si el inicio de sesion es correcto                             
+  $userIniciado="";
+  $mensaje="";
+if ($usuarioBBDD) {
+  $passHash=$usuarioBBDD->getContrasenya();
+  if (password_verify($password,  $passHash)) {
+            $usuarioIniciado=$this->getDoctrine()
+                ->getRepository(Usuario::Class)
+                ->findOneBy(['email' => $user], 
+                         ['id' => 'ASC']);
+                 $session->set('nombre_usuario', $usuarioIniciado->getNombre());
+                 return $this->redirectToRoute('carrito');
+                 }
+          else{
+            $mensaje="La contraseña o el email son incorrectos";
+                }
+              }
+  //--------------------------------------------------------------------------------
+      return $this->render('page/carrito.html.twig', [
+          'controller_name' => 'PageController',
+          'form' => $form->CreateView(),
+          'formTarjeta' => $formTarjeta->CreateView(),
+          'page' => 'carrito',
+          'jumbotron' => 'no',
+          "mensaje" => $mensaje,
+          "user" => $user1,
+          "filtroPedido" => $idproducto,
+          "filtroTarjetas" => $BankTarj,
+          'NumCols' => $XV,
+          'test' => $test,
+          "iduser" =>$idusario,
+          "numT" => $numTarje,
+          "mensajeLimite" => $limitTarjeta,
+          "tarjetaRepe" => $mensajeRepe,
+          'TotalTodo' => 0,
+      ]);
+
+  }
     /**
      * @Route("/login", name="login")
      */
@@ -1292,14 +1472,15 @@ if ($user1) {
                 'form' => $form->CreateView(),
                 'creditCard' => $creditBank,
                 'pedidoUsuario' => $pedido,
+ 
 
             ]);
         }
 
     /**
-     * @Route("/detallepedido/{id}", name="detallepedidouser", methods={"GET","POST"})
+     * @Route("/realizado", name="realizado", methods={"GET","POST"})
      */
-    public function detallepedido(Request $request, $id, SessionInterface $session)
+    public function realizado(Request $request, SessionInterface $session)
     {
       $user1 = $session->get('nombre_usuario');
       $user= $request->request->get("user");
@@ -1308,7 +1489,7 @@ if ($user1) {
       $usuarioBBDD=$this->getDoctrine()
           ->getRepository(Usuario::class)
           ->findOneBy(['email' => $user]);
-          if ($user1) {
+        if ($user1) {
             $iduser=$this->getDoctrine()
                 ->getRepository(Usuario::class)
                 ->findOneBy(['nombre' => $user1]);
@@ -1318,88 +1499,23 @@ if ($user1) {
             $idusario=$this->getDoctrine()
                 ->getRepository(Usuario::class)
                 ->findOneBy(['id' => $idusuario]);
-                                       
-            $pedidos=$this->getDoctrine()
-                ->getRepository(Pedidos::class)
-                ->findOneBy(['id_cliente' => $iduser->getId()]);     
-                               
-            $pedidosCompleto=$this->getDoctrine()
-                 ->getRepository(Pedidos::class)
-                 ->findBy(['id_cliente' => $iduser->getId(), "estado" => "completo"]);
-                                   
-            $estado=$this->getDoctrine()
-                  ->getRepository(Pedidos::class)
-                  ->findOneBy(['estado' => "incompleto", 'id_cliente' => $idusario->getId()]);}
-                          else {
-                                  $estado="";
-                                  $pedidos="";
-                                  $idusario="";
-                                  
-                                  }
-    
-    
-                        if ( $estado && $pedidos) {
-                                        
-                              $idestado=$this->getDoctrine()
-                                    ->getRepository(Pedidos::class)
-                                    ->findBy(['id' => $estado->getId()]);
-                                                    
-                              $idpedidoEstado=$estado->getId();
-    
-                              
-                                        
-                              $idproducto=$this->getDoctrine()
-                                    ->getRepository(Productoxpedidos::class)
-                                    ->findBy(['id_pedido' => $idpedidoEstado]);
-                                    
-                                          
-                                                        
-                              $filtroPedido=$this->getDoctrine()
-                                    ->getRepository(Pedidos::Class)
-                                    ->findBy(['id' => $idpedidoEstado], 
-                                            ['id' => 'ASC']);}
-    
-    
-    
-          else{
-               $idproducto="";
-               $idproductoRepe="";
-               $filtroPedido="";
 
-              }
-        $pedidoFiltro=$this->getDoctrine()
-        ->getRepository(Pedidos::Class)
-        ->findBy(
-            ['id' => $id], 
-            ['id' => 'ASC']
-          );
-          $productosFiltro=$this->getDoctrine()
-          ->getRepository(Productoxpedidos::Class)
-          ->findBy(
-              ['id_pedido' => $id], 
-              ['id' => 'ASC']
-            );
-            foreach ($pedidoFiltro as $cliente) {
-                $idcliente= $this->getDoctrine()
-                ->getRepository(Usuario::Class)
-                ->findBy(
-                    ['id' => $cliente->getIdCliente()], 
-                    ['id' => 'ASC']
-                  );
+
             }
-        return $this->render('page/verFactura.html.twig', [
+            $productosFiltro="";
+            $filtroPedido="";
+        return $this->render('page/compraRealizada.html.twig', [
             'controller_name' => 'PageAdminController',
             'page' => 'factura',
             'jumbotron' => 'no',
             'productos' => $productosFiltro,
-            'idpedido'=> $id,
-            'cliente' => $idcliente,
+              "filtroPedido" => $filtroPedido,
             "user" => "",
             "user" => $user1,
             "iduser" =>$idusario,
-            "filtroPedido" => $idproducto,
         ]);
     }
+
 
     /**
      * @Route("/logOut", name="logOut")

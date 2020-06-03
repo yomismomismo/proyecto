@@ -18,10 +18,10 @@
     window.onload = recalculateCart();
 </script>
 
-<section class="container">
+<section class="container" style="height:100%;">
 	<br>
-	<div class="container">
-  <div class="row" style="background-color: white;">
+	<div class="container" style="height:100%;">
+  <div class="row" style="background-color: white;height:100%;" >
   <div class="shopping-cart col-12 col-sm-12 col-md-12 col-lg-7 col-xl-7">
   
   <div class="column-labels">
@@ -148,7 +148,10 @@ document.getElementById("myFormdelete").submit();
 </script> 
 
 {% endfor %}
+			{% else %}
+			<p style="text-align:center"> No hay ningún producto añadido</p>
 			{% endif %}
+
 			{% endif %}	
 
   
@@ -158,6 +161,7 @@ document.getElementById("myFormdelete").submit();
 	<div class="cd-cart-total">
 		<dl class="subtotal">
 			  <dt>Subtotal</dt>
+		
 			  {% set iva = TotalTodo * 0.21 %}
 			  {% set TsinIva = TotalTodo - iva %}
 			  <dd class="totals-value" id="cart-subtotal">{{TsinIva}}</dd>
@@ -173,10 +177,10 @@ document.getElementById("myFormdelete").submit();
 	{% endif %}
 		
 	  {% if user %}
-	  	{% if TotalTodo >= 30 %}
+	  	{% if TotalTodo >= 30 or TotalTodo == 0 %}
 	  		{% set shipping = 0 %}
 	  	{% endif %}
-	  	{% if TotalTodo < 30 %}
+	  	{% if TotalTodo < 30 and  TotalTodo > 0 %}
 	  		{% set shipping = 7 %}
 			{% set TotalTodo = TotalTodo + 7 %}
 	  	{% endif %}
@@ -402,7 +406,7 @@ function inputValue(from, to) {
     document.querySelector(to).innerHTML = document.querySelector(to).dataset.default;
 }
 </script>
-
+{% if filtroPedido %}
 	  <h4 class="headline-primary">Payment</h3>
 	  <div class="ux-card" id="tarjeta">
 				<span style="font-size:16px;">Seleccione una tarjeta</span>
@@ -421,7 +425,7 @@ function inputValue(from, to) {
   </div>
   </div>
   </div>
-
+{% endif %}
 </section>
 	</div> 
 	        <script src="plugins/jquery-toast-plugin/dist/jquery.toast.min.js"></script>
