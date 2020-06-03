@@ -24,7 +24,7 @@ final class Version20200529123903 extends AbstractMigration
 
         $this->addSql('ALTER TABLE cuentas_bank ADD estado VARCHAR(20) NOT NULL');
         $this->addSql('ALTER TABLE pedidos DROP FOREIGN KEY FK_6716CCAAF1D4C0C4');
-        $this->addSql('ALTER TABLE pedidos CHANGE id_tarjeta_id id_tarjeta_id INT NOT NULL');
+        $this->addSql('ALTER TABLE pedidos CHANGE id_tarjeta_id id_tarjeta_id INT NULL');
         $this->addSql('DROP INDEX idx_6716ccaaf1d4c0c4 ON pedidos');
         $this->addSql('CREATE INDEX IDX_6716CCAA7DF88940 ON pedidos (id_tarjeta_id)');
         $this->addSql('ALTER TABLE pedidos ADD CONSTRAINT FK_6716CCAAF1D4C0C4 FOREIGN KEY (id_tarjeta_id) REFERENCES cuentas_bank (id)');

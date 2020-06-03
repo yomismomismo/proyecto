@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-use App\Entity\{Usuario, Pedidos, Producto, Productoxpedidos, Comentario};
+use App\Entity\{Usuario, Pedidos, Producto, Productoxpedidos, Comentario, Admin};
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Form\{ProductoType, UsuarioType};
 use Symfony\Component\HttpFoundation\Response;
@@ -20,53 +20,60 @@ class PageAdminController extends AbstractController
     public function index(Request $request, SessionInterface $session)
     {
         $week = 10;
-        $contactoBBDD=$this->getDoctrine()->getRepository(Usuario::Class)->findAll();
         $user1 = $session->get('nombre_usuario');
-        $user= $request->request->get("user");
-        $password=  $request->request->get("password");
-            var_dump($user);
-        $usuarioBBDD=$this->getDoctrine()
+        $numUsers= $this->getDoctrine()
         ->getRepository(Usuario::class)
-        ->findOneBy(['email' => $user]);
+        ->findAll();
+        $contadorUser=0;
+        foreach ($numUsers as $user) {
+            $contadorUser=$contadorUser+1;
+        }
+        $numUPedidos= $this->getDoctrine()
+        ->getRepository(Pedidos::class)
+        ->findBy(["estado" => "completado"]);
+        $contadorPedidos=0;
+        foreach ($numUPedidos as $pedido) {
+            $contadorPedidos=$contadorPedidos+1;
+        }
+        $numComentarios= $this->getDoctrine()
+        ->getRepository(Comentario::class)
+        ->findAll();
+        $contadorComentarios=0;
+        foreach ($numComentarios as $comentario) {
+            $contadorComentarios=$contadorComentarios+1;
+        }
+        $productofiltro= $this->getDoctrine()
+        ->getRepository(Producto::class)
+        ->findAll(["unidades_venidas" => "des"]);
+            
+        if ($user1) {
+            return $this->render('adminPage/indexAdmin.html.twig', [
+                'controller_name' => 'PageAdminController',
+                "numUsuarios" => $contadorUser,
+                "numPedidos" => $contadorPedidos,
+                "numComentarios" => $contadorComentarios,
+                "productofiltro" => $productofiltro
+                 ]);
 
-    //Recoger contraseña encriptada y comprobar si el inicio de sesion es correcto                             
-    $userIniciado="";
-    $mensaje="";
-  if ($usuarioBBDD) {
-    $passHash=$usuarioBBDD->getContrasenya();
-    if (password_verify($password,  $passHash)) {
-              $usuarioIniciado=$this->getDoctrine()
-                  ->getRepository(Usuario::Class)
-                  ->findOneBy(['email' => $user], 
-                           ['id' => 'ASC']);
-                   $session->set('nombre_usuario', $usuarioIniciado->getNombre());
-                   return $this->render('adminPage/indexAdmin.html.twig', [
-                    'controller_name' => 'PageAdminController',
-                    
-                     ]);
+        }
+        else{
+            return $this->render('adminPage/loginAdmin.html.twig', [
+                'controller_name' => 'PageAdminController',
+
+                 ]);
+        }
+                  
                    }
-            else{
-              $mensaje="La contraseña o el email son incorrectos";
-                  }
-                }
-                else{
-                    return $this->render('adminPage/loginAdmin.html.twig', [
-                        'controller_name' => 'PageAdminController',
-                        "user" => "",
-            "user" => $user1,
-                         ]);
-                        }
-
-    }
+    
     //--------------------------------------------------------------------------------
                    
     /**
      * @Route("/page/admin/productosAdmin", name="productosAdmin")
      */
-    public function productosAdmin(ProductoRepository $productoRepository, ComentarioRepository $comentarioRepository )
+    public function productosAdmin(ProductoRepository $productoRepository, ComentarioRepository $comentarioRepository,Request $request, SessionInterface $session )
     {
 
-
+        $user1 = $session->get('nombre_usuario');
         return $this->render('adminPage/prodcAdmin.html.twig', [
             'controller_name' => 'PageController',
             'productos' => $productoRepository->findAll(),
@@ -80,19 +87,21 @@ class PageAdminController extends AbstractController
     public function deletecom(ProductoRepository $productoRepository, ComentarioRepository $comentarioRepository )
     {
 
-
+        $user1 = $session->get('nombre_usuario');
         return $this->render('adminPage/prodcAdmin.html.twig', [
             'controller_name' => 'PageController',
             'productos' => $productoRepository->findAll(),
             'comentario' => $comentarioRepository->findAll(),
+
             
         ]);
     }
      /**
      * @Route("/page/admin/comentAdmin", name="comentAdmin")
      */
-    public function comentAdmin(ComentarioRepository $comentarioRepository)
+    public function comentAdmin(ComentarioRepository $comentarioRepository, Request $request, SessionInterface $session)
     {
+        $user1 = $session->get('nombre_usuario');
         return $this->render('adminPage/comentAdmin.html.twig', [
             'controller_name' => 'PageController',
             'comentarios' => $comentarioRepository->findAll(),
@@ -103,8 +112,9 @@ class PageAdminController extends AbstractController
     /**
      * @Route("/page/admin/mensajes", name="mensajes")
      */
-    public function mensajes(MensajeRepository $mensajeRepository)
+    public function mensajes(MensajeRepository $mensajeRepository, Request $request, SessionInterface $session)
     {
+        $user1 = $session->get('nombre_usuario');
         return $this->render('adminPage/mensajes.html.twig', [
             'controller_name' => 'PageAdminController',
             'mensajes' => $mensajeRepository->findAll(),
@@ -114,8 +124,9 @@ class PageAdminController extends AbstractController
     /**
      * @Route("/page/admin/pedidos", name="pedidos")
      */
-    public function pedidos(PedidosRepository $pedidosRepository)
+    public function pedidos(PedidosRepository $pedidosRepository, Request $request, SessionInterface $session)
     {
+        $user1 = $session->get('nombre_usuario');
         return $this->render('adminPage/pedidos.html.twig', [
             'controller_name' => 'PageAdminController',
             'pedidos' => $pedidosRepository->findAll(),
@@ -126,46 +137,47 @@ class PageAdminController extends AbstractController
      */
     public function loginAdmin(Request $request, SessionInterface $session)
     {
+        
         $contactoBBDD=$this->getDoctrine()->getRepository(Usuario::Class)->findAll();
         $user1 = $session->get('nombre_usuario');
         $user= $request->request->get("user");
-        $password=  $request->request->get("password");
-            var_dump($user);
+        $password= $request->request->get("password");
         $usuarioBBDD=$this->getDoctrine()
-        ->getRepository(Usuario::class)
-        ->findOneBy(['email' => $user]);
-
+        ->getRepository(Admin::class)
+        ->findOneBy(['usuario' => $user]);
     //Recoger contraseña encriptada y comprobar si el inicio de sesion es correcto                             
     $userIniciado="";
     $mensaje="";
+        if ($user1) {
+            return $this->redirectToRoute('page_admin');
+        }
+        else {
   if ($usuarioBBDD) {
-    $passHash=$usuarioBBDD->getContrasenya();
+    $passHash=password_hash( $usuarioBBDD->getPassword(), CRYPT_BLOWFISH);
     if (password_verify($password,  $passHash)) {
               $usuarioIniciado=$this->getDoctrine()
-                  ->getRepository(Usuario::Class)
-                  ->findOneBy(['email' => $user], 
+                  ->getRepository(Admin::Class)
+                  ->findOneBy(['usuario' => $user], 
                            ['id' => 'ASC']);
-                   $session->set('nombre_usuario', $usuarioIniciado->getNombre());
-                   return $this->redirectToRoute('index');
+                   $session->set('nombre_usuario', $usuarioIniciado->getUsuario());
+                   return $this->redirectToRoute('page_admin');
                    }
             else{
               $mensaje="La contraseña o el email son incorrectos";
                   }
                 }
-                else{
                     return $this->render('adminPage/loginAdmin.html.twig', [
                         'controller_name' => 'PageAdminController',
                         "user" => "",
-            "user" => $user1,
+                    "user" => $user1,
+                    "mensaje" => $mensaje
                          ]);
-                        }
-                        
-        return $this->render('adminPage/loginAdmin.html.twig', []);}
+                        }}
 
     /**
      * @Route("/page/admin/usuarios", name="usuarios")
      */
-    public function usuarios(UsuarioRepository $usuarioRepository)
+    public function usuarios(UsuarioRepository $usuarioRepository, Request $request, SessionInterface $session)
     {
         return $this->render('adminPage/usuariosAdmin.html.twig', [
             'controller_name' => 'PageAdminController',
@@ -175,8 +187,9 @@ class PageAdminController extends AbstractController
     /**
         * @Route("/page/admin/detalleUsuarios/{id}/{currentPage?1}", name="detalleUsuarios", methods={"GET","POST"})
      */
-    public function detalleUsuarios($id, $currentPage, EntityManagerInterface $entityManager, Request $request, Usuario $usuario)
+    public function detalleUsuarios($id, $currentPage, EntityManagerInterface $entityManager, Usuario $usuario, Request $request, SessionInterface $session)
     {
+        $user1 = $session->get('nombre_usuario');
         $equiposFiltro=$this->getDoctrine()
         ->getRepository(Usuario::Class)
         ->findBy(
@@ -221,8 +234,9 @@ class PageAdminController extends AbstractController
     /**
      * @Route("/page/admin/detallepedido/{id}", name="detallepedido", methods={"GET","POST"})
      */
-    public function detallepedido(Request $request, $id)
+    public function detallepedido($id, Request $request, SessionInterface $session)
     {
+        $user1 = $session->get('nombre_usuario');
         $pedidoFiltro=$this->getDoctrine()
         ->getRepository(Pedidos::Class)
         ->findBy(
@@ -255,9 +269,9 @@ class PageAdminController extends AbstractController
     /**
      * @Route("/page/admin/newProducto", name="newProducto")
      */
-    public function newProducto(Request $request)
+    public function newProducto(Request $request, SessionInterface $session)
     {
-          
+        $user1 = $session->get('nombre_usuario');
     $producto = new Producto();
     $form = $this->createForm(ProductoType::class, $producto);
     $form->handleRequest($request);
@@ -283,8 +297,9 @@ class PageAdminController extends AbstractController
     /**
      * @Route("/page/admin/detalleProducto/{id}", name="detalleProducto", methods={"GET","POST"})
      */
-    public function detalleProducto(Request $request, $id, Producto $producto): Response
+    public function detalleProducto($id, Producto $producto, Request $request, SessionInterface $session): Response
     {
+        $user1 = $session->get('nombre_usuario');
         $equiposFiltro=$this->getDoctrine()
         ->getRepository(Producto::Class)
         ->findBy(
@@ -312,8 +327,9 @@ class PageAdminController extends AbstractController
     /**
      * @Route("/page/admin/pdf/{id}", name="pdf", methods={"GET","POST"})
      */
-    public function pdf(Request $request,$id)
+    public function pdf(Request $request,$id, SessionInterface $session)
     {
+        $user1 = $session->get('nombre_usuario');
         $pedidoFiltro=$this->getDoctrine()
         ->getRepository(Pedidos::Class)
         ->findBy(
@@ -371,6 +387,16 @@ class PageAdminController extends AbstractController
         $dompdf->stream("mypdf.pdf", [
             "Attachment" => true
         ]);
+
+    }
+    /**
+     * @Route("/logOut", name="logOutAdmin")
+     */
+    public function logOut(Request $request, SessionInterface $session)
+    {
+        $session->clear();
+        $session->invalidate();
+                return $this->redirectToRoute('loginAdmin');
 
     }
 }

@@ -23,56 +23,59 @@
                         <div class="row">
                             <!-- page statustic chart start -->
                             <div class="col-xl-3 col-md-6">
-                                <div class="card card-red text-white">
-                                    <div class="card-block">
-                                        <div class="row align-items-center">
-                                            <div class="col-8">
-                                                <h4 class="mb-0">2,563</h4>
-                                                <p class="mb-0">Usuarios</p>
+                                <div class="card prod-p-card card-blue">
+                                    <div class="card-body" style="height: 165px;">
+                                        <div class="row align-items-center mb-30">
+                                            <div class="col">
+                                                <h6 class="mb-5 text-white">Usuarios</h6>
+                                                <h3 class="mb-0 fw-700 text-white">{{numUsuarios}}</h3>
                                             </div>
-                                            <div class="col-4 text-right">
-                                                <i class="ik ik-user f-30"></i>
+                                            <div class="col-auto">
+                                                <i class="fa fa-users text-blue f-18"></i>
                                             </div>
                                         </div>
-                                        <div id="Widget-line-chart1" class="chart-line chart-shadow" style="width:100%;height:75px"></div>
+                                        {# <p class="mb-0 text-white"><span class="label label-danger mr-10">+11%</span>From Previous Month</p> #}
                                     </div>
                                 </div>
                             </div>
+  {# ---------------------------------------------------------------------------------------------------------- #}
                             <div class="col-xl-3 col-md-6">
-                                <div class="card card-blue text-white">
-                                    <div class="card-block">
-                                        <div class="row align-items-center">
-                                            <div class="col-8">
-                                                <h4 class="mb-0">3,612</h4>
-                                                <p class="mb-0">Pedidos</p>
+                                <div class="card prod-p-card card-green">
+                                    <div class="card-body" style="height: 165px;">
+                                        <div class="row align-items-center mb-30">
+                                            <div class="col">
+                                                <h6 class="mb-5 text-white">Pedidos</h6>
+                                                <h3 class="mb-0 fw-700 text-white">{{numPedidos}}</h3>
                                             </div>
-                                            <div class="col-4 text-right">
-                                                <i class="ik ik-shopping-cart f-30"></i>
+                                            <div class="col-auto">
+                                              <i class="fa fa-shopping-cart text-green f-18"></i>
                                             </div>
                                         </div>
-                                        <div id="Widget-line-chart2" class="chart-line chart-shadow" style="width:100%;height:75px"></div>
+                                        {# <p class="mb-0 text-white"><span class="label label-danger mr-10">+11%</span>From Previous Month</p> #}
                                     </div>
                                 </div>
                             </div>
-                        
+  {# ---------------------------------------------------------------------------------------------------------- #}                        
+
+                            <!-- page statustic chart start -->
                             <div class="col-xl-3 col-md-6">
-                                <div class="card card-yellow text-white">
-                                    <div class="card-block">
-                                        <div class="row align-items-center">
-                                            <div class="col-8">
-                                                <h4 class="mb-0">3,550</h4>
-                                                <p class="mb-0">Comentarios</p>
+                                <div class="card prod-p-card card-yellow">
+                                    <div class="card-body" style="height: 165px;">
+                                        <div class="row align-items-center mb-30">
+                                            <div class="col">
+                                                <h6 class="mb-5 text-white">Comentarios</h6>
+                                                <h3 class="mb-0 fw-700 text-white">{{numComentarios}}</h3>
                                             </div>
-                                            <div class="col-4 text-right">
-                                                <i class="ik ik-volume-2 f-30"></i>
+                                            <div class="col-auto">
+                                              <i class="fa fa-comments text-orange f-18"></i>
                                             </div>
                                         </div>
-                                        <div id="Widget-line-chart4" class="chart-line chart-shadow" style="width:100%;height:75px"></div>
+                                        {# <p class="mb-0 text-white"><span class="label label-danger mr-10">+11%</span>From Previous Month</p> #}
                                     </div>
                                 </div>
                             </div>
                             <!-- page statustic chart end -->
-
+ {# ---------------------------------------------------------------------------------------------------------- #}       
                             <!-- Project statustic start -->
                              <div class="col-xl-3 col-md-6">
                                 <div class="card prod-p-card card-red">
@@ -91,18 +94,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3>Line Chart</h3>
-                                    </div>
-                                    <div class="card-block text-center">
-                                        <div id="line_chart" class="chart-shadow" style="height:400px"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
+                    
                     <div class="row">
                             <!-- Application Sales start -->
                             <div class="col-md-12 col-xl-12">
@@ -132,60 +124,26 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>
+                                                        {% for producto in productofiltro %}
                                                             <div class="d-inline-block align-middle">
-                                                                <h6>Able Pro</h6>
-                                                                <p class="text-muted mb-0">Powerful Admin Theme</p>
+                                                                <h6>{{producto.getNombre()}}</h6>
+                                                                <p class="text-muted mb-0">{{producto.getCategoriaId().getCategoria()}}</p>
                                                             </div>
                                                         </td>
-                                                        <td>16,300</td>
+                                                        <td>{{producto.getUnidadesVendidas()}}</td>
                                                         <td>
+                                                        {% if producto.getUnidadesStock() == 0 %}
                                                             <div ><label class="badge badge-danger">out Stock</label></div>
-                                                        </td>
-                                                        <td>$53</td>
-                                                        <td class="text-blue">$15,652</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-inline-block align-middle">
-                                                                <h6>Photoshop</h6>
-                                                                <p class="text-muted mb-0">Design Software</p>
-                                                            </div>
-                                                        </td>
-                                                        <td>26,421</td>
-                                                        <td>
-                                                            <div ><label class="badge badge-danger">out Stock</label></div>
-                                                        </td>
-                                                        <td>$35</td>
-                                                        <td class="text-blue">$18,785</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-inline-block align-middle">
-                                                                <h6>Guruable</h6>
-                                                                <p class="text-muted mb-0">Best Admin Template</p>
-                                                            </div>
-                                                        </td>
-                                                        <td>8,265</td>
-                                                        <td>
+                                                            {% else %}
                                                             <div ><label class="badge badge-success">In Stock</label></div>
+                                                        {% endif %}
                                                         </td>
-                                                        <td>$98</td>
-                                                        <td class="text-blue">$9,652</td>
+                                                        <td>{{producto.getPrecio()}}€</td>
+                                                        {% set total = 0 %}
+                                                        {% set total = producto.getUnidadesVendidas() * producto.getPrecio() %}
+                                                        <td class="text-blue">{{total}}€</td>
                                                     </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-inline-block align-middle">
-                                                                <h6>Flatable</h6>
-                                                                <p class="text-muted mb-0">Admin App</p>
-                                                            </div>
-                                                        </td>
-                                                        <td>10,652</td>
-                                                        <td>
-                                                            <div ><label class="badge badge-success">In Stock</label></div>
-                                                        </td>
-                                                        <td>$20</td>
-                                                        <td class="text-blue">$7,856</td>
-                                                    </tr>
+                                                    {% endfor %}
                                                 </tbody>
                                             </table>
                                         </div>

@@ -61,7 +61,7 @@
 	            {% endfor %}
 			<div class="col-6 col-lg-3" > 
             {% for imagen in imagen|slice(1,1) %}
-                <img src="{{ruta}}{{imagen}}" alt="Preview image" width=257>
+                <img src="{{ruta}}{{imagen}}" alt="Preview image" style="height: 257px !important; width:257px !important;">
 			{% endfor %}
                 <div id="products"><p style="display: inline-block;margin-top: 10px;" title={{producto.getNombre()}}><a href={{ path('detalleprod', {'id': producto.getId()}) }} >{% if producto.getNombre()|length > 38 %} {{producto.getNombre()|slice(0,37)}}...  {% else %}{{producto.getNombre()}}{% endif %}</a></p>
 					<br><p>{{producto.getPrecio()}}</p></div></div>
@@ -86,7 +86,7 @@
     {% if stocks.getUnidadesStock < 50 %}
 	<div class="col-6 col-sm-5 col-md-4 col-lg-3" >
 		    {% for imagen in imagen|slice(1,1) %}
-				 <img src="{{ruta}}{{imagen}}" alt="Preview image" width=257>
+				 <img src="{{ruta}}{{imagen}}" alt="Preview image" style="height: 257px !important; width:257px !important;">
                  
                     <div id="products"><p>{{stocks.getNombre()}}</p>
 					<p>Precio</p></div></div>

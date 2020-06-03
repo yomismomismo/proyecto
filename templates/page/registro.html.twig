@@ -1,10 +1,10 @@
  {% extends "page/layout.html.twig" %}
 {% block head %}
-    <link rel="stylesheet" href="css/formstyle.css">
+            <link rel="stylesheet" href="{{ asset("formstyle.css", "estilos") }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="js/validate-jquery-form.js"></script>
-    <script src="js/additional-validate-form.js"></script>
-    <script src="js/formscript.js"></script>
+      <script src="{{ asset("validate-jquery-form.js", "script") }}"></script>
+    <script src="{{ asset("additional-validate-form.js", "script") }}"></script>
+      <script src="{{ asset("formscript.js", "script") }}"></script>
 {% endblock %}
 {% block contenido %}
 <!-- Contact form section -->
@@ -54,7 +54,7 @@
         <label class="form-label" for="phoneNumber">
           Número de télefono<abbr title="Este campo es obligatorio">*</abbr>
         </label>
-        {{form_widget(form.telefono, {'attr':{'id':'phoneNumber', 'class':'form-element','name':'phoneNumber' ,'type':'tel', "autocomplete":"on", 'placeholder':'000-00-00-00', "tabindex":"4", 'required':'', "aria-required":"true", "autofocus":"",  "minlength":"9", 'maxlength':'9'}})}}
+         {{form_widget(form.telefono, {'attr':{'id':'phoneNumber', 'class':'form-element','name':'phoneNumber' ,'type':'tel', "autocomplete":"on", 'placeholder':'000-00-00-00', "tabindex":"4", 'required':'', "aria-required":"true", "autofocus":"",  "minlength":"9", 'maxlength':'9'}})}}
         {# <input id="phoneNumber" class="form-element" name="phoneNumber" type="tel" autocomplete="on" placeholder="000-00-00-00"  maxlength="9" tabindex="4" required aria-required="true" /> #}
       </div>
     </div>
@@ -142,7 +142,7 @@
         <label class="form-label" for="addressZIP">
           CP<abbr title="Este campo es obligatorio">*</abbr>
         </label>
-         {{form_widget(form.cod_postal, {'attr':{'id':'addressZIP', 'class':'form-element','name':'postal-code' ,'type':'number', "autocomplete":"shipping postal-code", 'placeholder':'12345', "tabindex":"9", 'required':'', "aria-required":"true", "autofocus":"", 'maxlength':'5'}})}}
+         {{form_widget(form.cod_postal, {'attr':{'id':'addressZIP', 'class':'form-element','name':'postal-code' ,'type':'tel', "autocomplete":"shipping postal-code", 'placeholder':'12345', "tabindex":"9", 'required':'', "aria-required":"true", "autofocus":"", 'maxlength':'5'}})}}
       {# <input id="addressZIP" class="form-element" name="postal-code" type="tel" autocomplete="shipping postal-code" placeholder="12345" tabindex="9" maxlength="5" required aria-required="true" /> #}
       </div>
     </div>
