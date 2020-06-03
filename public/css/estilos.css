@@ -41,8 +41,9 @@ footer{
   width: 50%;
   background-color: #0003;
   height: 645px;
-  background-image: url("/img/conejo.jpeg");
+  background-image: url("/img/iggy.jpg");
   background-blend-mode: soft-light;
+  background-position-y: -241px;
   margin-top: 80px;
   margin-bottom: 80px;
   background-size: cover;
