@@ -64,7 +64,7 @@
                 <img src="{{ruta}}{{imagen}}" alt="Preview image" width=257>
 			{% endfor %}
                 <div id="products"><p style="display: inline-block;margin-top: 10px;" title={{producto.getNombre()}}><a href={{ path('detalleprod', {'id': producto.getId()}) }} >{% if producto.getNombre()|length > 38 %} {{producto.getNombre()|slice(0,37)}}...  {% else %}{{producto.getNombre()}}{% endif %}</a></p>
-					<br><p>{{producto.getPrecio()}}</p></div></div>
+					<br><p>Precio: {{producto.getPrecio()}}€</p></div></div>
         {% endfor %} 
 
 	</div>
@@ -89,7 +89,7 @@
 				 <img src="{{ruta}}{{imagen}}" alt="Preview image" width=257>
                  
                     <div id="products"><p>{{stocks.getNombre()}}</p>
-					<p>Precio</p></div></div>
+					<p>Precio: {{stocks.getPrecio()}}€</p></div></div>
     					{% endfor %}
 
                             {% else %}
@@ -104,8 +104,24 @@
                         
 	<div id="imgindex2" class="col-md-6"></div>
     <div id="cajatexto" class="col-md-6" style="background-color:white;">
-		<h1>Sobre Nosotros</h1>
-			<p id="texto">Productos para conejo de las mejores marcas</p>
+		<h1 style="
+    font-size: 3em;">Sobre Nosotros</h1>
+			<p id="texto">Yomo es la cadena líder de tiendas de animales en España.
+
+En Yomo somos especialistas en todo tipo de animales y tenemos un equipo de más de 1.000 personas dedicadas a ayudar a mejorar la vida de todas las mascotas, pues un amante de los animales no es sólo un cliente, es un amigo.
+
+Para ayudarte a cuidar y disfrutar de tu mejor amigo contamos con las mejores ofertas del sector y con el personal más especializado.</p>
+<br>
+<h5>¿POR QUÉ SOMOS DIFERENTES?</h5>
+<p id="texto">En Yomo hacemos de la innovación una de nuestras banderas. Nuestras tiendas están pensadas para que sean un espacio de recreo para niños y mayores y sobre todo, sean grandes o pequeñas, nuestras tiendas están diseñadas para cubrir todas las necesidades de tu animal. Hasta las tiendas Yomo más pequeñas tienen más de cinco mil artículos que cubren las necesidades de las seis familias principales de animales: perros, gatos, aves, roedores, reptiles y peces. Además, puedes contar con más 50.000 productos por encargo.
+<br><br>
+Yomo no es una cadena de tiendas más, trabajamos con seres vivos y por eso nuestro equipo está formado por amantes de los animales. En Yomo nos tomamos tu bienestar muy en serio e intentamos cumplir en todo momento con la declaración Yomo..
+<br><br>
+Además Yomo es un mundo, un mundo animal, donde ellos (los animales) son los protagonistas. A diferencia de otras tiendas, en Yomo nos encanta que entres sólo a mirar, porque en nuestras instalaciones queremos transmitir, sobre todo a los más pequeños, el amor y respeto por los animales. 
+<br><br>
+Por todo ello, te invitamos a venir a una tienda Yomo cuanto antes
+<br><br>
+Para los que hacemos Yomo esto es más que un trabajo. Al igual que tú, somos amantes de los animales y queremos ayudarte a que los cuides para que tengan una vida feliz.</p>
     </div>
 
 </div>

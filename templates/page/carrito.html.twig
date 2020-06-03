@@ -25,11 +25,11 @@
   <div class="shopping-cart col-12 col-sm-12 col-md-12 col-lg-7 col-xl-7">
   
   <div class="column-labels">
-	<label class="product-image">Image</label>
-	<label class="product-details">Product</label>
-	<label class="product-price">Price</label>
-	<label class="product-quantity">Quantity</label>
-	<label class="product-removal">Remove</label>
+	<label class="product-image">Imagen</label>
+	<label class="product-details">Producto</label>
+	<label class="product-price">Precio</label>
+	<label class="product-quantity">Cantidad</label>
+	<label class="product-removal">Eliminar</label>
 	<label class="product-line-price">Total</label>
   </div>
   		{# {% if user %}
@@ -165,7 +165,7 @@ document.getElementById("myFormdelete").submit();
 			  {% set iva = TotalTodo * 0.21 %}
 			  {% set TsinIva = TotalTodo - iva %}
 			  <dd class="totals-value" id="cart-subtotal">{{TsinIva}}</dd>
-			  <dt><a href="/taxes">Estimated Taxes & Fees</a></dt>
+			  <dt><a href="/taxes">Tasas</a></dt>
 			  
 			  <dd class="totals-value" id="cart-tax">{{iva}}</dd>
 			</dl>
@@ -189,11 +189,11 @@ document.getElementById("myFormdelete").submit();
 	  <dd class="totals-value" id="cart-total">{{TotalTodo}}</dd>
 	</dl>
 	<dl class="support">
-	  <dt><a href="/savings/">Shipping</a></dt>
+	  <dt><a href="/savings/">Envio</a></dt>
 
 
 	  <dd class="totals-value" id="cart-shipping">{{shipping}}</dd>
-	  <dt><a href="/promocode/add">Have a promocode?</a></dt>
+	  {# <dt><a href="/promocode/add">Have a promocode?</a></dt> #}
 	</dl>
 
 	{# Desplegable mostrar Tarjeta #}
@@ -215,7 +215,7 @@ window.onload = function(){showDangerToast()}
             <th>Fecha Caducidad</th>
         </tr>
     </thead>       
-	<tbody>
+	<tbody style="cursor: pointer">
 	
 	{% for tarjetas in filtroTarjetas %}
 	<tr  id="nombre{{tarjetas.getId()}}">
@@ -257,12 +257,12 @@ document.getElementById("nombre{{tarjetas.getId()}}").onclick = function(){
 		<p style="font-size:16px;color:red">No puedes agregar otra tarjeta</p>
 {% else %}
 <div id="accordion" class="accordion">
-	<div class="payment link">Add<i class="fa fa-chevron-down"></i></div>
+	<div class="payment link">Añadir tarjeta<i class="fa fa-chevron-down"></i></div>
 
 	{{form_start(formTarjeta, {'attr':{'class':"form1 form-horizontal", 'action':'', 'autocomplete':'off', 'style':'display:none', "id":"subirForm",'onsubmit':"myFunction()"}})}}
 	<div class="container1">
 <div id="dela" class="form__card1  card1 front">
-    <span id="name" class="card__name1"  data-default="Full Name">Full Name</span>
+    <span id="name" class="card__name1"  data-default="Full Name">Nombre Completo</span>
     <span id="number" class="card__number1" data-default="1234 5678 9012 3456">1234 5678 9012 3456</span>
   </div>
   
@@ -280,7 +280,7 @@ document.getElementById("nombre{{tarjetas.getId()}}").onclick = function(){
  {{form_widget(formTarjeta.fecha_caducidad, {'attr':{ 'id':'inputData','class':"form__input1 fecha", 'maxlength':'5', "name":"fecha_caducidad", "type":"text", 'onkeyup':"fechas()"}})}}<br>
   <label for="inputCvv" class="form__label1">CVV:</label><br>
   <input id="cuentas_bank_cvv" class="form__input1" onkeyup ="inputValue(this, '#cvvLine')" maxlength="4" name="cuentas_bank_cvv" type="text"/><br>
-   {{form_widget(formTarjeta.send, {'label': 'Crear', 'attr':{'class':'btn bot', 'type':'submit'}})}}
+   {{form_widget(formTarjeta.send, {'label': 'Crear', 'attr':{'class':'btn bot btn-purchase1', 'type':'submit'}})}}
    <input id="UltDigits" type="hidden" name="UltDigits" value=""/>
 	{{form_end(formTarjeta)}}
 
@@ -389,21 +389,20 @@ function inputValue(from, to) {
 }
 </script>
 {% if filtroPedido %}
-	  <h4 class="headline-primary">Payment</h3>
+	  <h4 class="headline-primary">Pago</h3>
 	  <div class="ux-card" id="tarjeta">
 				<span style="font-size:16px;">Seleccione una tarjeta</span>
 	  </div>
 	<div class="terms">
 	  <h4 class="headline-primary">Términos y Condiciones</h3>
 	  <div id="terms">
-	  <p class="review">Clicking on "I Agree" means you agree to GoDaddy's <a href="terms/show">Terms & Conditions</a>.</p>
-	  <p class="review" ><strong>Products automatically</strong> renew until cancelled, and are billed to your payment method on file. Turn off auto-renew in your GoDaddy account.</p>
-	  <button type="button" id="aceptado" class="btn btn-purchase review">I Agree</button>
+	  <p class="review">Al hacer clic en "Acepto" significa que está de acuerdo con los <a href="terms/show">Términos y Condiciones</a> de Yomo.</p>
+	  <button type="button" id="aceptado" class="btn btn-purchase1 review">Acepto</button>
 	  </div>
-	  <p class="agreed" id="agreed">He leido y aceptado los <a href="terms/show">Términos y Condiciones</a>.</p>
+	  <p class="agreed" id="agreed">He leido y aceptado los <a href="/public/documents/terminosyCondiciones.pdf">Términos y Condiciones</a>.</p>
 	</div>
 	<div class="complete">
-	  <a id="completado"><button id="completar" type="button" disabled="disabled" class="btn btn-purchase">Complete Purchase</button></a>
+	  <a id="completado"><button id="completar" type="button" disabled="disabled" class="btn btn-purchase1">Completar compra</button></a>
 	</div>
   </div>
   </div>

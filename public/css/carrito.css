@@ -58,7 +58,7 @@
   font-size: 14px;
   font-weight: 500;
   text-transform: uppercase;
-  color: rebeccapurple;
+  color: #128937;
 }
 
 .form__input1 {
@@ -168,7 +168,8 @@ i.fa-chevron-down {
 /* sdfsdfsffffffffffffffffffffffffffffff*/
 .product-image {
   float: left;
-  width: 20%;
+  margin-left: 10px;
+  width: 17%;
 }
 
 .product-details {
@@ -178,12 +179,12 @@ i.fa-chevron-down {
 
 .product-price {
   float: left;
-  width: 12%;
+  width: 11%;
 }
 
 .product-quantity {
   float: left;
-  width: 10%;
+  width: 14%;
 }
 
 .product-removal {
@@ -250,6 +251,15 @@ label {
   padding-bottom: 15px;
   margin-bottom: 15px;
   border-bottom: 1px solid #eee;
+}
+.btn{
+  padding: 2px 20px 7px !important;
+}
+
+.btn-purchase1 {
+  color: #fff!important;
+    border-color: #155629!important;
+  background-color: #128937!important;
 }
 .column-labels .product-image, .column-labels .product-details, .column-labels .product-removal {
 }

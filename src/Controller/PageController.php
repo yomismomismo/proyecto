@@ -869,7 +869,7 @@ if ($user1) {
         $usuarioBBDD=$this->getDoctrine()
         ->getRepository(Usuario::class)
         ->findOneBy(['email' => $user]);
-
+        $contador=0;
         if ($user1) {
         $iduser=$this->getDoctrine()
             ->getRepository(Usuario::class)
@@ -1169,7 +1169,7 @@ if ($usuarioBBDD) {
                 }
               }
   //--------------------------------------------------------------------------------
-      return $this->render('page/carrito.html.twig', [
+      return $this->render('f', [
           'controller_name' => 'PageController',
           'form' => $form->CreateView(),
           'formTarjeta' => $formTarjeta->CreateView(),
@@ -1198,7 +1198,6 @@ if ($usuarioBBDD) {
       
       $user1 = $session->get('nombre_usuario');
       $ultDigit = $request->get('tarjeta');
-      var_dump($ultDigit);
       
       $iduser=$this->getDoctrine()
             ->getRepository(Usuario::class)
@@ -1210,8 +1209,8 @@ if ($usuarioBBDD) {
           ->getRepository(Pedidos::Class)
           ->findOneBy(["id_cliente" => $idusuario, "estado" => "incompleto"]);
 
-
-
+      if ($filtroP) {
+        
           $filtroProdx=$this->getDoctrine()
           ->getRepository(Productoxpedidos::Class)
           ->findBy(["id_pedido" => $filtroP->getId()]);
@@ -1231,10 +1230,22 @@ if ($usuarioBBDD) {
               $filtroP->setIdtarjeta($idTarjeta);
               $entityManager->flush($filtroP);
               $entityManager->flush();
+              $productosFiltro="";
+              $filtroPedido="";
+      }}
+      else {
+        return $this->redirectToRoute('index');
       }
-      return $this->render('page/completado.html.twig', [
-        'controller_name' => 'PageController',
+      
 
+      return $this->render('page/CompraRealizada.html.twig', [
+        'controller_name' => 'PageController',
+        'page' => 'carrito',
+        'jumbotron' => 'no',
+        'productos' => $productosFiltro,
+        "filtroPedido" => $filtroPedido,
+        "user" => $user1,
+        "iduser" =>$iduser,
     ]);
     }
 
