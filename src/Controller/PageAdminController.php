@@ -9,27 +9,57 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\{MensajeRepository, PedidosRepository, UsuarioRepository, ComentarioRepository, ProductoRepository};
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 class PageAdminController extends AbstractController
 {
-    /**
+        /**
      * @Route("/page/admin", name="page_admin")
      */
-    public function index()
+    public function index(Request $request, SessionInterface $session)
     {
         $week = 10;
+        $contactoBBDD=$this->getDoctrine()->getRepository(Usuario::Class)->findAll();
+        $user1 = $session->get('nombre_usuario');
+        $user= $request->request->get("user");
+        $password=  $request->request->get("password");
+            var_dump($user);
+        $usuarioBBDD=$this->getDoctrine()
+        ->getRepository(Usuario::class)
+        ->findOneBy(['email' => $user]);
 
-        return $this->render('adminPage/indexAdmin.html.twig', [
-            'controller_name' => 'PageAdminController',
-            
-             ]);
+    //Recoger contraseña encriptada y comprobar si el inicio de sesion es correcto                             
+    $userIniciado="";
+    $mensaje="";
+  if ($usuarioBBDD) {
+    $passHash=$usuarioBBDD->getContrasenya();
+    if (password_verify($password,  $passHash)) {
+              $usuarioIniciado=$this->getDoctrine()
+                  ->getRepository(Usuario::Class)
+                  ->findOneBy(['email' => $user], 
+                           ['id' => 'ASC']);
+                   $session->set('nombre_usuario', $usuarioIniciado->getNombre());
+                   return $this->render('adminPage/indexAdmin.html.twig', [
+                    'controller_name' => 'PageAdminController',
+                    
+                     ]);
+                   }
+            else{
+              $mensaje="La contraseña o el email son incorrectos";
+                  }
+                }
+                else{
+                    return $this->render('adminPage/loginAdmin.html.twig', [
+                        'controller_name' => 'PageAdminController',
+                        "user" => "",
+            "user" => $user1,
+                         ]);
+                        }
+
     }
-
-
-
-
-
+    //--------------------------------------------------------------------------------
+                   
     /**
      * @Route("/page/admin/productosAdmin", name="productosAdmin")
      */
@@ -94,8 +124,42 @@ class PageAdminController extends AbstractController
     /**
      * @Route("/page/admin/loginAdmin", name="loginAdmin")
      */
-    public function loginAdmin()
+    public function loginAdmin(Request $request, SessionInterface $session)
     {
+        $contactoBBDD=$this->getDoctrine()->getRepository(Usuario::Class)->findAll();
+        $user1 = $session->get('nombre_usuario');
+        $user= $request->request->get("user");
+        $password=  $request->request->get("password");
+            var_dump($user);
+        $usuarioBBDD=$this->getDoctrine()
+        ->getRepository(Usuario::class)
+        ->findOneBy(['email' => $user]);
+
+    //Recoger contraseña encriptada y comprobar si el inicio de sesion es correcto                             
+    $userIniciado="";
+    $mensaje="";
+  if ($usuarioBBDD) {
+    $passHash=$usuarioBBDD->getContrasenya();
+    if (password_verify($password,  $passHash)) {
+              $usuarioIniciado=$this->getDoctrine()
+                  ->getRepository(Usuario::Class)
+                  ->findOneBy(['email' => $user], 
+                           ['id' => 'ASC']);
+                   $session->set('nombre_usuario', $usuarioIniciado->getNombre());
+                   return $this->redirectToRoute('index');
+                   }
+            else{
+              $mensaje="La contraseña o el email son incorrectos";
+                  }
+                }
+                else{
+                    return $this->render('adminPage/loginAdmin.html.twig', [
+                        'controller_name' => 'PageAdminController',
+                        "user" => "",
+            "user" => $user1,
+                         ]);
+                        }
+                        
         return $this->render('adminPage/loginAdmin.html.twig', []);}
 
     /**

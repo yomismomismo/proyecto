@@ -1189,6 +1189,55 @@ if ($usuarioBBDD) {
       ]);
 
   }
+
+    /**
+     * @Route("/carrito/completado/{id}", name="completado", methods={"GET","POST"})
+     */
+    public function new(Request $request, $id , SessionInterface $session,EntityManagerInterface $entityManager): Response
+    {
+      
+      $user1 = $session->get('nombre_usuario');
+      $ultDigit = $request->get('tarjeta');
+      var_dump($ultDigit);
+      
+      $iduser=$this->getDoctrine()
+            ->getRepository(Usuario::class)
+            ->findOneBy(['nombre' => $user1]);
+
+        $idusuario= $iduser->getId();
+
+        $filtroP=$this->getDoctrine()
+          ->getRepository(Pedidos::Class)
+          ->findOneBy(["id_cliente" => $idusuario, "estado" => "incompleto"]);
+
+
+
+          $filtroProdx=$this->getDoctrine()
+          ->getRepository(Productoxpedidos::Class)
+          ->findBy(["id_pedido" => $filtroP->getId()]);
+          
+            foreach ($filtroProdx as $value) {
+              $entityManager = $this->getDoctrine()->getManager();
+              $resultadoCantidad=abs((int)$value->getCantidad() - (int)$value->getIdProducto()->getUnidadesStock());
+              $value->getIdProducto()->setUnidadesStock($resultadoCantidad);
+              $entityManager->flush($value);
+
+              $idTarjeta=$this->getDoctrine()
+              ->getRepository(CuentasBank::Class)
+              ->findOneBy(["id" => $id]);
+ 
+              $entityManager = $this->getDoctrine()->getManager();
+              $filtroP->setEstado("completo");
+              $filtroP->setIdtarjeta($idTarjeta);
+              $entityManager->flush($filtroP);
+              $entityManager->flush();
+      }
+      return $this->render('page/completado.html.twig', [
+        'controller_name' => 'PageController',
+
+    ]);
+    }
+
     /**
      * @Route("/login", name="login")
      */

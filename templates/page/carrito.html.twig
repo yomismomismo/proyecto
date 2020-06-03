@@ -232,13 +232,14 @@ document.getElementById("nombre{{tarjetas.getId()}}").onclick = function(){
 	document.getElementById("tarjeta").style.fontSize="16px"
 	document.getElementById("tarjeta").style.fontWeight="bold"
 	document.getElementById("tarjeta").style.color="green"
+	document.getElementById("completado").href="{{ path('completado', {'id': tarjetas.getId()}) }}"
 	var img = document.createElement("IMG");
 	img.src="https://i.ya-webdesign.com/images/payment-logos-png-7.png"
 	img.height="32"
 	img.width="50"
 	document.getElementById("tarjeta").appendChild(img)
 
-	console.log()
+
 	}
 </script>
 	{% endfor %}
@@ -278,7 +279,7 @@ document.getElementById("nombre{{tarjetas.getId()}}").onclick = function(){
   <label for="inputData" class="form__label1 ">Fecha Caducidad:</label><br>
  {{form_widget(formTarjeta.fecha_caducidad, {'attr':{ 'id':'inputData','class':"form__input1 fecha", 'maxlength':'5', "name":"fecha_caducidad", "type":"text", 'onkeyup':"fechas()"}})}}<br>
   <label for="inputCvv" class="form__label1">CVV:</label><br>
-  <input id="inputCvv" class="form__input1" onkeyup ="inputValue(this, '#cvvLine')" maxlength="4" name="inputCvv" type="text"/><br>
+  <input id="cuentas_bank_cvv" class="form__input1" onkeyup ="inputValue(this, '#cvvLine')" maxlength="4" name="cuentas_bank_cvv" type="text"/><br>
    {{form_widget(formTarjeta.send, {'label': 'Crear', 'attr':{'class':'btn bot', 'type':'submit'}})}}
    <input id="UltDigits" type="hidden" name="UltDigits" value=""/>
 	{{form_end(formTarjeta)}}
@@ -315,7 +316,6 @@ function myFunction(){
 $('#cuentas_bank_cvv').click(function() {
 	cv.classList.add("back2");
 	cv2.classList.add("front2");
-	//alert(event.target.nodeName);
 });
 
 
@@ -326,10 +326,6 @@ bod.onclick = function(){
 	}
 }
 
-{# function normalImg(x) {
-cv.classList.remove("back2");
-	cv2.classList.remove("front2");
-} #}
 
 $(function () {
   var Accordion = function (el, multiple) {
@@ -382,20 +378,6 @@ $(function () {
 
   var accordion2 = new Accordion2($("#accordion1"), false);
 });
- // mirar esto //
-$(document).ready(function () {
-    $("#inputName").keyup(function () {
-                    if ($(this).val().length == 4) {
-                        $(this).val($(this).val() + "-");
-                    }
-                    else if ($(this).val().length == 9) {
-                        $(this).val($(this).val() + "-");
-                    }
-                    else if ($(this).val().length == 14) {
-                        $(this).val($(this).val() + "-");
-                    }
-                });
-});
 
 function inputValue(from, to) {
   if(from.value != '')
@@ -412,14 +394,16 @@ function inputValue(from, to) {
 				<span style="font-size:16px;">Seleccione una tarjeta</span>
 	  </div>
 	<div class="terms">
-	  <h4 class="headline-primary">Terms & Conditions</h3>
+	  <h4 class="headline-primary">Términos y Condiciones</h3>
+	  <div id="terms">
 	  <p class="review">Clicking on "I Agree" means you agree to GoDaddy's <a href="terms/show">Terms & Conditions</a>.</p>
-	  <p class="review"><strong>Products automatically</strong> renew until cancelled, and are billed to your payment method on file. Turn off auto-renew in your GoDaddy account.</p>
-	  <p class="agreed">I've read and agreed to the <a href="terms/show">Term & Conditions</a>.</p>
-	  <button type="button" class="btn btn-purchase review">I Agree</button>
+	  <p class="review" ><strong>Products automatically</strong> renew until cancelled, and are billed to your payment method on file. Turn off auto-renew in your GoDaddy account.</p>
+	  <button type="button" id="aceptado" class="btn btn-purchase review">I Agree</button>
+	  </div>
+	  <p class="agreed" id="agreed">He leido y aceptado los <a href="terms/show">Términos y Condiciones</a>.</p>
 	</div>
 	<div class="complete">
-	  <button type="button" disabled="disabled" class="btn btn-purchase">Complete Purchase</button>
+	  <a id="completado"><button id="completar" type="button" disabled="disabled" class="btn btn-purchase">Complete Purchase</button></a>
 	</div>
   </div>
   </div>
@@ -429,6 +413,8 @@ function inputValue(from, to) {
 </section>
 	</div> 
 	        <script src="plugins/jquery-toast-plugin/dist/jquery.toast.min.js"></script>
+			<script src="js/carrito.js"></script>
 	    <script src="js/pagCarritoCalc.js"></script>
+		
 				    <script src="{{ asset("js-admin/alerts.js", "script") }}"></script>
 {% endblock %}

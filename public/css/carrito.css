@@ -252,7 +252,6 @@ label {
   border-bottom: 1px solid #eee;
 }
 .column-labels .product-image, .column-labels .product-details, .column-labels .product-removal {
-  text-indent: -9999px;
 }
 
 /* Product entries */
@@ -488,7 +487,9 @@ label {
 .payment button, .terms button {
   margin-top: 20px;
 }
-
+.review{
+  display: inherit;
+}
 .terms .agreed {
   display: none;
 }
